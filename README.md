@@ -14,6 +14,7 @@ Get information about Origami repositories. See [the production service][product
   * [Requirements](#requirements)
   * [Running Locally](#running-locally)
   * [Configuration](#configuration)
+  * [Operational Documentation](#operational-documentation)
   * [Testing](#testing)
   * [Deployment](#deployment)
   * [Monitoring](#monitoring)
@@ -54,6 +55,7 @@ We configure Origami Repo Data using environment variables. In development, conf
 
 ### Required in Heroku
 
+  * `CMDB_API_KEY`: The CMDB API key to use when updating health checks and the application runbook
   * `FASTLY_PURGE_API_KEY`: A Fastly API key which is used to purge URLs (when somebody POSTs to the `/purge` endpoint)
   * `GRAPHITE_API_KEY`: The FT's internal Graphite API key.
   * `PURGE_API_KEY`: The API key to require when somebody POSTs to the `/purge` endpoint. This should be a non-memorable string, for example a UUID
@@ -71,6 +73,15 @@ We configure Origami Repo Data using environment variables. In development, conf
 The service can also be configured by sending HTTP headers, these would normally be set in your CDN config:
 
   * `FT-Origami-Service-Base-Path`: The base path for the service, this gets prepended to all paths in the HTML and ensures that redirects work when the CDN rewrites URLs.
+
+
+## Operational Documentation
+
+The source documentation for the [runbook] and healthcheck endpoints ([EU][healthcheck-eu]/[US][healthcheck-us]) are stored in the `operational-documentation` folder. These files are pushed to CMDB upon every promotion to production. You can push them to CMDB manually by running the following command:
+
+```sh
+make cmdb-update
+```
 
 
 ## Testing
@@ -98,8 +109,7 @@ make verify
 We run the tests and linter on CI, you can view [results on CircleCI][ci]. `make test` and `make lint` must pass before we merge a pull request.
 
 
-Deployment
-----------
+## Deployment
 
 The production ([EU][heroku-production-eu]/[US][heroku-production-us]) and [QA][heroku-qa] applications run on [Heroku]. We deploy continuously to QA via [CircleCI][ci], you should never need to deploy to QA manually. We use a [Heroku pipeline][heroku-pipeline] to promote QA deployments to production.
 
@@ -110,8 +120,7 @@ make promote
 ```
 
 
-Monitoring
-----------
+## Monitoring
 
   * [Grafana dashboard][grafana]: graph memory, load, and number of requests
   * [Pingdom check (Production EU)][pingdom-eu]: checks that the EU production app is responding
@@ -121,8 +130,7 @@ Monitoring
   * [Splunk (Production)][splunk]: query application logs
 
 
-Trouble-Shooting
-----------------
+## Trouble-Shooting
 
 We've outlined some common issues that can occur in the running of the Origami Repo Data:
 
@@ -146,8 +154,7 @@ make deploy
 ```
 
 
-License
--------
+## License
 
 The Financial Times has published this software under the [MIT license][license].
 
@@ -155,6 +162,8 @@ The Financial Times has published this software under the [MIT license][license]
 
 [ci]: https://circleci.com/gh/Financial-Times/origami-repo-data
 [grafana]: http://grafana.ft.com/dashboard/db/origami-repo-data
+[healthcheck-eu]: https://endpointmanager.in.ft.com/manage/origami-repo-data-eu.herokuapp.com
+[healthcheck-us]: https://endpointmanager.in.ft.com/manage/origami-repo-data-us.herokuapp.com
 [heroku-pipeline]: https://dashboard.heroku.com/pipelines/e707ccd0-dd5b-44b2-8361-c13ca892a492
 [heroku-production-eu]: https://dashboard.heroku.com/apps/origami-repo-data-eu
 [heroku-production-us]: https://dashboard.heroku.com/apps/origami-repo-data-us
@@ -166,6 +175,7 @@ The Financial Times has published this software under the [MIT license][license]
 [pingdom-eu]: https://my.pingdom.com/newchecks/checks#check=3766255
 [pingdom-us]: https://my.pingdom.com/newchecks/checks#check=3766267
 [production-url]: https://origami-repo-data.ft.com/
+[runbook]: https://dewey.ft.com/origami-repo-data.html
 [sentry-production]: https://sentry.io/nextftcom/repo-data-production
 [sentry-qa]: https://sentry.io/nextftcom/repo-data-qa
 [service-options]: https://github.com/Financial-Times/origami-service#options
