@@ -24,7 +24,13 @@ Get information about Origami repositories. See [the production service][product
 
 ## Requirements
 
-Running Origami Repo Data requires [Node.js] 8.x and [npm].
+Running Origami Repo Data requires [Node.js] 8.x and [npm]. A [PostgreSQL] database is also required.
+
+If you're working on a Mac, the simplest way to install PostgreSQL is to use [Homebrew]. Run the following and pay attention to the instructions output after installing:
+
+```sh
+brew install postgresql
+```
 
 
 ## Running Locally
@@ -35,7 +41,19 @@ Before we can run the application, we'll need to install dependencies:
 npm install
 ```
 
-Run the application in development mode with
+Create a local PostgreSQL database, you may need to provide credentials for the following command depending on your local setup:
+
+```sh
+make db-create
+```
+
+Now you'll need to migrate the database, which sets up the required tables. You'll also need to run this command if you pull commits which include new database migrations:
+
+```sh
+make db-migrate-up
+```
+
+Run the application in development mode with:
 
 ```sh
 make run-dev
@@ -50,6 +68,7 @@ We configure Origami Repo Data using environment variables. In development, conf
 
 ### Required everywhere
 
+  * `DATABASE_URL`: A PostgreSQL connection string, with write permission on a database
   * `NODE_ENV`: The environment to run the application in. One of `production`, `development` (default), or `test` (for use in automated tests).
   * `PORT`: The port to run the application on.
 
@@ -73,6 +92,29 @@ We configure Origami Repo Data using environment variables. In development, conf
 The service can also be configured by sending HTTP headers, these would normally be set in your CDN config:
 
   * `FT-Origami-Service-Base-Path`: The base path for the service, this gets prepended to all paths in the HTML and ensures that redirects work when the CDN rewrites URLs.
+
+
+## Database
+
+Most of the files which are used in maintaining your local database are in the `data` folder of this repo. This is split into migrations and seed data.
+
+You can use the following commands to manage your local database:
+
+```sh
+make db-migrate-up    # migrate up to the latest version of the schema
+make db-migrate-down  # revert the last applied migration
+make db-seed          # add seed data to the database for local testing
+```
+
+To create a new migration file, you'll need to run:
+
+```sh
+./script/create-migration.js <NAME-OF-MIGRATION>
+```
+
+This will generate a file in `data/migration` which you can update to include `up` and `down` migrations. We use [Knex] for migrations, copying from an existing file may help.
+
+Seed data for local development is in `data/seed/demo`. Every file in this directory will be used to seed the database when `make db-seed` is run.
 
 
 ## Operational Documentation
@@ -169,11 +211,14 @@ The Financial Times has published this software under the [MIT license][license]
 [heroku-production-us]: https://dashboard.heroku.com/apps/origami-repo-data-us
 [heroku-qa]: https://dashboard.heroku.com/apps/origami-repo-data-qa
 [heroku]: https://heroku.com/
+[homebrew]: https://brew.sh/
+[knex]: http://knexjs.org/
 [license]: http://opensource.org/licenses/MIT
 [node.js]: https://nodejs.org/
 [npm]: https://www.npmjs.com/
 [pingdom-eu]: https://my.pingdom.com/newchecks/checks#check=3766255
 [pingdom-us]: https://my.pingdom.com/newchecks/checks#check=3766267
+[postgresql]: https://www.postgresql.org/
 [production-url]: https://origami-repo-data.ft.com/
 [runbook]: https://dewey.ft.com/origami-repo-data.html
 [sentry-production]: https://sentry.io/nextftcom/repo-data-production

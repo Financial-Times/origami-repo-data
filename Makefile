@@ -22,3 +22,23 @@ HEROKU_APP_QA = $(SERVICE_SYSTEM_CODE)-qa
 HEROKU_APP_EU = $(SERVICE_SYSTEM_CODE)-eu
 HEROKU_APP_US = $(SERVICE_SYSTEM_CODE)-us
 GRAFANA_DASHBOARD = $(SERVICE_SYSTEM_CODE)
+
+
+# Additional Tasks
+# ----------------
+
+db-create:
+	@createdb origami-repo-data
+	@$(DONE)
+
+db-migrate-up:
+	@./script/migrate-up.js
+	@$(DONE)
+
+db-migrate-down:
+	@./script/migrate-down.js
+	@$(DONE)
+
+db-seed:
+	@./script/seed.js
+	@$(DONE)

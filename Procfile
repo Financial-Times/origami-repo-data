@@ -1,2 +1,2 @@
 web: make run
-release: make release
+release: make release db-migrate-up
