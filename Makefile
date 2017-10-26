@@ -42,3 +42,11 @@ db-migrate-down:
 db-seed:
 	@./script/seed.js
 	@$(DONE)
+
+# Database migration tasks specific to the release
+# phase in Heroku. This prevents migrating twice when
+# promoting to production (migrates in EU only)
+release-db:
+ifneq ($(REGION), US)
+	@make db-migrate-up
+endif
