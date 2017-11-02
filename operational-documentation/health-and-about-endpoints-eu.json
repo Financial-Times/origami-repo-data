@@ -1,5 +1,4 @@
 {
-	"dataItemID": "origami-repo-data-eu.herokuapp.com",
 	"base": "origami-repo-data-eu.herokuapp.com",
 	"protocol": "https",
 	"healthSuffix": "__health",
