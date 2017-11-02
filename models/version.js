@@ -1,6 +1,5 @@
 'use strict';
 
-const knex = require('knex');
 const uuid = require('uuid/v4');
 const uuidv5 = require('uuid/v5');
 

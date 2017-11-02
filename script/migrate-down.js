@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 'use strict';
 
-const bookshelf = require('bookshelf');
 const dotenv = require('dotenv');
 const knex = require('knex');
 

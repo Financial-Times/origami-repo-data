@@ -1,6 +1,6 @@
 'use strict';
 
-exports.up = async (database, Promise) => {
+exports.up = async database => {
 
 	// Create the versions table
 	await database.schema.createTable('versions', table => {
@@ -29,6 +29,6 @@ exports.up = async (database, Promise) => {
 
 };
 
-exports.down = async (database, Promise) => {
+exports.down = async database => {
 	await database.schema.dropTable('versions');
 };
