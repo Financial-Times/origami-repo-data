@@ -2,46 +2,28 @@
 
 exports.up = async (database, Promise) => {
 
-	// Create the repos table
-	await database.schema.createTable('repos', table => {
-
-		// Meta information
-		table.string('id').unique().primary();
-		table.timestamp('createdAt').defaultTo(database.fn.now());
-		table.timestamp('updatedAt').defaultTo(database.fn.now());
-
-		// Actual repo data
-		table.string('name').notNullable();
-		table.string('type').defaultTo(null);
-		table.string('url').notNullable();
-		table.string('supportEmail');
-		table.string('supportChannel');
-
-	});
-
 	// Create the versions table
 	await database.schema.createTable('versions', table => {
 
 		// Meta information
 		table.string('id').unique().primary();
-		table.timestamp('createdAt').defaultTo(database.fn.now());
-		table.timestamp('updatedAt').defaultTo(database.fn.now());
-		table.string('repo').notNullable();
+		table.timestamp('created_at').defaultTo(database.fn.now());
+		table.timestamp('updated_at').defaultTo(database.fn.now());
 
-		// Actual version data
-		table.string('number').notNullable();
-		table.string('commitHash').notNullable();
+		// Repo information
+		table.string('name').notNullable();
+		table.string('type').defaultTo(null);
+		table.string('url').notNullable();
+		table.string('support_email');
+		table.string('support_channel');
 
-		table.json('origamiManifest');
-		table.json('bowerManifest');
-		table.json('imagesetManifest');
-		table.json('aboutManifest');
-		table.json('packageManifest');
+		// Version information
+		table.string('version').notNullable();
+		table.string('commit_hash').notNullable();
 
-		table.json('markdownDocuments');
-
-		// Foreign key contraints
-		table.foreign('repo').references('repos.id');
+		// Raw data from manifests and markdown
+		table.json('manifests');
+		table.json('markdown');
 
 	});
 
@@ -49,5 +31,4 @@ exports.up = async (database, Promise) => {
 
 exports.down = async (database, Promise) => {
 	await database.schema.dropTable('versions');
-	await database.schema.dropTable('repos');
 };
