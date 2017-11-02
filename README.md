@@ -148,6 +148,12 @@ The code will also need to pass linting on CI, you can run the linter locally wi
 make verify
 ```
 
+To run the integration tests, you'll need a local PostgreSQL database named `origami-repo-data-test`. You can set this up with:
+
+```sh
+make db-create-test
+```
+
 We run the tests and linter on CI, you can view [results on CircleCI][ci]. `make test` and `make lint` must pass before we merge a pull request.
 
 

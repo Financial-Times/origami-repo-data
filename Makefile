@@ -31,6 +31,10 @@ db-create:
 	@createdb origami-repo-data
 	@$(DONE)
 
+db-create-test:
+	@createdb origami-repo-data-test
+	@$(DONE)
+
 db-migrate-up:
 	@./script/migrate-up.js
 	@$(DONE)
