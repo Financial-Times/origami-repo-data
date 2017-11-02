@@ -1,6 +1,6 @@
 'use strict';
 
-exports.seed = async (database, Promise) => {
+exports.seed = async database => {
 
 	// UUIDs are static for the demo data so that we can share
 	// local links with eachother and predictably test
