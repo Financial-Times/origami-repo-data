@@ -36,18 +36,16 @@ describe('GET /v1/repos', () => {
 
 			const repo1 = response.repos[0];
 			assert.isObject(repo1);
-			assert.strictEqual(repo1.id, '855d47ce-697e-51b9-9882-0c3c9044f0f5'); // distinct UUID based on repo URL
+			assert.strictEqual(repo1.id, '855d47ce-697e-51b9-9882-0c3c9044f0f5');
 			assert.strictEqual(repo1.name, 'mock-service');
 
 			const repo2 = response.repos[1];
 			assert.isObject(repo2);
-			assert.strictEqual(repo2.id, 'c990cb4b-c82b-5071-afb0-16149debc53d'); // distinct UUID based on repo URL
+			assert.strictEqual(repo2.id, 'c990cb4b-c82b-5071-afb0-16149debc53d');
 			assert.strictEqual(repo2.name, 'o-mock-component');
 
 		});
 
 	});
-
-	// TODO also test other endpoints once they've been updated
 
 });

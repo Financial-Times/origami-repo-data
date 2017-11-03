@@ -14,6 +14,7 @@ exports.seed = async database => {
 	await database('versions').insert([
 		{
 			id: ids.version1,
+			repo_id: '2683afa7-5997-5b0c-bfc9-abe0676dca55',
 			created_at: new Date(Date.now() - 10000),
 			updated_at: new Date(Date.now() - 10000),
 			name: 'o-example-component',
@@ -49,6 +50,7 @@ exports.seed = async database => {
 		},
 		{
 			id: ids.version2,
+			repo_id: '2683afa7-5997-5b0c-bfc9-abe0676dca55',
 			created_at: new Date(Date.now() - 5000),
 			updated_at: new Date(Date.now() - 5000),
 			name: 'o-example-component',
@@ -84,6 +86,7 @@ exports.seed = async database => {
 		},
 		{
 			id: ids.version3,
+			repo_id: '2683afa7-5997-5b0c-bfc9-abe0676dca55',
 			created_at: new Date(Date.now()),
 			updated_at: new Date(Date.now()),
 			name: 'o-example-component',

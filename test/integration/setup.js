@@ -15,7 +15,7 @@ before(async () => {
 		database: process.env.TEST_DATABASE || 'postgres://localhost:5432/origami-repo-data-test',
 		environment: 'test',
 		log: mockLog,
-		port: process.env.TEST_PORT || undefined,
+		port: process.env.TEST_PORT || 0,
 		requestLogFormat: null
 	});
 	await app.listen();

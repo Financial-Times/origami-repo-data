@@ -13,6 +13,7 @@ exports.seed = async database => {
 	await database('versions').insert([
 		{
 			id: ids.version1,
+			repo_id: '98f4c2aa-a99c-51b0-8a12-f9af235e386f',
 			created_at: new Date(Date.now() - 6000),
 			name: 'node-example-module',
 			type: null,
@@ -41,6 +42,7 @@ exports.seed = async database => {
 		},
 		{
 			id: ids.version2,
+			repo_id: '98f4c2aa-a99c-51b0-8a12-f9af235e386f',
 			created_at: new Date(Date.now() - 1000),
 			updated_at: new Date(Date.now() - 1000),
 			name: 'node-example-module',

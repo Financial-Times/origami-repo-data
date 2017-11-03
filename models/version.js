@@ -24,6 +24,7 @@ function initModel(app) {
 			// When a model is saved...
 			this.on('saving', () => {
 				// Fill out automatic fields
+				this.attributes.repo_id = uuidv5(this.attributes.url, uuidv5.URL);
 				this.attributes.updatedAt = new Date();
 				return this;
 			});
@@ -56,8 +57,8 @@ function initModel(app) {
 		serializeAsRepo() {
 			const repo = this.serialize();
 
-			// Generate a consistent UUID based on the repo URL
-			repo.id = uuidv5(repo.url, uuidv5.URL);
+			// Switch the IDs
+			repo.id = this.get('repo_id');
 
 			delete repo.commitHash;
 			return repo;
@@ -127,20 +128,20 @@ function initModel(app) {
 			}).fetch();
 		},
 
-		// Fetch the latest versions of a repo with a given name
-		fetchLatestByName(repoName) {
+		// Fetch the latest versions of a repo with a given repo ID
+		fetchLatestByRepoId(repoId) {
 			return Version.collection().query(qb => {
 				qb.select('*');
-				qb.where('name', repoName);
+				qb.where('repo_id', repoId);
 				qb.orderBy('created_at', 'desc');
 			}).fetchOne();
 		},
 
-		// Fetch all versions of a repo with a given name
-		fetchByName(repoName) {
+		// Fetch all versions of a repo with a given repo ID
+		fetchByRepoId(repoId) {
 			return Version.collection().query(qb => {
 				qb.select('*');
-				qb.where('name', repoName);
+				qb.where('repo_id', repoId);
 				qb.orderBy('created_at', 'desc');
 			}).fetch();
 		}
