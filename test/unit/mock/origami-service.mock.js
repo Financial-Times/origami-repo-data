@@ -31,6 +31,7 @@ origamiService.middleware = {
 };
 
 module.exports.mockRequest = {
+	app: mockApp,
 	headers: {},
 	query: {},
 	params: {}
