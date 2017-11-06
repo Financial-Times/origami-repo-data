@@ -12,11 +12,16 @@ describe('lib/middleware/require-auth', () => {
 		origamiService = require('../../mock/origami-service.mock');
 
 		mockKey = {
-			get: sinon.stub().returns(true)
+			get: sinon.stub()
 		};
+		mockKey.get.withArgs('secret').returns('mock-hashed-secret');
+		mockKey.get.withArgs('read').returns(true);
+		mockKey.get.withArgs('write').returns(true);
+		mockKey.get.withArgs('admin').returns(true);
 		origamiService.mockApp.model = {
 			Key: {
-				fetchByKey: sinon.stub().resolves(mockKey)
+				compare: sinon.stub().resolves(true),
+				fetchById: sinon.stub().resolves(mockKey)
 			}
 		};
 
@@ -52,11 +57,12 @@ describe('lib/middleware/require-auth', () => {
 				middleware = requireAuth(requireAuth.READ);
 			});
 
-			describe('when a valid "X-Api-Key" header is set', () => {
+			describe('when valid "X-Api-Key" and "X-Api-Secret" headers are set', () => {
 				let caughtError;
 
 				beforeEach(done => {
 					origamiService.mockRequest.headers['x-api-key'] = 'mock-api-key';
+					origamiService.mockRequest.headers['x-api-secret'] = 'mock-api-secret';
 					middleware(origamiService.mockRequest, origamiService.mockResponse, error => {
 						caughtError = error;
 						done();
@@ -64,12 +70,17 @@ describe('lib/middleware/require-auth', () => {
 				});
 
 				it('fetches a key from the database', () => {
-					assert.calledOnce(origamiService.mockApp.model.Key.fetchByKey);
-					assert.calledWithExactly(origamiService.mockApp.model.Key.fetchByKey, 'mock-api-key');
+					assert.calledOnce(origamiService.mockApp.model.Key.fetchById);
+					assert.calledWithExactly(origamiService.mockApp.model.Key.fetchById, 'mock-api-key');
+				});
+
+				it('compares the provided secret with the stored hash', () => {
+					assert.calledOnce(origamiService.mockApp.model.Key.compare);
+					assert.calledWithExactly(origamiService.mockApp.model.Key.compare, 'mock-api-secret', 'mock-hashed-secret');
 				});
 
 				it('gets the returned key permission that corresponds to `level`', () => {
-					assert.calledOnce(mockKey.get);
+					assert.called(mockKey.get);
 					assert.calledWithExactly(mockKey.get, 'read');
 				});
 
@@ -79,11 +90,12 @@ describe('lib/middleware/require-auth', () => {
 
 			});
 
-			describe('when a valid "apiKey" query parameter is set', () => {
+			describe('when valid "apiKey" and "apiSecret" query parameter are set', () => {
 				let caughtError;
 
 				beforeEach(done => {
 					origamiService.mockRequest.query.apiKey = 'mock-api-key';
+					origamiService.mockRequest.query.apiSecret = 'mock-api-secret';
 					middleware(origamiService.mockRequest, origamiService.mockResponse, error => {
 						caughtError = error;
 						done();
@@ -91,12 +103,17 @@ describe('lib/middleware/require-auth', () => {
 				});
 
 				it('fetches a key from the database', () => {
-					assert.calledOnce(origamiService.mockApp.model.Key.fetchByKey);
-					assert.calledWithExactly(origamiService.mockApp.model.Key.fetchByKey, 'mock-api-key');
+					assert.calledOnce(origamiService.mockApp.model.Key.fetchById);
+					assert.calledWithExactly(origamiService.mockApp.model.Key.fetchById, 'mock-api-key');
+				});
+
+				it('compares the provided secret with the stored hash', () => {
+					assert.calledOnce(origamiService.mockApp.model.Key.compare);
+					assert.calledWithExactly(origamiService.mockApp.model.Key.compare, 'mock-api-secret', 'mock-hashed-secret');
 				});
 
 				it('gets the returned key permission that corresponds to `level`', () => {
-					assert.calledOnce(mockKey.get);
+					assert.called(mockKey.get);
 					assert.calledWithExactly(mockKey.get, 'read');
 				});
 
@@ -106,7 +123,7 @@ describe('lib/middleware/require-auth', () => {
 
 			});
 
-			describe('when an API key is not provided', () => {
+			describe('when API credentials are not provided', () => {
 				let caughtError;
 
 				beforeEach(done => {
@@ -117,7 +134,7 @@ describe('lib/middleware/require-auth', () => {
 				});
 
 				it('does not fetch a key from the database', () => {
-					assert.notCalled(origamiService.mockApp.model.Key.fetchByKey);
+					assert.notCalled(origamiService.mockApp.model.Key.fetchById);
 				});
 
 				it('calls `next` with a 401 error', () => {
@@ -131,8 +148,9 @@ describe('lib/middleware/require-auth', () => {
 				let caughtError;
 
 				beforeEach(done => {
-					origamiService.mockApp.model.Key.fetchByKey.resolves();
+					origamiService.mockApp.model.Key.fetchById.resolves();
 					origamiService.mockRequest.headers['x-api-key'] = 'mock-api-key';
+					origamiService.mockRequest.headers['x-api-secret'] = 'mock-api-secret';
 					middleware(origamiService.mockRequest, origamiService.mockResponse, error => {
 						caughtError = error;
 						done();
@@ -140,8 +158,38 @@ describe('lib/middleware/require-auth', () => {
 				});
 
 				it('attempts to fetch a key from the database', () => {
-					assert.calledOnce(origamiService.mockApp.model.Key.fetchByKey);
-					assert.calledWithExactly(origamiService.mockApp.model.Key.fetchByKey, 'mock-api-key');
+					assert.calledOnce(origamiService.mockApp.model.Key.fetchById);
+					assert.calledWithExactly(origamiService.mockApp.model.Key.fetchById, 'mock-api-key');
+				});
+
+				it('calls `next` with a 401 error', () => {
+					assert.instanceOf(caughtError, Error);
+					assert.strictEqual(caughtError.status, 401);
+				});
+
+			});
+
+			describe('when an invalid "X-Api-Secret" header is set', () => {
+				let caughtError;
+
+				beforeEach(done => {
+					origamiService.mockApp.model.Key.compare.resolves(false);
+					origamiService.mockRequest.headers['x-api-key'] = 'mock-api-key';
+					origamiService.mockRequest.headers['x-api-secret'] = 'mock-api-secret';
+					middleware(origamiService.mockRequest, origamiService.mockResponse, error => {
+						caughtError = error;
+						done();
+					});
+				});
+
+				it('fetches a key from the database', () => {
+					assert.calledOnce(origamiService.mockApp.model.Key.fetchById);
+					assert.calledWithExactly(origamiService.mockApp.model.Key.fetchById, 'mock-api-key');
+				});
+
+				it('compares the provided secret with the stored hash', () => {
+					assert.calledOnce(origamiService.mockApp.model.Key.compare);
+					assert.calledWithExactly(origamiService.mockApp.model.Key.compare, 'mock-api-secret', 'mock-hashed-secret');
 				});
 
 				it('calls `next` with a 401 error', () => {
@@ -155,8 +203,9 @@ describe('lib/middleware/require-auth', () => {
 				let caughtError;
 
 				beforeEach(done => {
-					mockKey.get.returns(false);
+					mockKey.get.withArgs('read').returns(false);
 					origamiService.mockRequest.headers['x-api-key'] = 'mock-api-key';
+					origamiService.mockRequest.headers['x-api-secret'] = 'mock-api-secret';
 					middleware(origamiService.mockRequest, origamiService.mockResponse, error => {
 						caughtError = error;
 						done();
@@ -164,12 +213,12 @@ describe('lib/middleware/require-auth', () => {
 				});
 
 				it('fetches a key from the database', () => {
-					assert.calledOnce(origamiService.mockApp.model.Key.fetchByKey);
-					assert.calledWithExactly(origamiService.mockApp.model.Key.fetchByKey, 'mock-api-key');
+					assert.calledOnce(origamiService.mockApp.model.Key.fetchById);
+					assert.calledWithExactly(origamiService.mockApp.model.Key.fetchById, 'mock-api-key');
 				});
 
 				it('gets the returned key permission that corresponds to `level`', () => {
-					assert.calledOnce(mockKey.get);
+					assert.called(mockKey.get);
 					assert.calledWithExactly(mockKey.get, 'read');
 				});
 
@@ -188,11 +237,12 @@ describe('lib/middleware/require-auth', () => {
 
 				beforeEach(done => {
 					origamiService.mockRequest.headers['x-api-key'] = 'mock-api-key';
+					origamiService.mockRequest.headers['x-api-secret'] = 'mock-api-secret';
 					requireAuth(requireAuth.READ)(origamiService.mockRequest, origamiService.mockResponse, done);
 				});
 
 				it('gets the returned key "read" permission', () => {
-					assert.calledOnce(mockKey.get);
+					assert.called(mockKey.get);
 					assert.calledWithExactly(mockKey.get, 'read');
 				});
 
@@ -206,11 +256,12 @@ describe('lib/middleware/require-auth', () => {
 
 				beforeEach(done => {
 					origamiService.mockRequest.headers['x-api-key'] = 'mock-api-key';
+					origamiService.mockRequest.headers['x-api-secret'] = 'mock-api-secret';
 					requireAuth(requireAuth.WRITE)(origamiService.mockRequest, origamiService.mockResponse, done);
 				});
 
 				it('gets the returned key "write" permission', () => {
-					assert.calledOnce(mockKey.get);
+					assert.called(mockKey.get);
 					assert.calledWithExactly(mockKey.get, 'write');
 				});
 
@@ -224,11 +275,12 @@ describe('lib/middleware/require-auth', () => {
 
 				beforeEach(done => {
 					origamiService.mockRequest.headers['x-api-key'] = 'mock-api-key';
+					origamiService.mockRequest.headers['x-api-secret'] = 'mock-api-secret';
 					requireAuth(requireAuth.ADMIN)(origamiService.mockRequest, origamiService.mockResponse, done);
 				});
 
 				it('gets the returned key "admin" permission', () => {
-					assert.calledOnce(mockKey.get);
+					assert.called(mockKey.get);
 					assert.calledWithExactly(mockKey.get, 'admin');
 				});
 

@@ -11,7 +11,8 @@ describe('GET /v1/repos/:repoId', () => {
 		await database.seed(app, 'basic');
 		request = agent
 			.get('/v1/repos/c990cb4b-c82b-5071-afb0-16149debc53d')
-			.set('X-Api-Key', 'mock-read-key');
+			.set('X-Api-Key', 'mock-read-key')
+			.set('X-Api-Secret', 'mock-read-secret');
 	});
 
 	it('responds with a 200 status', () => {
@@ -50,7 +51,8 @@ describe('GET /v1/repos/:repoId', () => {
 			await database.seed(app, 'basic');
 			request = agent
 				.get('/v1/repos/not-an-id')
-				.set('X-Api-Key', 'mock-read-key');
+				.set('X-Api-Key', 'mock-read-key')
+				.set('X-Api-Secret', 'mock-read-secret');
 		});
 
 		it('responds with a 404 status', () => {
@@ -63,7 +65,7 @@ describe('GET /v1/repos/:repoId', () => {
 
 	});
 
-	describe('when no API key is provided', () => {
+	describe('when no API credentials are provided', () => {
 		let request;
 
 		beforeEach(async () => {
@@ -88,7 +90,8 @@ describe('GET /v1/repos/:repoId', () => {
 			await database.seed(app, 'basic');
 			request = agent
 				.get('/v1/repos/c990cb4b-c82b-5071-afb0-16149debc53d')
-				.set('X-Api-Key', 'mock-no-key');
+				.set('X-Api-Key', 'mock-no-key')
+				.set('X-Api-Secret', 'mock-no-secret');
 		});
 
 		it('responds with a 403 status', () => {

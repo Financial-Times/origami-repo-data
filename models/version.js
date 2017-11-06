@@ -18,14 +18,14 @@ function initModel(app) {
 			this.on('creating', () => {
 				// Fill out automatic fields
 				this.attributes.id = uuid();
-				this.attributes.createdAt = new Date();
+				this.attributes.created_at = new Date();
 			});
 
 			// When a model is saved...
 			this.on('saving', () => {
 				// Fill out automatic fields
 				this.attributes.repo_id = uuidv5(this.attributes.url, uuidv5.URL);
-				this.attributes.updatedAt = new Date();
+				this.attributes.updated_at = new Date();
 				return this;
 			});
 

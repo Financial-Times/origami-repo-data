@@ -1,5 +1,6 @@
 'use strict';
 
+const bcrypt = require('bcrypt');
 const uuid = require('uuid/v4');
 
 module.exports = initModel;
@@ -17,15 +18,20 @@ function initModel(app) {
 			this.on('creating', () => {
 				// Fill out automatic fields
 				this.attributes.id = uuid();
-				this.attributes.key = uuid();
-				this.attributes.createdAt = new Date();
+				this.attributes.created_at = new Date();
 			});
 
 			// When a model is saved...
-			this.on('saving', () => {
+			this.on('saving', async () => {
 				// Fill out automatic fields
-				this.attributes.updatedAt = new Date();
+				this.attributes.updated_at = new Date();
+
+				// Hash the secret if it's changed
+				if (this.hasChanged('secret')) {
+					this.attributes.secret = await Key.hash(this.attributes.secret);
+				}
 				return this;
+
 			});
 
 		},
@@ -35,24 +41,33 @@ function initModel(app) {
 		serialize() {
 			return {
 				id: this.get('id'),
-				name: this.get('name'),
-				key: this.get('key'),
+				description: this.get('description'),
 				permissions: {
 					read: this.get('read'),
 					write: this.get('write'),
 					admin: this.get('admin')
-				},
-				lastUsed: this.get('last_used_at')
+				}
 			};
 		},
 
 	// Model static methods
 	}, {
 
+		// Hash a key
+		hash(key) {
+			const saltRounds = 5;
+			return bcrypt.hash(key, saltRounds);
+		},
+
+		// Check a key against a hashed key
+		compare(key, hash) {
+			return bcrypt.compare(key, hash);
+		},
+
 		// Fetch a key by its key property
-		fetchByKey(key) {
+		fetchById(keyId) {
 			return Key.collection().query(qb => {
-				qb.where('key', key);
+				qb.where('id', keyId);
 				qb.orderBy('created_at', 'desc');
 			}).fetchOne();
 		}
