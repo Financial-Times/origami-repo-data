@@ -8,7 +8,7 @@ exports.seed = async database => {
 	await database('keys').insert([
 		{
 			id: '1b0a64e9-ce8c-4246-9356-3858e8b25804',
-			secret: await bcrypt.hash('8fa8ffe9-9cc8-413c-a86d-96e61e6ec8f4', 5),
+			secret: await bcrypt.hash('secret-key', 5), // Only for use in local demos
 			description: 'Origami admin access',
 			read: true,
 			write: true,
@@ -16,7 +16,7 @@ exports.seed = async database => {
 		},
 		{
 			id: 'd4169f7a-33e8-4596-bbe2-9fa669d993fd',
-			secret: await bcrypt.hash('696ccc15-883a-41f6-a2cf-4aefc4360292', 5),
+			secret: await bcrypt.hash('secret-key', 5), // Only for use in local demos
 			description: 'Example write access',
 			read: true,
 			write: true,
@@ -24,7 +24,7 @@ exports.seed = async database => {
 		},
 		{
 			id: 'd591f731-4a24-4ced-af9c-482df059f6ef',
-			secret: await bcrypt.hash('c47106f5-865b-4655-8bb5-2c237b534467', 5),
+			secret: await bcrypt.hash('secret-key', 5), // Only for use in local demos
 			description: 'Example read access',
 			read: true,
 			write: false,
@@ -32,7 +32,7 @@ exports.seed = async database => {
 		},
 		{
 			id: '86474c4d-d4dc-44c7-9d02-c2cdc667bb2c',
-			secret: await bcrypt.hash('f301745a-31c0-4fe1-a2d7-ad51d92167b7', 5),
+			secret: await bcrypt.hash('secret-key', 5), // Only for use in local demos
 			description: 'Example no access',
 			read: false,
 			write: false,

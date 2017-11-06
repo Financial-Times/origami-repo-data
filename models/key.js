@@ -1,6 +1,7 @@
 'use strict';
 
 const bcrypt = require('bcrypt');
+const crypto = require('crypto');
 const uuid = require('uuid/v4');
 
 module.exports = initModel;
@@ -62,6 +63,12 @@ function initModel(app) {
 		// Check a key against a hashed key
 		compare(key, hash) {
 			return bcrypt.compare(key, hash);
+		},
+
+		// Generate a secure secret key
+		generateSecret() {
+			// See https://stackoverflow.com/a/14869745 for the thinking on this
+			return crypto.randomBytes(20).toString('hex');
 		},
 
 		// Fetch a key by its key property
