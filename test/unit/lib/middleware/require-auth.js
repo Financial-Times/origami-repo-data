@@ -84,6 +84,10 @@ describe('lib/middleware/require-auth', () => {
 					assert.calledWithExactly(mockKey.get, 'read');
 				});
 
+				it('sets `request.authenticatedKey` to the key from the database', () => {
+					assert.strictEqual(origamiService.mockRequest.authenticatedKey, mockKey);
+				});
+
 				it('calls `next` with no error', () => {
 					assert.isUndefined(caughtError);
 				});

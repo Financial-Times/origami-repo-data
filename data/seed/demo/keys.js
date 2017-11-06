@@ -12,7 +12,9 @@ exports.seed = async database => {
 			description: 'Origami admin access',
 			read: true,
 			write: true,
-			admin: true
+			admin: true,
+			created_at: new Date(Date.now()),
+			updated_at: new Date(Date.now()),
 		},
 		{
 			id: 'd4169f7a-33e8-4596-bbe2-9fa669d993fd',
@@ -20,7 +22,9 @@ exports.seed = async database => {
 			description: 'Example write access',
 			read: true,
 			write: true,
-			admin: false
+			admin: false,
+			created_at: new Date(Date.now() - 1000),
+			updated_at: new Date(Date.now() - 1000),
 		},
 		{
 			id: 'd591f731-4a24-4ced-af9c-482df059f6ef',
@@ -28,7 +32,9 @@ exports.seed = async database => {
 			description: 'Example read access',
 			read: true,
 			write: false,
-			admin: false
+			admin: false,
+			created_at: new Date(Date.now() - 2000),
+			updated_at: new Date(Date.now() - 2000),
 		},
 		{
 			id: '86474c4d-d4dc-44c7-9d02-c2cdc667bb2c',
@@ -36,7 +42,9 @@ exports.seed = async database => {
 			description: 'Example no access',
 			read: false,
 			write: false,
-			admin: false
+			admin: false,
+			created_at: new Date(Date.now() - 3000),
+			updated_at: new Date(Date.now() - 3000),
 		}
 	]);
 

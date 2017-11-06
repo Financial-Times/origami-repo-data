@@ -12,7 +12,15 @@
 				{{title}}
 			</h1>
 
-			<p>{{error.message}}</p>
+			{{#if error.isValidationError}}
+				<ul>
+					{{#error.details}}
+						<li>{{message}}</li>
+					{{/error.details}}
+				</ul>
+			{{else}}
+				<p>{{error.message}}</p>
+			{{/if}}
 
 		</div>
 	</div>
