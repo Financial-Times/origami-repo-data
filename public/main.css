@@ -1,0 +1,17 @@
+@charset "UTF-8";
+
+/* Typographic overrides */
+
+
+/* Table overrides */
+td,
+th[scope=row]{
+	vertical-align: top;
+}
+td p:first-child {
+	margin-top: 0;
+}
+table dl,
+.o-techdocs-content table pre {
+	margin: 0;
+}
