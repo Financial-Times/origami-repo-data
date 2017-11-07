@@ -153,6 +153,15 @@ function initModel(app) {
 				qb.where('repo_id', repoId);
 				qb.where('id', versionId);
 			}).fetchOne();
+		},
+
+		// Fetch a versions with a given repo ID and semver version number
+		fetchByRepoIdAndVersionNumber(repoId, versionNumber) {
+			return Version.collection().query(qb => {
+				qb.select('*');
+				qb.where('repo_id', repoId);
+				qb.where('version', versionNumber);
+			}).fetchOne();
 		}
 
 	});

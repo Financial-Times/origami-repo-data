@@ -44,6 +44,31 @@ describe('GET /v1/repos/:repoId/versions/:versionId', () => {
 
 	});
 
+	describe('when :versionId is a valid semver number', () => {
+		let request;
+
+		beforeEach(async () => {
+			await database.seed(app, 'basic');
+			request = agent
+				.get('/v1/repos/c990cb4b-c82b-5071-afb0-16149debc53d/versions/v1.0.0')
+				.set('X-Api-Key', 'mock-read-key')
+				.set('X-Api-Secret', 'mock-read-secret');
+		});
+
+		it('responds with a 301 status', () => {
+			return request.expect(301);
+		});
+
+		it('responds with a Location header pointing to the ID-based endpoint', () => {
+			return request.expect('Location', '/v1/repos/c990cb4b-c82b-5071-afb0-16149debc53d/versions/5bdc1cb5-19f1-4afe-883b-83c822fbbde0');
+		});
+
+		it('responds with text', () => {
+			return request.expect('Content-Type', /text\/plain/);
+		});
+
+	});
+
 	describe('when :repoId is not a valid repo ID', () => {
 		let request;
 
@@ -93,6 +118,27 @@ describe('GET /v1/repos/:repoId/versions/:versionId', () => {
 			await database.seed(app, 'basic');
 			request = agent
 				.get('/v1/repos/c990cb4b-c82b-5071-afb0-16149debc53d/versions/3731599a-f6a0-4856-8f28-9d10bc567d5b')
+				.set('X-Api-Key', 'mock-read-key')
+				.set('X-Api-Secret', 'mock-read-secret');
+		});
+
+		it('responds with a 404 status', () => {
+			return request.expect(404);
+		});
+
+		it('responds with HTML', () => {
+			return request.expect('Content-Type', /text\/html/);
+		});
+
+	});
+
+	describe('when :versionId is a valid semver number but the version does not exist', () => {
+		let request;
+
+		beforeEach(async () => {
+			await database.seed(app, 'basic');
+			request = agent
+				.get('/v1/repos/c990cb4b-c82b-5071-afb0-16149debc53d/versions/v123.456.789')
 				.set('X-Api-Key', 'mock-read-key')
 				.set('X-Api-Secret', 'mock-read-secret');
 		});
