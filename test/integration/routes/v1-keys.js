@@ -153,17 +153,17 @@ describe('POST /v1/keys', () => {
 			response = (await request.then()).body;
 		});
 
-		it('has a `key` object property', () => {
-			assert.isObject(response.key);
+		it('has a `credentials` object property', () => {
+			assert.isObject(response.credentials);
 		});
 
 		it('includes the ID and secret of the new key', async () => {
 			const keys = await app.database.knex.select('*').from('keys').where({
 				description: 'mock description'
 			});
-			assert.isString(response.key.id);
-			assert.isString(response.key.secret);
-			assert.isTrue(await bcrypt.compare(response.key.secret, keys[0].secret));
+			assert.isString(response.credentials.id);
+			assert.isString(response.credentials.secret);
+			assert.isTrue(await bcrypt.compare(response.credentials.secret, keys[0].secret));
 		});
 
 	});
