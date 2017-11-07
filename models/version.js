@@ -144,6 +144,15 @@ function initModel(app) {
 				qb.where('repo_id', repoId);
 				qb.orderBy('created_at', 'desc');
 			}).fetch();
+		},
+
+		// Fetch a versions with a given repo ID and version ID
+		fetchByRepoIdAndVersionId(repoId, versionId) {
+			return Version.collection().query(qb => {
+				qb.select('*');
+				qb.where('repo_id', repoId);
+				qb.where('id', versionId);
+			}).fetchOne();
 		}
 
 	});
