@@ -67,7 +67,7 @@
 
 			<pre><code class="json">{
 	// A unique identifier for the repo
-	"id": "98f4c2aa-a99c-51b0-8a12-f9af235e386f",
+	"id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
 
 	// The name of the repo on GitHub
 	"name": "repo-name",
@@ -101,6 +101,25 @@
 	"lastUpdated": "2017-11-06T09:56:45.991Z"
 }</code></pre>
 
+			<h3 id="entity-repo">Version Entity</h3>
+
+			<p>
+				Version entities represent individual versions or releasese of repositories that have
+				been ingested into the service. As JSON they look like very similar to
+				<a href="#entity-repo">Repository entities</a>, but with the following differences:
+			</p>
+
+			<pre><code class="json">{
+	// A unique identifier for the version, rather than the repo
+	"id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+
+	// The semver version number that corresponds to this release
+	"version": "v1.1.0",
+
+	// The commit hash that corresponds to this release
+	"commitHash": "XXXXXX"
+}</code></pre>
+
 			<h3 id="entity-key">Key Entity</h3>
 
 			<p>
@@ -131,7 +150,7 @@
 
 			<p>
 				Get a list of all available Origami repositories as an array. This endpoint responds
-				with an array of <a href="v1/docs/api#entity-repo">Repository entities</a>. This
+				with an array of <a href="#entity-repo">Repository entities</a>. This
 				endpoint requires the <code>READ</code> permission.
 			</p>
 
@@ -151,9 +170,9 @@
 							<td>
 								<dl>
 									<dt>X-Api-Key</dt>
-									<dd>See <a href="v1/docs/api#authentication">authentication docs</a></dd>
+									<dd>See <a href="#authentication">authentication docs</a></dd>
 									<dt>X-Api-Secret</dt>
-									<dd>See <a href="v1/docs/api#authentication">authentication docs</a></dd>
+									<dd>See <a href="#authentication">authentication docs</a></dd>
 								</dl>
 							</td>
 						</tr>
@@ -217,7 +236,7 @@
 
 			<p>
 				Get a single Origami repository by ID. This endpoint responds with a
-				<a href="v1/docs/api#entity-repo">Repository entity</a>. This endpoint requires the
+				<a href="#entity-repo">Repository entity</a>. This endpoint requires the
 				<code>READ</code> permission.
 			</p>
 
@@ -237,17 +256,17 @@
 							<td>
 								<dl>
 									<dt>X-Api-Key</dt>
-									<dd>See <a href="v1/docs/api#authentication">authentication docs</a></dd>
+									<dd>See <a href="#authentication">authentication docs</a></dd>
 									<dt>X-Api-Secret</dt>
-									<dd>See <a href="v1/docs/api#authentication">authentication docs</a></dd>
+									<dd>See <a href="#authentication">authentication docs</a></dd>
 								</dl>
 							</td>
 						</tr>
 						<tr>
 							<th scope="row">Path</th>
 							<td>
-								<code>/v1/repos/<var>:id</var></code><br/>
-								(where <var>:id</var> is the unique identifier for a <a href="v1/docs/api#entity-repo">Repository</a>)
+								<code>/v1/repos/<var>:repo-id</var></code><br/>
+								(where <var>:repo-id</var> is the unique identifier for a <a href="#entity-repo">Repository</a>)
 							</td>
 						</tr>
 					</tbody>
@@ -265,7 +284,7 @@
 								<code>200</code> on success<br/>
 								<code>401</code> if authentication failed<br/>
 								<code>403</code> if authorization failed<br/>
-								<code>404</code> if a repo matching <var>:id</var> does not exist
+								<code>404</code> if a repo matching <var>:repo-id</var> does not exist
 							</td>
 						</tr>
 						<tr>
