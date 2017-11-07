@@ -1,5 +1,6 @@
 'use strict';
 
+const semver = require('semver');
 const uuid = require('uuid/v4');
 const uuidv5 = require('uuid/v5');
 
@@ -25,6 +26,7 @@ function initModel(app) {
 			this.on('saving', () => {
 				// Fill out automatic fields
 				this.attributes.repo_id = uuidv5(this.attributes.url, uuidv5.URL);
+				this.attributes.version_normalised = Version.normaliseSemver(this.attributes.version);
 				this.attributes.updated_at = new Date();
 				return this;
 			});
@@ -160,8 +162,13 @@ function initModel(app) {
 			return Version.collection().query(qb => {
 				qb.select('*');
 				qb.where('repo_id', repoId);
-				qb.where('version', versionNumber);
+				qb.where('version_normalised', Version.normaliseSemver(versionNumber));
 			}).fetchOne();
+		},
+
+		// Normalise a semver version
+		normaliseSemver(semverVersion) {
+			return semver.valid(semverVersion);
 		}
 
 	});
