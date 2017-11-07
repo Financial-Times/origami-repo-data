@@ -1,0 +1,41 @@
+
+<div class="o-techdocs-container">
+	<div class="o-techdocs-layout">
+
+		<div class="o-techdocs-sidebar">
+			{{>navigation}}
+		</div>
+
+		<div class="o-techdocs-main o-techdocs-content">
+
+			<h1>API Reference</h1>
+
+			<p>
+				The API reference for {{origami.options.name}} is split into several sections:
+			</p>
+
+			<ul>
+				<li>
+					<p>
+						<a href="{{basePath}}v1/docs/api/authentication">Authentication</a>:<br/>
+						Learn how to get an API key and authenticate with {{origami.options.name}}
+					</p>
+				</li>
+				<li>
+					<p>
+						<a href="{{basePath}}v1/docs/api/repositories">Repository endpoints</a>:<br/>
+						List and manage repositories that have been ingested into the service
+					</p>
+				</li>
+				<li>
+					<p>
+						<a href="{{basePath}}v1/docs/api/keys">API Key endpoints</a>:<br/>
+						List and manage API keys that have access to the service
+					</p>
+				</li>
+			</ul>
+
+		</div>
+
+	</div>
+</div>

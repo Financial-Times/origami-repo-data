@@ -8,55 +8,14 @@
 
 		<div class="o-techdocs-main o-techdocs-content">
 
-			<h1>API Reference</h1>
-
-
-			<h2 id="authentication">Authentication</h2>
+			<h1>Repository Endpoints</h1>
 
 			<p>
-				To authenticate with {{origami.options.name}}, you'll need an API key and secret.
-				You can get these by <a href="mailto:origami.support@ft.com">contacting the Origami team</a>.
-				Describe your use-case in detail so that we can assign your key appropriate permissions
-				(<code>READ</code>, <code>WRITE</code>, or <code>ADMIN</code>). The documentation
-				for each endpoint below outlines which permission you'll need.
+				The repository endpoints are used to view and manage the repositories that have been
+				ingested into the service. They respond and deal with one of the following entities:
 			</p>
 
-			<p>
-				Once you have credentials, most API methods require you to provide the key and secret
-				in HTTP headers:
-			</p>
-
-			<div class="o-techdocs-table-wrapper">
-				<table>
-					<thead>
-						<tr>
-							<th>Header</th>
-							<th>Value</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td><code>X-Api-Key</code></td>
-							<td>The API key that was provided by the Origami team</td>
-						</tr>
-						<tr>
-							<td><code>X-Api-Secret</code></td>
-							<td>The API secret key that was provided by the Origami team</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-
-			<h3>Example <code>curl</code> command:</h3>
-
-			<pre><code class="bash">curl -H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' https://origami-repo-data.ft.com/v1/repos</code></pre>
-
-
-			<h2 id="entities">Types of entity</h2>
-
-			<p>
-				{{origami.options.name}} responds with several different entity types:
-			</p>
+			<h2 id="entities">Entities</h2>
 
 			<h3 id="entity-repo">Repository Entity</h3>
 
@@ -120,31 +79,6 @@
 	"commitHash": "XXXXXX"
 }</code></pre>
 
-			<h3 id="entity-key">Key Entity</h3>
-
-			<p>
-				Key entities represent API keys which have access to the service.
-				As JSON they look like this:
-			</p>
-
-			<pre><code class="json">{
-	// A unique identifier for the key, used in the X-Api-Key header
-	"id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-
-	// When the key was generated
-	"generated": "2017-11-06T12:09:43.276Z",
-
-	// A short human-readable description of the key
-	"description": "A read key for Origami dashboards",
-
-	// The permissions that this key grants when used to authenticate
-	"permissions": {
-		"read": true,
-		"write": false,
-		"admin": false
-	}
-}</code></pre>
-
 
 			<h2 id="get-v1-repos">Get all repositories</h2>
 
@@ -166,20 +100,20 @@
 							</td>
 						</tr>
 						<tr>
+							<th scope="row">Path</th>
+							<td>
+								<code>/v1/repos</code>
+							</td>
+						</tr>
+						<tr>
 							<th scope="row">Headers</th>
 							<td>
 								<dl>
 									<dt>X-Api-Key</dt>
-									<dd>See <a href="#authentication">authentication docs</a></dd>
+									<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
 									<dt>X-Api-Secret</dt>
-									<dd>See <a href="#authentication">authentication docs</a></dd>
+									<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
 								</dl>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Path</th>
-							<td>
-								<code>/v1/repos</code>
 							</td>
 						</tr>
 					</tbody>
@@ -221,6 +155,7 @@
 		}
 	]
 }</code></pre>
+								<a href="#entity-repo">(documentation on Repository entities)</a>
 							</td>
 						</tr>
 					</tbody>
@@ -229,10 +164,12 @@
 
 			<h3>Example <code>curl</code> command:</h3>
 
-			<pre><code class="bash">curl -H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' https://origami-repo-data.ft.com/v1/repos</code></pre>
+			<pre><code class="bash">curl \
+	-H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
+	https://origami-repo-data.ft.com/v1/repos</code></pre>
 
 
-			<h2 id="get-v1-repos-(id)">Get a single repository</h2>
+			<h2 id="get-v1-repos-(id)">Get a repository</h2>
 
 			<p>
 				Get a single Origami repository by ID. This endpoint responds with a
@@ -252,21 +189,21 @@
 							</td>
 						</tr>
 						<tr>
-							<th scope="row">Headers</th>
-							<td>
-								<dl>
-									<dt>X-Api-Key</dt>
-									<dd>See <a href="#authentication">authentication docs</a></dd>
-									<dt>X-Api-Secret</dt>
-									<dd>See <a href="#authentication">authentication docs</a></dd>
-								</dl>
-							</td>
-						</tr>
-						<tr>
 							<th scope="row">Path</th>
 							<td>
 								<code>/v1/repos/<var>:repo-id</var></code><br/>
 								(where <var>:repo-id</var> is the unique identifier for a <a href="#entity-repo">Repository</a>)
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">Headers</th>
+							<td>
+								<dl>
+									<dt>X-Api-Key</dt>
+									<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+									<dt>X-Api-Secret</dt>
+									<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+								</dl>
 							</td>
 						</tr>
 					</tbody>
@@ -307,6 +244,7 @@
 		// Repository entity
 	]
 }</code></pre>
+								<a href="#entity-repo">(documentation on Repository entities)</a>
 							</td>
 						</tr>
 					</tbody>
@@ -315,7 +253,100 @@
 
 			<h3>Example <code>curl</code> command:</h3>
 
-			<pre><code class="bash">curl -H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' https://origami-repo-data.ft.com/v1/repos/XXXXXX</code></pre>
+			<pre><code class="bash">curl \
+	-H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
+	https://origami-repo-data.ft.com/v1/repos/XXXXXX</code></pre>
+
+
+			<h2 id="get-v1-repos-(id)-versions">Get all versions for a repository</h2>
+
+			<p>
+				Get a list of all versions for an Origami repository as an array. This endpoint responds
+				with an array of <a href="#entity-version">Version entities</a>. This
+				endpoint requires the <code>READ</code> permission.
+			</p>
+
+			<h3>Request</h3>
+
+			<div class="o-techdocs-table-wrapper">
+				<table>
+					<tbody>
+						<tr>
+							<th scope="row">Method</th>
+							<td>
+								<code>GET</code>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">Path</th>
+							<td>
+								<code>/v1/repos/<var>:repo-id</var>/versions</code><br/>
+								(where <var>:repo-id</var> is the unique identifier for a <a href="#entity-repo">Repository</a>)
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">Headers</th>
+							<td>
+								<dl>
+									<dt>X-Api-Key</dt>
+									<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+									<dt>X-Api-Secret</dt>
+									<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+								</dl>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<h3>Response</h3>
+
+			<div class="o-techdocs-table-wrapper">
+				<table>
+					<tbody>
+						<tr>
+							<th scope="row">Status</th>
+							<td>
+								<code>200</code> on success<br/>
+								<code>401</code> if authentication failed<br/>
+								<code>403</code> if authorization failed<br/>
+								<code>404</code> if a repo matching <var>:repo-id</var> does not exist
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">Headers</th>
+							<td>
+								<dl>
+									<dt>Content-Type</dt>
+									<dd>
+										<code>application/json</code> on success<br/>
+										<code>text/html</code> on error
+									</dd>
+								</dl>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">Body</th>
+							<td>
+								<pre><code class="json">{
+	"versions": [
+		{
+			// Version entity
+		}
+	]
+}</code></pre>
+								<a href="#entity-version">(documentation on Version entities)</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<h3>Example <code>curl</code> command:</h3>
+
+			<pre><code class="bash">curl \
+	-H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
+	https://origami-repo-data.ft.com/v1/repos/XXXXXX/versions</code></pre>
 
 		</div>
 

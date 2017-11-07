@@ -1,0 +1,58 @@
+
+<div class="o-techdocs-container">
+	<div class="o-techdocs-layout">
+
+		<div class="o-techdocs-sidebar">
+			{{>navigation}}
+		</div>
+
+		<div class="o-techdocs-main o-techdocs-content">
+
+			<h1>Authentication</h1>
+
+			<p>
+				To authenticate with {{origami.options.name}}, you'll need an API key and secret.
+				You can get these by <a href="mailto:origami.support@ft.com">contacting the Origami team</a>.
+				Describe your use-case in detail so that we can assign your key appropriate permissions
+				(<code>READ</code>, <code>WRITE</code>, or <code>ADMIN</code>). The documentation
+				for each endpoint outlines which permission you'll need.
+			</p>
+
+			<p>
+				Once you have credentials, most API methods require you to provide the key and secret
+				in HTTP headers. You can use a query parameter rather than headers, but be careful
+				when using this approach as it's easier to accidentally expose your secret.
+			</p>
+
+			<p>
+				The headers or query parameters required by the service are:
+			</p>
+
+			<div class="o-techdocs-table-wrapper">
+				<table>
+					<thead>
+						<tr>
+							<th>Header</th>
+							<th>Query Parameter</th>
+							<th>Value</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><code>X-Api-Key</code></td>
+							<td><code>apiKey</code></td>
+							<td>The API key that was provided by the Origami team</td>
+						</tr>
+						<tr>
+							<td><code>X-Api-Secret</code></td>
+							<td><code>apiSecret</code></td>
+							<td>The API secret key that was provided by the Origami team</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+		</div>
+
+	</div>
+</div>
