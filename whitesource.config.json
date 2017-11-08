@@ -1,0 +1,7 @@
+{
+	"checkPolicies": true,
+	"projectName": "origami-repo-data",
+	"productName": "origami-repo-data",
+	"devDep": false,
+	"failOnError": true
+}
