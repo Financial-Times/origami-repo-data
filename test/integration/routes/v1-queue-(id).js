@@ -4,15 +4,15 @@
 const database = require('../helpers/database');
 const assert = require('proclaim');
 
-describe('GET /v1/keys/:keyId', () => {
+describe('GET /v1/queue/:ingestionId', () => {
 	let request;
 
 	beforeEach(async () => {
 		await database.seed(app, 'basic');
 		request = agent
-			.get('/v1/keys/mock-read-key')
-			.set('X-Api-Key', 'mock-admin-key')
-			.set('X-Api-Secret', 'mock-admin-secret');
+			.get('/v1/queue/5a070ea9-44f8-4312-8080-c4882d642ec4')
+			.set('X-Api-Key', 'mock-read-key')
+			.set('X-Api-Secret', 'mock-read-secret');
 	});
 
 	it('responds with a 200 status', () => {
@@ -30,29 +30,26 @@ describe('GET /v1/keys/:keyId', () => {
 			response = (await request.then()).body;
 		});
 
-		it('has a `key` object property', () => {
-			assert.isObject(response.key);
+		it('has an `ingestion` object property', () => {
+			assert.isObject(response.ingestion);
 		});
 
-		it('includes the requested key with no secret', () => {
-
-			assert.isObject(response.key);
-			assert.strictEqual(response.key.id, 'mock-read-key');
-			assert.isUndefined(response.key.secret);
-
+		it('includes the latest requested ingestion', () => {
+			assert.isObject(response.ingestion);
+			assert.strictEqual(response.ingestion.id, '5a070ea9-44f8-4312-8080-c4882d642ec4');
 		});
 
 	});
 
-	describe('when :keyId is not a valid key ID', () => {
+	describe('when :ingestionId is not a valid ingestion ID', () => {
 		let request;
 
 		beforeEach(async () => {
 			await database.seed(app, 'basic');
 			request = agent
-				.get('/v1/keys/not-an-id')
-				.set('X-Api-Key', 'mock-admin-key')
-				.set('X-Api-Secret', 'mock-admin-secret');
+				.get('/v1/queue/not-an-id')
+				.set('X-Api-Key', 'mock-read-key')
+				.set('X-Api-Secret', 'mock-read-secret');
 		});
 
 		it('responds with a 404 status', () => {
@@ -70,7 +67,7 @@ describe('GET /v1/keys/:keyId', () => {
 
 		beforeEach(async () => {
 			await database.seed(app, 'basic');
-			request = agent.get('/v1/keys/mock-read-key');
+			request = agent.get('/v1/queue/5a070ea9-44f8-4312-8080-c4882d642ec4');
 		});
 
 		it('responds with a 401 status', () => {
@@ -89,9 +86,9 @@ describe('GET /v1/keys/:keyId', () => {
 		beforeEach(async () => {
 			await database.seed(app, 'basic');
 			request = agent
-				.get('/v1/keys/mock-read-key')
-				.set('X-Api-Key', 'mock-write-key')
-				.set('X-Api-Secret', 'mock-write-secret');
+				.get('/v1/queue/5a070ea9-44f8-4312-8080-c4882d642ec4')
+				.set('X-Api-Key', 'mock-no-key')
+				.set('X-Api-Secret', 'mock-no-secret');
 		});
 
 		it('responds with a 403 status', () => {
@@ -106,13 +103,13 @@ describe('GET /v1/keys/:keyId', () => {
 
 });
 
-describe('DELETE /v1/keys/:keyId', () => {
+describe('DELETE /v1/queue/:ingestionId', () => {
 	let request;
 
 	beforeEach(async () => {
 		await database.seed(app, 'basic');
 		request = agent
-			.delete('/v1/keys/mock-read-key')
+			.delete('/v1/queue/5a070ea9-44f8-4312-8080-c4882d642ec4')
 			.set('X-Api-Key', 'mock-admin-key')
 			.set('X-Api-Secret', 'mock-admin-secret');
 	});
@@ -127,34 +124,13 @@ describe('DELETE /v1/keys/:keyId', () => {
 		assert.strictEqual(response.text, '');
 	});
 
-	describe('when :keyId is the same as the key being used to authenticate', () => {
+	describe('when :ingestionId is not a valid key ID', () => {
 		let request;
 
 		beforeEach(async () => {
 			await database.seed(app, 'basic');
 			request = agent
-				.delete('/v1/keys/mock-admin-key')
-				.set('X-Api-Key', 'mock-admin-key')
-				.set('X-Api-Secret', 'mock-admin-secret');
-		});
-
-		it('responds with a 403 status', () => {
-			return request.expect(403);
-		});
-
-		it('responds with HTML', () => {
-			return request.expect('Content-Type', /text\/html/);
-		});
-
-	});
-
-	describe('when :keyId is not a valid key ID', () => {
-		let request;
-
-		beforeEach(async () => {
-			await database.seed(app, 'basic');
-			request = agent
-				.delete('/v1/keys/not-an-id')
+				.delete('/v1/queue/not-an-id')
 				.set('X-Api-Key', 'mock-admin-key')
 				.set('X-Api-Secret', 'mock-admin-secret');
 		});
@@ -174,7 +150,7 @@ describe('DELETE /v1/keys/:keyId', () => {
 
 		beforeEach(async () => {
 			await database.seed(app, 'basic');
-			request = agent.delete('/v1/keys/mock-read-key');
+			request = agent.delete('/v1/queue/5a070ea9-44f8-4312-8080-c4882d642ec4');
 		});
 
 		it('responds with a 401 status', () => {
@@ -193,7 +169,7 @@ describe('DELETE /v1/keys/:keyId', () => {
 		beforeEach(async () => {
 			await database.seed(app, 'basic');
 			request = agent
-				.delete('/v1/keys/mock-read-key')
+				.delete('/v1/queue/5a070ea9-44f8-4312-8080-c4882d642ec4')
 				.set('X-Api-Key', 'mock-write-key')
 				.set('X-Api-Secret', 'mock-write-secret');
 		});

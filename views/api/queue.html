@@ -8,62 +8,64 @@
 
 		<div class="o-techdocs-main o-techdocs-content">
 
-			<h1>API Key Endpoints</h1>
+			<h1>Ingestion Queue Endpoints</h1>
 
 			<p>
-				The API key endpoints are used to view and manage API keys to grant access to the
-				service. They respond and deal with one of the following entities:
+				The ingestion queue endpoints are used to view and manage the queue of repositories
+				to be added to the service. They respond and deal with one of the following entities:
 			</p>
 
 			<h2 id="entities">Entities</h2>
 
-			<h3 id="entity-key">Key Entity</h3>
+			<h3 id="entity-ingestion">Ingestion Entity</h3>
 
 			<p>
-				Key entities represent API keys which have access to the service.
-				As JSON they look like this:
+				Ingestion entities represent individual repositories in the queue, which are waiting
+				to be ingested or are currently being ingested. As JSON they look like this:
 			</p>
 
 			<pre><code class="json">{
-	// A unique identifier for the key, used in the X-Api-Key header
+	// A unique identifier for the ingestion
 	"id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
 
-	// When the key was generated
-	"generated": "2017-11-06T12:09:43.276Z",
+	// The repository and tag which will be ingested to create a
+	// new version in the database
+	"repo": {
+		"url": "https://github.com/Financial-Times/example",
+		"tag": "v1.0.0"
+	},
 
-	// A short human-readable description of the key
-	"description": "A read key for Origami dashboards",
+	// The progress that has been made so far in ingesting this
+	// repository and tag
+	"progress": {
 
-	// The permissions that this key grants when used to authenticate
-	"permissions": {
-		"read": true,
-		"write": false,
-		"admin": false
-	}
+		// Whether this item is currently being ingested
+		"isInProgress": false,
+
+		// The time that the ingestion process was started, either
+		// null when it is not in progress, or a date string if it is
+		"startTime": null,
+
+		// How many attempts have been made to ingest this
+		// repository and tag combination
+		"attempts": 0
+
+	},
+
+	// When the ingestion was created
+	"created": "2017-11-08T12:13:00.000Z",
+
+	// When the ingestion was last updated
+	"lastUpdated": "2017-11-08T12:13:00.000Z"
 }</code></pre>
 
-			<h3 id="entity-credentials">Credentials Entity</h3>
+
+			<h2 id="get-v1-queue">Get the full queue</h2>
 
 			<p>
-				Credentials entities represent a full set of credentials (key and secret) which have
-				access to the service. As JSON they look like this:
-			</p>
-
-			<pre><code class="json">{
-	// A unique identifier for the key, used in the X-Api-Key header
-	"id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-
-	// The secret for the key, used in the X-Api-Secret header
-	"secret": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-}</code></pre>
-
-
-			<h2 id="get-v1-keys">Get all API keys</h2>
-
-			<p>
-				Get a list of all available API keys for this service as an array. This endpoint
-				responds with an array of <a href="#entity-key">Key entities</a>. This
-				endpoint requires the <code>ADMIN</code> permission.
+				Get a list of all current ingestions in the queue as an array. This endpoint
+				responds with an array of <a href="#entity-ingestion">Ingestion entities</a>. This
+				endpoint requires the <code>READ</code> permission.
 			</p>
 
 			<h3>Request</h3>
@@ -80,7 +82,7 @@
 						<tr>
 							<th scope="row">Path</th>
 							<td>
-								<code>/v1/keys</code>
+								<code>/v1/queue</code>
 							</td>
 						</tr>
 						<tr>
@@ -127,13 +129,13 @@
 							<th scope="row">Body</th>
 							<td>
 								<pre><code class="json">{
-	"keys": [
+	"queue": [
 		{
-			// Key entity
+			// Ingestion entity
 		}
 	]
 }</code></pre>
-								<a href="#entity-key">(documentation on Key entities)</a>
+								<a href="#entity-ingestion">(documentation on Ingestion entities)</a>
 							</td>
 						</tr>
 					</tbody>
@@ -144,15 +146,15 @@
 
 			<pre><code class="bash">curl \
 	-H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
-	https://origami-repo-data.ft.com/v1/keys</code></pre>
+	https://origami-repo-data.ft.com/v1/queue</code></pre>
 
 
-			<h2 id="get-v1-keys-(id)">Get an API key</h2>
+			<h2 id="get-v1-queue-(id)">Get an ingestion</h2>
 
 			<p>
-				Get a single API key for this service by ID. This endpoint responds with a
-				<a href="#entity-key">Key entity</a>. This endpoint requires the
-				<code>ADMIN</code> permission.
+				Get a single ingestion in the queue by ID. This endpoint responds with a
+				<a href="#entity-ingestion">Ingestion entity</a>. This endpoint requires the
+				<code>READ</code> permission.
 			</p>
 
 			<h3>Request</h3>
@@ -169,9 +171,9 @@
 						<tr>
 							<th scope="row">Path</th>
 							<td>
-								<code>/v1/keys/<var>:key-id</var></code><br/>
-								(where <var>:key-id</var> is the unique identifier for a
-								<a href="#entity-key">Key</a>)
+								<code>/v1/queue/<var>:ingestion-id</var></code><br/>
+								(where <var>:ingestion-id</var> is the unique identifier for a
+								<a href="#entity-ingestion">Ingestion</a>)
 							</td>
 						</tr>
 						<tr>
@@ -200,7 +202,7 @@
 								<code>200</code> on success<br/>
 								<code>401</code> if authentication failed<br/>
 								<code>403</code> if authorization failed<br/>
-								<code>404</code> if a key matching <var>:key-id</var> does not exist
+								<code>404</code> if an ingestion matching <var>:ingestion-id</var> does not exist
 							</td>
 						</tr>
 						<tr>
@@ -219,11 +221,11 @@
 							<th scope="row">Body</th>
 							<td>
 								<pre><code class="json">{
-	"key": {
-		// Key entity
+	"ingestion": {
+		// Ingestion entity
 	}
 }</code></pre>
-								<a href="#entity-key">(documentation on Key entities)</a>
+								<a href="#entity-ingestion">(documentation on Ingestion entities)</a>
 							</td>
 						</tr>
 					</tbody>
@@ -234,21 +236,16 @@
 
 			<pre><code class="bash">curl \
 	-H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
-	https://origami-repo-data.ft.com/v1/keys/XXXXXX</code></pre>
+	https://origami-repo-data.ft.com/v1/queue/XXXXXX</code></pre>
 
 
-			<h2 id="post-v1-keys">Create an API key</h2>
-
-			<p>
-				Create a new API key which can be used to access the service. This endpoint accepts
-				key details and responds with a <a href="#entity-credentials">Credentials entity</a>: the new
-				API key and secret. This endpoint requires the <code>ADMIN</code> permission.
-			</p>
+			<h2 id="post-v1-queue">Add an ingestion to the queue</h2>
 
 			<p>
-				<strong aria-label="Warning">⚠️</strong> The API secret will only ever be output once
-				when the key is created. After this point it is hashed and unreadable even by the
-				service. Be sure to save the output somewhere secure, such as LastPass.
+				Create a new ingestion and add it to the queue. This endpoint accepts
+				ingestion details and responds with a newly created
+				<a href="#entity-ingestion">Ingestion entity</a>. This endpoint requires the
+				<code>WRITE</code> permission.
 			</p>
 
 			<h3>Request</h3>
@@ -265,7 +262,7 @@
 						<tr>
 							<th scope="row">Path</th>
 							<td>
-								<code>/v1/keys</code>
+								<code>/v1/queue</code>
 							</td>
 						</tr>
 						<tr>
@@ -285,13 +282,11 @@
 							<th scope="row">Body</th>
 							<td>
 								<pre><code class="json">{
-	// A short human-readable description of the key (required)
-	"description": "A read key for Origami dashboards",
+	// The GitHub repository URL to ingest (required)
+	"url": "https://github.com/Financial-Times/example",
 
-	// The permissions that this key grants (optional)
-	"read": true,   // defaults to true
-	"write": false, // defaults to false
-	"admin": false  // defaults to false
+	// The GitHub repository tag to ingest (required)
+	"tag": "v1.0.0"
 }</code></pre>
 							</td>
 						</tr>
@@ -329,11 +324,11 @@
 							<th scope="row">Body</th>
 							<td>
 								<pre><code class="json">{
-	"credentials": {
-		// Credentials entity
+	"ingestion": {
+		// Ingestion entity
 	}
 }</code></pre>
-								<a href="#entity-credentials">(documentation on Credentials entities)</a>
+								<a href="#entity-ingestion">(documentation on Ingestion entities)</a>
 							</td>
 						</tr>
 					</tbody>
@@ -344,16 +339,15 @@
 
 			<pre><code class="bash">curl -X POST \
 	-H 'Content-Type: application/json' -H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
-	-d '{"description": "A new API key", "read": true, "write": true, "admin": false}' \
-	https://origami-repo-data.ft.com/v1/keys</code></pre>
+	-d '{"url": "https://github.com/Financial-Times/example", "tag": "v1.0.0"}' \
+	https://origami-repo-data.ft.com/v1/queue</code></pre>
 
 
-			<h2 id="delete-v1-keys-(id)">Delete an API key</h2>
+			<h2 id="delete-v1-queue-(id)">Delete an ingestion</h2>
 
 			<p>
-				Delete a single API key from this service by ID. This endpoint requires the
-				<code>ADMIN</code> permission. Additionally, you are not permitted to delete the
-				same API key that you are currently authenticating with.
+				Delete a single ingestion from the queue by ID, preventing that repo/tag combination
+				from being ingested. This endpoint requires the <code>ADMIN</code> permission.
 			</p>
 
 			<h3>Request</h3>
@@ -370,9 +364,9 @@
 						<tr>
 							<th scope="row">Path</th>
 							<td>
-								<code>/v1/keys/<var>:key-id</var></code><br/>
-								(where <var>:key-id</var> is the unique identifier for a
-								<a href="#entity-key">Key</a>)
+								<code>/v1/queue/<var>:ingestion-id</var></code><br/>
+								(where <var>:ingestion-id</var> is the unique identifier for a
+								<a href="#entity-ingestion">Ingestion</a>)
 							</td>
 						</tr>
 						<tr>
@@ -401,7 +395,7 @@
 								<code>204</code> on success<br/>
 								<code>401</code> if authentication failed<br/>
 								<code>403</code> if authorization failed<br/>
-								<code>404</code> if a key matching <var>:key-id</var> does not exist
+								<code>404</code> if an ingestion matching <var>:ingestion-id</var> does not exist
 							</td>
 						</tr>
 						<tr>
@@ -430,7 +424,7 @@
 
 			<pre><code class="bash">curl -X DELETE \
 	-H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
-	https://origami-repo-data.ft.com/v1/keys/XXXXXX</code></pre>
+	https://origami-repo-data.ft.com/v1/queue/XXXXXX</code></pre>
 
 		</div>
 

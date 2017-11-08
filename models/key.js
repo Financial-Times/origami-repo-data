@@ -111,7 +111,6 @@ function initModel(app) {
 		fetchById(keyId) {
 			return Key.collection().query(qb => {
 				qb.where('id', keyId);
-				qb.orderBy('created_at', 'desc');
 			}).fetchOne();
 		}
 
