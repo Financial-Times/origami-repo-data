@@ -26,7 +26,7 @@ function initModel(app) {
 			this.on('saving', () => {
 				// Fill out automatic fields
 				this.attributes.repo_id = uuidv5(this.attributes.url, uuidv5.URL);
-				this.attributes.version_normalised = Version.normaliseSemver(this.attributes.version);
+				this.attributes.version = Version.normaliseSemver(this.attributes.tag);
 				this.attributes.updated_at = new Date();
 				return this;
 			});
@@ -162,7 +162,7 @@ function initModel(app) {
 			return Version.collection().query(qb => {
 				qb.select('*');
 				qb.where('repo_id', repoId);
-				qb.where('version_normalised', Version.normaliseSemver(versionNumber));
+				qb.where('version', Version.normaliseSemver(versionNumber));
 			}).fetchOne();
 		},
 

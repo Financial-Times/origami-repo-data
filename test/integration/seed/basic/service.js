@@ -13,8 +13,8 @@ exports.seed = async database => {
 			url: 'https://github.com/Financial-Times/mock-service',
 			support_email: 'origami.support@ft.com',
 			support_channel: '#ft-origami',
-			version: 'v1.0.0',
-			version_normalised: '1.0.0',
+			tag: 'v1.0.0',
+			version: '1.0.0',
 			commit_hash: 'mock-hash-1',
 			manifests: JSON.stringify({}),
 			markdown: JSON.stringify({})
@@ -29,8 +29,8 @@ exports.seed = async database => {
 			url: 'https://github.com/Financial-Times/mock-service',
 			support_email: 'origami.support@ft.com',
 			support_channel: '#ft-origami',
-			version: 'v2.0.0',
-			version_normalised: '2.0.0',
+			tag: 'v2.0.0',
+			version: '2.0.0',
 			commit_hash: 'mock-hash-2',
 			manifests: JSON.stringify({}),
 			markdown: JSON.stringify({})
@@ -45,8 +45,8 @@ exports.seed = async database => {
 			url: 'https://github.com/Financial-Times/mock-service',
 			support_email: 'origami.support@ft.com',
 			support_channel: '#ft-origami',
-			version: 'v2.1.0',
-			version_normalised: '2.1.0',
+			tag: 'v2.1.0',
+			version: '2.1.0',
 			commit_hash: 'mock-hash-3',
 			manifests: JSON.stringify({}),
 			markdown: JSON.stringify({})

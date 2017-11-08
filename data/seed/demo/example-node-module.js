@@ -20,8 +20,8 @@ exports.seed = async database => {
 			url: 'https://github.com/Financial-Times/node-example-module',
 			support_email: 'origami.support@ft.com',
 			support_channel: '#ft-origami',
-			version: 'v1.0.0',
-			version_normalised: '1.0.0',
+			tag: 'v1.0.0',
+			version: '1.0.0',
 			commit_hash: '071a20f7e49b6fcf29c1080140d599c8c60b71b6',
 			manifests: JSON.stringify({
 				about: null,
@@ -51,8 +51,8 @@ exports.seed = async database => {
 			url: 'https://github.com/Financial-Times/node-example-module',
 			support_email: 'origami.support@ft.com',
 			support_channel: '#ft-origami',
-			version: 'v1.1.0',
-			version_normalised: '1.1.0',
+			tag: 'v1.1.0',
+			version: '1.1.0',
 			commit_hash: '64a7ab36ee875404a57f62c2fe0bea528603f022',
 			manifests: JSON.stringify({
 				about: null,
