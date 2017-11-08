@@ -1,6 +1,6 @@
 'use strict';
 
-const joi = require('joi');
+const joi = require('joi').extend(require('joi-extension-semver'));
 const uuid = require('uuid/v4');
 
 module.exports = initModel;
@@ -12,7 +12,7 @@ function initModel(app) {
 		url: joi.string().uri({
 			scheme: 'https'
 		}).required(),
-		tag: joi.string().required(),
+		tag: joi.semver().valid().required(),
 		ingestion_attempts: joi.number().integer(),
 		ingestion_started_at: joi.date()
 	});
