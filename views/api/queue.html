@@ -248,6 +248,12 @@
 				<code>WRITE</code> permission.
 			</p>
 
+			<p>
+				<strong aria-label="Notice">ℹ️</strong> This endpoint can also function as a
+				<a href="https://developer.github.com/webhooks/">GitHub webhook</a>.
+				There's a section on this <a href="#post-v1-queue-github-webhook">below the standard request/response documentation</a>.
+			</p>
+
 			<h3>Request</h3>
 
 			<div class="o-techdocs-table-wrapper">
@@ -341,6 +347,52 @@
 	-H 'Content-Type: application/json' -H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
 	-d '{"url": "https://github.com/Financial-Times/example", "tag": "v1.0.0"}' \
 	https://origami-repo-data.ft.com/v1/queue</code></pre>
+
+			<h3 id="post-v1-queue-github-webhook">GitHub Webhook</h3>
+
+			<p>
+				You can also automatically add repository/tag combinations to the queue via a
+				<a href="https://developer.github.com/webhooks/">GitHub webhook</a>. This further
+				automates the service. We recommend doing this as an organisation-wide hook.
+			</p>
+
+			<ol>
+				<li>
+					<p>
+						Create a new webhook on either your repository or origanisation
+					</p>
+				</li>
+				<li>
+					<p>
+						Set the <b>Payload URL</b> to this endpoint. You'll need to include the
+						<code>apiKey</code> and <code>apiSecret</code> query parameters rather than
+						headers, as GitHub does not allow you to send custom headers with webhooks.
+						See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a>
+						for more detail
+					</p>
+				</li>
+				<li>
+					<p>
+						Set the <b>Content type</b> to <code>application/json</code>
+					</p>
+				</li>
+				<li>
+					<p>
+						Select the <b>Let me select individual events</b> radio button
+					</p>
+				</li>
+				<li>
+					<p>
+						Uncheck all event types <em>except</em> <b>Create</b> – this should be the
+						only one checked
+					</p>
+				</li>
+				<li>
+					<p>
+						Click <b>Add webhook</b>
+					</p>
+				</li>
+			</ol>
 
 
 			<h2 id="delete-v1-queue-(id)">Delete an ingestion</h2>

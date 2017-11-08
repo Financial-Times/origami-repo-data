@@ -225,3 +225,194 @@ describe('POST /v1/queue', () => {
 	});
 
 });
+
+describe('POST /v1/queue (accepting a GitHub webhook)', () => {
+	let request;
+
+	beforeEach(async () => {
+		await database.seed(app, 'basic');
+		request = agent
+			.post('/v1/queue?apiKey=mock-write-key&apiSecret=mock-write-secret')
+			.set('X-GitHub-Event', 'create')
+			.send({
+				ref_type: 'tag',
+				ref: 'v5.6.7',
+				repository: {
+					html_url: 'https://github.com/Financial-Times/o-mock-component'
+				}
+			});
+	});
+
+	it('creates a new ingestion in the database', async () => {
+		await request.then();
+		const ingestions = await app.database.knex.select('*').from('ingestion_queue').where({
+			tag: 'v5.6.7'
+		});
+		assert.lengthEquals(ingestions, 1);
+		assert.isString(ingestions[0].id);
+		assert.strictEqual(ingestions[0].url, 'https://github.com/Financial-Times/o-mock-component');
+		assert.strictEqual(ingestions[0].tag, 'v5.6.7');
+		assert.strictEqual(ingestions[0].ingestion_attempts, 0);
+		assert.isNull(ingestions[0].ingestion_started_at);
+	});
+
+	it('responds with a 201 status', () => {
+		return request.expect(201);
+	});
+
+	it('responds with text', () => {
+		return request.expect('Content-Type', /text\/plain/);
+	});
+
+	describe('when the `X-GitHub-Event` header is not "create"', () => {
+		let request;
+
+		beforeEach(async () => {
+			await database.seed(app, 'basic');
+			request = agent
+				.post('/v1/queue?apiKey=mock-write-key&apiSecret=mock-write-secret')
+				.set('X-GitHub-Event', 'nope')
+				.send({
+					ref_type: 'tag',
+					ref: 'v5.6.7',
+					repository: {
+						html_url: 'https://github.com/Financial-Times/o-mock-component'
+					}
+				});
+		});
+
+		it('responds with a 400 status', () => {
+			return request.expect(400);
+		});
+
+		it('responds with HTML', () => {
+			return request.expect('Content-Type', /text\/html/);
+		});
+
+	});
+
+	describe('when the request body `ref_type` property is not "tag"', () => {
+		let request;
+
+		beforeEach(async () => {
+			await database.seed(app, 'basic');
+			request = agent
+				.post('/v1/queue?apiKey=mock-write-key&apiSecret=mock-write-secret')
+				.set('X-GitHub-Event', 'create')
+				.send({
+					ref_type: 'branch',
+					ref: 'new-branch',
+					repository: {
+						html_url: 'https://github.com/Financial-Times/o-mock-component'
+					}
+				});
+		});
+
+		it('responds with a 202 status', () => {
+			return request.expect(202);
+		});
+
+		it('responds with text', () => {
+			return request.expect('Content-Type', /text\/plain/);
+		});
+
+	});
+
+	describe('when the request body `ref` property is not a valid semantic version', () => {
+		let request;
+
+		beforeEach(async () => {
+			await database.seed(app, 'basic');
+			request = agent
+				.post('/v1/queue?apiKey=mock-write-key&apiSecret=mock-write-secret')
+				.set('X-GitHub-Event', 'create')
+				.send({
+					ref_type: 'tag',
+					ref: 'new-tag',
+					repository: {
+						html_url: 'https://github.com/Financial-Times/o-mock-component'
+					}
+				});
+		});
+
+		it('responds with a 202 status', () => {
+			return request.expect(202);
+		});
+
+		it('responds with text', () => {
+			return request.expect('Content-Type', /text\/plain/);
+		});
+
+	});
+
+	describe('when the request body `repository.html_url` property is not set', () => {
+		let request;
+
+		beforeEach(async () => {
+			await database.seed(app, 'basic');
+			request = agent
+				.post('/v1/queue?apiKey=mock-write-key&apiSecret=mock-write-secret')
+				.set('X-GitHub-Event', 'create')
+				.send({
+					ref_type: 'tag',
+					ref: 'v5.6.7',
+					repository: {}
+				});
+		});
+
+		it('responds with a 400 status', () => {
+			return request.expect(400);
+		});
+
+		it('responds with HTML', () => {
+			return request.expect('Content-Type', /text\/html/);
+		});
+
+	});
+
+	describe('when no API credentials are provided', () => {
+		let request;
+
+		beforeEach(async () => {
+			await database.seed(app, 'basic');
+			request = agent.post('/v1/queue');
+		});
+
+		it('responds with a 401 status', () => {
+			return request.expect(401);
+		});
+
+		it('responds with HTML', () => {
+			return request.expect('Content-Type', /text\/html/);
+		});
+
+	});
+
+	describe('when the provided API key does not have the required permissions', () => {
+		let request;
+
+		beforeEach(async () => {
+			await database.seed(app, 'basic');
+			request = agent
+				.post('/v1/queue?apiKey=mock-read-key&apiSecret=mock-read-secret')
+				.set('X-GitHub-Event', 'create')
+				.send({
+					ref_type: 'tag',
+					ref: 'v5.6.7',
+					repository: {
+						html_url: 'https://github.com/Financial-Times/o-mock-component'
+					}
+				});
+		});
+
+		it('responds with a 403 status', () => {
+			return request.expect(403);
+		});
+
+		it('responds with HTML', () => {
+			return request.expect('Content-Type', /text\/html/);
+		});
+
+	});
+
+});
