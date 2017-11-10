@@ -7,8 +7,38 @@
 		</div>
 
 		<div class="o-techdocs-main o-techdocs-content">
+
 			<h1>Get information about Origami repositories</h1>
+
 			<p><strong>⚠️ This is a work in progress ⚠️</strong></p>
+
+			{{#if origami.options.enableSetupStep}}
+				<div class="o-techdocs-card o-techdocs-card--sev1">
+					<div class="o-techdocs-card__context">
+						<div class="o-techdocs-card__heading">
+							<div class="o-techdocs-card__title">Service Set Up</div>
+						</div>
+					</div>
+					<div class="o-techdocs-card__content">
+						{{#if setupCredentials}}
+							<p>
+								The API key and secret below will only ever be output once. Do not
+								refresh this page or navigate away until you've saved the credentials
+								somewhere secure, such as LastPass.
+							</p>
+							<pre><code class="nohighlight"><b>API Key:</b> {{setupCredentials.id}}
+<b>API Secret:</b> {{setupCredentials.secret}}</code></pre>
+						{{else}}
+							<p>
+								Please remove the <code>ENABLE_SETUP_STEP</code> environment
+								variable from the service configuration.
+							</p>
+						{{/if}}
+
+					</div>
+				</div>
+			{{/if}}
+
 		</div>
 
 	</div>

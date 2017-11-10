@@ -15,3 +15,9 @@ table dl,
 .o-techdocs-content table pre {
 	margin: 0;
 }
+
+/* aside overrides */
+.o-techdocs-card__content p,
+.o-techdocs-card__content pre {
+	margin: 0;
+}
