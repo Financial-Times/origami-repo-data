@@ -11,6 +11,7 @@ describe('lib/service', () => {
 	let bookshelf;
 	let healthChecks;
 	let knex;
+	let morgan;
 	let service;
 	let origamiService;
 	let requireAll;
@@ -29,6 +30,9 @@ describe('lib/service', () => {
 
 		knex = require('../mock/knex.mock');
 		mockery.registerMock('knex', knex);
+
+		morgan = require('../mock/morgan.mock');
+		mockery.registerMock('morgan', morgan);
 
 		origamiService = require('../mock/origami-service.mock');
 		mockery.registerMock('@financial-times/origami-service', origamiService);
@@ -89,6 +93,73 @@ describe('lib/service', () => {
 
 		it('sets `options.about` to the contents of about.json', () => {
 			assert.strictEqual(options.about, about);
+		});
+
+		it('creates a new morgan token named "auth"', () => {
+			assert.calledOnce(morgan.token);
+			assert.calledWith(morgan.token, 'auth');
+			assert.isFunction(morgan.token.firstCall.args[1]);
+		});
+
+		describe('morgan "auth" token', () => {
+			let authToken;
+			let mockRequest;
+			let returnValue;
+
+			beforeEach(() => {
+				mockRequest = {
+					authenticatedKey: {
+						get: sinon.stub().returns('mock-auth-value')
+					}
+				};
+				authToken = morgan.token.firstCall.args[1];
+				returnValue = authToken(mockRequest, {});
+			});
+
+			it('calls the authenticated key `get` method with "id"', () => {
+				assert.calledOnce(mockRequest.authenticatedKey.get);
+				assert.calledWithExactly(mockRequest.authenticatedKey.get, 'id');
+			});
+
+			it('returns the result of the `get` call', () => {
+				assert.strictEqual(returnValue, 'mock-auth-value');
+			});
+
+			describe('when a third argument (field) is passed in', () => {
+
+				beforeEach(() => {
+					mockRequest.authenticatedKey.get.resetHistory();
+					returnValue = authToken(mockRequest, {}, 'mock-field');
+				});
+
+				it('calls the authenticated key `get` method with the passed in field', () => {
+					assert.calledOnce(mockRequest.authenticatedKey.get);
+					assert.calledWithExactly(mockRequest.authenticatedKey.get, 'mock-field');
+				});
+
+				it('returns the result of the `get` call', () => {
+					assert.strictEqual(returnValue, 'mock-auth-value');
+				});
+
+			});
+
+			describe('when there is no authenticated key', () => {
+
+				beforeEach(() => {
+					delete mockRequest.authenticatedKey;
+					returnValue = authToken(mockRequest, {}, 'mock-field');
+				});
+
+				it('returns "none"', () => {
+					assert.strictEqual(returnValue, 'none');
+				});
+
+			});
+
+		});
+
+		it('sets `options.requestLogFormat` to combined plus auth information', () => {
+			assert.strictEqual(options.requestLogFormat, `${morgan.combined} auth=":auth/:auth[description]"`);
 		});
 
 		it('creates and mounts getBasePath middleware', () => {
