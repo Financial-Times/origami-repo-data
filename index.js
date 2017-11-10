@@ -10,7 +10,8 @@ const options = {
 	database: process.env.DATABASE_URL || 'postgres://localhost:5432/origami-repo-data',
 	log: console,
 	name: 'Origami Repo Data',
-	workers: process.env.WEB_CONCURRENCY || 1
+	workers: process.env.WEB_CONCURRENCY || 1,
+	enableSetupStep: !!process.env.ENABLE_SETUP_STEP
 };
 
 throng({

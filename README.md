@@ -66,6 +66,10 @@ Now you can access the app over HTTP on port `8080`: [http://localhost:8080/](ht
 
 We configure Origami Repo Data using environment variables. In development, configurations are set in a `.env` file. In production, these are set through Heroku config. Further documentation on the available options can be found in the [Origami Service documentation][service-options].
 
+### One time only
+
+  * `ENABLE_SETUP_STEP`: Set to `true` in order to allow the creation of an admin key using the `/v1/setup` endpoint. Once a key has been created this way, this configuration should be removed for security reasons.
+
 ### Required everywhere
 
   * `DATABASE_URL`: A PostgreSQL connection string, with write permission on a database
