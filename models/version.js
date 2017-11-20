@@ -77,7 +77,7 @@ function initModel(app) {
 
 			// Get a description of the version, falling back through different manifests
 			description() {
-				const manifests = this.get('manifests');
+				const manifests = this.get('manifests') || {};
 
 				// Order: origami, about, package, bower
 				if (manifests.origami && manifests.origami.description) {
@@ -97,7 +97,7 @@ function initModel(app) {
 
 			// Get keywords for the version, falling back through different manifests
 			keywords() {
-				const manifests = this.get('manifests');
+				const manifests = this.get('manifests') || {};
 				let keywords;
 
 				// Order: origami, package, bower
@@ -169,6 +169,22 @@ function initModel(app) {
 		// Normalise a semver version
 		normaliseSemver(semverVersion) {
 			return semver.valid(semverVersion);
+		},
+
+		// Create a version based on an Ingestion
+		async createFromIngestion(ingestion) {
+
+			// TODO get the full information from GitHub
+			const version = new Version({
+				name: ingestion.get('url').replace(/^https?:\/\/(www\.)?github.com\/|\/$/gi, ''),
+				url: ingestion.get('url'),
+				tag: ingestion.get('tag'),
+				commit_hash: 'TODO'
+			});
+
+			// Save and return the version
+			await version.save();
+			return version;
 		}
 
 	});

@@ -12,7 +12,8 @@ const mockApp = module.exports.mockApp = {
 	locals: {},
 	origami: {
 		options: {
-			mockOptions: true
+			mockOptions: true,
+			log: require('./log.mock')
 		}
 	},
 	set: sinon.stub(),

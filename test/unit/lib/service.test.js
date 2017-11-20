@@ -10,6 +10,7 @@ describe('lib/service', () => {
 	let basePath;
 	let bookshelf;
 	let healthChecks;
+	let IngestionQueueProcessor;
 	let knex;
 	let morgan;
 	let service;
@@ -27,6 +28,9 @@ describe('lib/service', () => {
 
 		healthChecks = require('../mock/health-checks.mock');
 		mockery.registerMock('./health-checks', healthChecks);
+
+		IngestionQueueProcessor = require('../mock/ingestion-queue-processor.mock');
+		mockery.registerMock('./ingestion-queue-processor', IngestionQueueProcessor);
 
 		knex = require('../mock/knex.mock');
 		mockery.registerMock('knex', knex);
@@ -232,6 +236,16 @@ describe('lib/service', () => {
 			requireAll.secondCall.args[0].resolve(model);
 			assert.calledOnce(model);
 			assert.calledWithExactly(model, origamiService.mockApp);
+		});
+
+		it('creates an ingestion queue processor', () => {
+			assert.calledOnce(IngestionQueueProcessor);
+			assert.calledWithExactly(IngestionQueueProcessor, origamiService.mockApp);
+			assert.calledWithNew(IngestionQueueProcessor);
+		});
+
+		it('starts the created ingestion queue processor', () => {
+			assert.calledOnce(IngestionQueueProcessor.mockIngestionQueueProcessor.start);
 		});
 
 		it('returns the created application', () => {
