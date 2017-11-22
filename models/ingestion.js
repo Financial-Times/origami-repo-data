@@ -121,8 +121,8 @@ function initModel(app) {
 
 					// This is the implementation of the exponential backoff.
 					// The ingestion will be attempted at longer and longer
-					// intervals (10 seconds to the power of the number of
-					// attempts made so far)
+					// intervals (10 seconds time 2 to the power of the number
+					// of attempts made so far)
 					qb.where(app.database.knex.raw('created_at + (interval \'10 seconds\' * power(2, ingestion_attempts)) <= now()'));
 
 					// Get the oldest ingestion first, so that things hang
