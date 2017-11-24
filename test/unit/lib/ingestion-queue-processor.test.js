@@ -128,7 +128,11 @@ describe('lib/ingestion-queue-processor', () => {
 				assert.calledOnce(mockIngestion.destroy);
 			});
 
-			it('recurses immediately', () => {
+			it('sets a timeout to recurse', () => {
+				assert.calledOnce(global.setTimeout);
+				assert.isFunction(global.setTimeout.firstCall.args[0]);
+				assert.strictEqual(global.setTimeout.firstCall.args[1], 100);
+				global.setTimeout.firstCall.args[0]();
 				assert.calledOnce(instance.fetchNextIngestion);
 				assert.calledWithExactly(instance.fetchNextIngestion);
 			});
@@ -136,6 +140,7 @@ describe('lib/ingestion-queue-processor', () => {
 			describe('when no ingestions are in the database', () => {
 
 				beforeEach(async () => {
+					global.setTimeout.resetHistory();
 					instance.Ingestion.fetchLatestAndMarkAsRunning.resetHistory();
 					instance.Ingestion.fetchLatestAndMarkAsRunning.resolves(null);
 					instance.Version.createFromIngestion.resetHistory();
@@ -171,6 +176,7 @@ describe('lib/ingestion-queue-processor', () => {
 				let creationError;
 
 				beforeEach(async () => {
+					global.setTimeout.resetHistory();
 					creationError = new Error('mock creation error');
 					instance.Version.createFromIngestion.resetHistory();
 					instance.Version.createFromIngestion.rejects(creationError);
@@ -201,7 +207,11 @@ describe('lib/ingestion-queue-processor', () => {
 					assert.calledWithExactly(mockIngestion.save);
 				});
 
-				it('recurses immediately', () => {
+				it('sets a timeout to recurse', () => {
+					assert.calledOnce(global.setTimeout);
+					assert.isFunction(global.setTimeout.firstCall.args[0]);
+					assert.strictEqual(global.setTimeout.firstCall.args[1], 100);
+					global.setTimeout.firstCall.args[0]();
 					assert.calledOnce(instance.fetchNextIngestion);
 					assert.calledWithExactly(instance.fetchNextIngestion);
 				});
@@ -212,6 +222,7 @@ describe('lib/ingestion-queue-processor', () => {
 				let fetchError;
 
 				beforeEach(async () => {
+					global.setTimeout.resetHistory();
 					fetchError = new Error('mock fetch error');
 					instance.Ingestion.fetchLatestAndMarkAsRunning.resetHistory();
 					instance.Ingestion.fetchLatestAndMarkAsRunning.rejects(fetchError);
@@ -226,7 +237,11 @@ describe('lib/ingestion-queue-processor', () => {
 					});
 				});
 
-				it('recurses immediately', () => {
+				it('sets a timeout to recurse', () => {
+					assert.calledOnce(global.setTimeout);
+					assert.isFunction(global.setTimeout.firstCall.args[0]);
+					assert.strictEqual(global.setTimeout.firstCall.args[1], 100);
+					global.setTimeout.firstCall.args[0]();
 					assert.calledOnce(instance.fetchNextIngestion);
 					assert.calledWithExactly(instance.fetchNextIngestion);
 				});
