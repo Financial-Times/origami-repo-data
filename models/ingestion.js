@@ -66,13 +66,30 @@ function initModel(app) {
 		// Validate the model before saving
 		validateSave() {
 			return new Promise((resolve, reject) => {
+				// Validate against the schema
 				joi.validate(this.attributes, schema, {
 					abortEarly: false,
 					allowUnknown: true
-				}, (error) => {
+				}, async error => {
 					if (error) {
 						return reject(error);
 					}
+
+					// Ensure that ingestion is unique
+					if (this.hasChanged('url') || this.hasChanged('tag')) {
+						if (await Ingestion.alreadyExists(this.attributes.url, this.attributes.tag)) {
+							error = new Error('Validation failed');
+							error.isConflict = true;
+							error.name = 'ValidationError';
+							error.details = [
+								{
+									message: 'An ingestion or version with the given URL and tag already exists'
+								}
+							];
+							return reject(error);
+						}
+					}
+
 					resolve();
 				});
 			});
@@ -92,6 +109,16 @@ function initModel(app) {
 	// Model static methods
 	}, {
 
+		// Check whether an ingestion or version with the given
+		// URL and tag already exists
+		async alreadyExists(url, tag) {
+			const existingIngestion = await Ingestion.fetchOneByUrlAndTag(url, tag);
+			if (existingIngestion) {
+				return true;
+			}
+			return Boolean(await app.model.Version.fetchOneByUrlAndTag(url, tag));
+		},
+
 		// Fetch all ingestions
 		fetchAll() {
 			return Ingestion.collection().query(qb => {
@@ -103,6 +130,15 @@ function initModel(app) {
 		fetchById(ingestionId) {
 			return Ingestion.collection().query(qb => {
 				qb.where('id', ingestionId);
+			}).fetchOne();
+		},
+
+		// Fetch an ingestion with a given url and tag
+		fetchOneByUrlAndTag(url, tag) {
+			return Ingestion.collection().query(qb => {
+				qb.select('*');
+				qb.where('url', url);
+				qb.where('tag', tag);
 			}).fetchOne();
 		},
 

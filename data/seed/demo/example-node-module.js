@@ -22,7 +22,6 @@ exports.seed = async database => {
 			support_channel: '#ft-origami',
 			tag: 'v1.0.0',
 			version: '1.0.0',
-			commit_hash: '071a20f7e49b6fcf29c1080140d599c8c60b71b6',
 			manifests: JSON.stringify({
 				about: null,
 				bower: null,
@@ -53,7 +52,6 @@ exports.seed = async database => {
 			support_channel: '#ft-origami',
 			tag: 'v1.1.0',
 			version: '1.1.0',
-			commit_hash: '64a7ab36ee875404a57f62c2fe0bea528603f022',
 			manifests: JSON.stringify({
 				about: null,
 				bower: null,

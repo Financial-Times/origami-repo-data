@@ -190,7 +190,8 @@ describe('lib/ingestion-queue-processor', () => {
 						type: 'error',
 						message: 'mock creation error',
 						url: 'mock-ingestion-url',
-						tag: 'mock-ingestion-tag'
+						tag: 'mock-ingestion-tag',
+						recoverable: false
 					});
 				});
 
@@ -218,6 +219,102 @@ describe('lib/ingestion-queue-processor', () => {
 
 			});
 
+			describe('when the version creation fails but is recoverable', () => {
+				let creationError;
+
+				beforeEach(async () => {
+					creationError = new Error('mock creation error');
+					creationError.isRecoverable = true;
+					instance.Version.createFromIngestion.resetHistory();
+					instance.Version.createFromIngestion.rejects(creationError);
+					await fetchNextIngestion();
+				});
+
+				it('logs the failure', () => {
+					assert.calledWith(instance.log, {
+						type: 'error',
+						message: 'mock creation error',
+						url: 'mock-ingestion-url',
+						tag: 'mock-ingestion-tag',
+						recoverable: true
+					});
+				});
+
+			});
+
+			describe('when the version creation fails and it is explicitly not recoverable', () => {
+				let creationError;
+
+				beforeEach(async () => {
+					creationError = new Error('mock creation error');
+					creationError.isRecoverable = false;
+					instance.Version.createFromIngestion.resetHistory();
+					instance.Version.createFromIngestion.rejects(creationError);
+					mockIngestion.set.resetHistory();
+					mockIngestion.destroy.resetHistory();
+					await fetchNextIngestion();
+				});
+
+				it('does not increment the ingestion attempts', () => {
+					assert.neverCalledWith(mockIngestion.set, 'ingestion_attempts', 2);
+				});
+
+				it('does not nullify the ingestion start date', () => {
+					assert.neverCalledWith(mockIngestion.set, 'ingestion_started_at', null);
+				});
+
+				it('destroys the ingestion', () => {
+					assert.calledOnce(mockIngestion.destroy);
+					assert.calledWithExactly(mockIngestion.destroy);
+				});
+
+			});
+
+			describe('when the version creation fails due to a GitHub rate limit error', () => {
+				let rateLimitError;
+				let expectedWaitDate;
+				let expectedWaitTime;
+
+				beforeEach(async () => {
+					sinon.stub(global.Date, 'now').returns(570189600000); // 1988-01-26T10:00:00.000Z
+					expectedWaitTime = 3600000; // Date.now minus the rate limit reset time
+					expectedWaitDate = '1988-01-26T11:00:00.000Z'; // Date.now plus wait time as an ISO string
+
+					rateLimitError = new Error('mock creation error');
+					rateLimitError.code = 403;
+					rateLimitError.headers = {
+						'x-ratelimit-reset': '570193200'
+					};
+
+					instance.Version.createFromIngestion.resetHistory();
+					instance.Version.createFromIngestion.rejects(rateLimitError);
+					global.setTimeout.resetHistory();
+					await fetchNextIngestion();
+				});
+
+				afterEach(() => {
+					global.Date.now.restore();
+				});
+
+				it('logs the wait time', () => {
+					assert.calledWith(instance.log, {
+						type: 'rate-limit-wait',
+						time: expectedWaitTime,
+						rateLimitReset: expectedWaitDate
+					});
+				});
+
+				it('sets a timeout to recurse that matches the rate limit reset time', () => {
+					assert.calledOnce(global.setTimeout);
+					assert.isFunction(global.setTimeout.firstCall.args[0]);
+					assert.strictEqual(global.setTimeout.firstCall.args[1], expectedWaitTime);
+					global.setTimeout.firstCall.args[0]();
+					assert.calledOnce(instance.fetchNextIngestion);
+					assert.calledWithExactly(instance.fetchNextIngestion);
+				});
+
+			});
+
 			describe('when the ingestion fetch fails', () => {
 				let fetchError;
 
@@ -233,7 +330,8 @@ describe('lib/ingestion-queue-processor', () => {
 				it('logs the failure', () => {
 					assert.calledWith(instance.log, {
 						type: 'error',
-						message: 'mock fetch error'
+						message: 'mock fetch error',
+						recoverable: false
 					});
 				});
 

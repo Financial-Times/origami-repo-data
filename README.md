@@ -73,6 +73,7 @@ We configure Origami Repo Data using environment variables. In development, conf
 ### Required everywhere
 
   * `DATABASE_URL`: A PostgreSQL connection string, with write permission on a database
+  * `GITHUB_AUTH_TOKEN`: A GitHub auth token which has read access to all Financial Times repositories.
   * `NODE_ENV`: The environment to run the application in. One of `production`, `development` (default), or `test` (for use in automated tests).
   * `PORT`: The port to run the application on.
 

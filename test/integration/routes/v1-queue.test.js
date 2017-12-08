@@ -149,6 +149,82 @@ describe('POST /v1/queue', () => {
 
 	});
 
+	describe('when an ingestion with the given url and tag already exists', () => {
+		let request;
+
+		beforeEach(async () => {
+			await database.seed(app, 'basic');
+			request = agent
+				.post('/v1/queue')
+				.set('X-Api-Key', 'mock-write-key')
+				.set('X-Api-Secret', 'mock-write-secret')
+				.send({
+					url: 'https://github.com/Financial-Times/o-mock-component',
+					tag: 'v2.1.0'
+				});
+		});
+
+		it('responds with a 409 status', () => {
+			return request.expect(409);
+		});
+
+		it('responds with HTML', () => {
+			return request.expect('Content-Type', /text\/html/);
+		});
+
+		describe('HTML response', () => {
+			let response;
+
+			beforeEach(async () => {
+				response = (await request.then()).text;
+			});
+
+			it('includes a descriptive error', () => {
+				assert.match(response, /already exists/);
+			});
+
+		});
+
+	});
+
+	describe('when a version with the given url and tag already exists', () => {
+		let request;
+
+		beforeEach(async () => {
+			await database.seed(app, 'basic');
+			request = agent
+				.post('/v1/queue')
+				.set('X-Api-Key', 'mock-write-key')
+				.set('X-Api-Secret', 'mock-write-secret')
+				.send({
+					url: 'https://github.com/Financial-Times/o-mock-component',
+					tag: 'v1.0.0'
+				});
+		});
+
+		it('responds with a 409 status', () => {
+			return request.expect(409);
+		});
+
+		it('responds with HTML', () => {
+			return request.expect('Content-Type', /text\/html/);
+		});
+
+		describe('HTML response', () => {
+			let response;
+
+			beforeEach(async () => {
+				response = (await request.then()).text;
+			});
+
+			it('includes a descriptive error', () => {
+				assert.match(response, /already exists/);
+			});
+
+		});
+
+	});
+
 	describe('when the request does not include a url or tag property', () => {
 		let request;
 

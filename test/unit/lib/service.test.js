@@ -9,6 +9,7 @@ describe('lib/service', () => {
 	let about;
 	let basePath;
 	let bookshelf;
+	let GitHubClient;
 	let healthChecks;
 	let IngestionQueueProcessor;
 	let knex;
@@ -25,6 +26,9 @@ describe('lib/service', () => {
 
 		bookshelf = require('../mock/bookshelf.mock');
 		mockery.registerMock('bookshelf', bookshelf);
+
+		GitHubClient = require('../mock/github-client.mock');
+		mockery.registerMock('./github-client', GitHubClient);
 
 		healthChecks = require('../mock/health-checks.mock');
 		mockery.registerMock('./health-checks', healthChecks);
@@ -61,6 +65,7 @@ describe('lib/service', () => {
 			options = {
 				database: 'mock-database-url',
 				environment: 'test',
+				githubAuthToken: 'mock-github-auth-token',
 				port: 1234
 			};
 			routes = {
@@ -166,6 +171,19 @@ describe('lib/service', () => {
 			assert.strictEqual(options.requestLogFormat, `${morgan.combined} auth=":auth/:auth[description]"`);
 		});
 
+		describe('when `options.requestLogFormat` is `null`', () => {
+
+			beforeEach(() => {
+				options.requestLogFormat = null;
+				service(options);
+			});
+
+			it('does not alter `options.requestLogFormat`', () => {
+				assert.isNull(options.requestLogFormat);
+			});
+
+		});
+
 		it('creates and mounts getBasePath middleware', () => {
 			assert.calledOnce(origamiService.middleware.getBasePath);
 			assert.calledWithExactly(origamiService.middleware.getBasePath);
@@ -238,14 +256,36 @@ describe('lib/service', () => {
 			assert.calledWithExactly(model, origamiService.mockApp);
 		});
 
-		it('creates an ingestion queue processor', () => {
+		it('creates an ingestion queue processor and stores it on the application', () => {
 			assert.calledOnce(IngestionQueueProcessor);
 			assert.calledWithExactly(IngestionQueueProcessor, origamiService.mockApp);
 			assert.calledWithNew(IngestionQueueProcessor);
+			assert.strictEqual(origamiService.mockApp.ingestionQueueProcessor, IngestionQueueProcessor.mockIngestionQueueProcessor);
 		});
 
 		it('starts the created ingestion queue processor', () => {
 			assert.calledOnce(IngestionQueueProcessor.mockIngestionQueueProcessor.start);
+		});
+
+		describe('when `options.disableIngestionQueue` is `true`', () => {
+
+			beforeEach(() => {
+				IngestionQueueProcessor.mockIngestionQueueProcessor.start.reset();
+				options.disableIngestionQueue = true;
+				service(options);
+			});
+
+			it('does not start the ingestionQueueProcessor', () => {
+				assert.notCalled(IngestionQueueProcessor.mockIngestionQueueProcessor.start);
+			});
+
+		});
+
+		it('creates a GitHub client and stores it on the application', () => {
+			assert.calledOnce(GitHubClient);
+			assert.calledWithExactly(GitHubClient, 'mock-github-auth-token');
+			assert.calledWithNew(GitHubClient);
+			assert.strictEqual(origamiService.mockApp.github, GitHubClient.mockGitHubClient);
 		});
 
 		it('returns the created application', () => {

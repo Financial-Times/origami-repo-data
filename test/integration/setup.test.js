@@ -13,6 +13,7 @@ const mockLog = {
 before(async () => {
 	const app = global.app = service({
 		database: process.env.TEST_DATABASE || 'postgres://localhost:5432/origami-repo-data-test',
+		disableIngestionQueue: true,
 		environment: 'test',
 		log: mockLog,
 		port: process.env.TEST_PORT || 0,
