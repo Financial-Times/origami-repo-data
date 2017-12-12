@@ -4,6 +4,7 @@ const cloneDeep = require('lodash/cloneDeep');
 const semver = require('semver');
 const uuid = require('uuid/v4');
 const uuidv5 = require('uuid/v5');
+const union = require('lodash/union');
 
 const origamiSupportEmail = 'origami.support@ft.com';
 
@@ -94,16 +95,16 @@ function initModel(app) {
 				const manifests = this.get('manifests') || {};
 
 				// Order: origami, about, package, bower
-				if (manifests.origami && manifests.origami.description) {
+				if (manifests.origami && manifests.origami.description && typeof manifests.origami.description === 'string') {
 					return manifests.origami.description;
 				}
-				if (manifests.about && manifests.about.description) {
+				if (manifests.about && manifests.about.description && typeof manifests.about.description === 'string') {
 					return manifests.about.description;
 				}
-				if (manifests.package && manifests.package.description) {
+				if (manifests.package && manifests.package.description && typeof manifests.package.description === 'string') {
 					return manifests.package.description;
 				}
-				if (manifests.bower && manifests.bower.description) {
+				if (manifests.bower && manifests.bower.description && typeof manifests.bower.description === 'string') {
 					return manifests.bower.description;
 				}
 				return null;
@@ -112,21 +113,22 @@ function initModel(app) {
 			// Get keywords for the version, falling back through different manifests
 			keywords() {
 				const manifests = this.get('manifests') || {};
-				let keywords;
+				let keywords = [];
 
 				// Order: origami, package, bower
-				if (manifests.origami && manifests.origami.keywords) {
-					keywords = manifests.origami.keywords;
-				} else if (manifests.package && manifests.package.keywords) {
-					keywords = manifests.package.keywords;
-				} else if (manifests.bower && manifests.bower.keywords) {
-					keywords = manifests.bower.description;
+				if (manifests.origami) {
+					keywords = union(keywords, extractKeywords(manifests.origami));
+				}
+				if (manifests.package) {
+					keywords = union(keywords, extractKeywords(manifests.package));
+				}
+				if (manifests.bower) {
+					keywords = union(keywords, extractKeywords(manifests.bower));
 				}
 
-				if (typeof keywords === 'string') {
-					return keywords.split(',').map(keyword => keyword.trim());
-				}
-				return keywords;
+				return keywords
+					.filter(keyword => typeof keyword === 'string')
+					.map(keyword => keyword.trim().toLowerCase());
 			}
 
 		}
@@ -354,4 +356,15 @@ function initModel(app) {
 	// Add the model to the app
 	app.model.Version = Version;
 
+}
+
+// Extract keywords from a manifest file
+function extractKeywords(manifest) {
+	if (typeof manifest.keywords === 'string') {
+		return manifest.keywords.split(',').map(keyword => keyword.trim());
+	}
+	if (Array.isArray(manifest.keywords)) {
+		return manifest.keywords;
+	}
+	return [];
 }
