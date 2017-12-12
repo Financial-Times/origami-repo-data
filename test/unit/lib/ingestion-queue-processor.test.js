@@ -7,6 +7,8 @@ describe('lib/ingestion-queue-processor', () => {
 	let app;
 	let IngestionQueueProcessor;
 	let mockIngestion;
+	let mockIngestionOverAttempted;
+	let mockIngestionOverRunning;
 	let mockVersion;
 
 	beforeEach(() => {
@@ -17,12 +19,27 @@ describe('lib/ingestion-queue-processor', () => {
 			save: sinon.stub().resolves(),
 			set: sinon.stub()
 		};
+		mockIngestionOverAttempted = {
+			destroy: sinon.stub().resolves(),
+			get: sinon.stub()
+		};
+		mockIngestionOverRunning = {
+			get: sinon.stub(),
+			save: sinon.stub().resolves(),
+			set: sinon.stub()
+		};
 		mockVersion = {
 			get: sinon.stub()
 		};
 		app.model = {
 			Ingestion: {
-				fetchLatestAndMarkAsRunning: sinon.stub().resolves(mockIngestion)
+				fetchLatestAndMarkAsRunning: sinon.stub().resolves(mockIngestion),
+				fetchOverAttempted: sinon.stub().resolves({
+					toArray: sinon.stub().returns([mockIngestionOverAttempted])
+				}),
+				fetchOverRunning: sinon.stub().resolves({
+					toArray: sinon.stub().returns([mockIngestionOverRunning])
+				})
 			},
 			Version: {
 				createFromIngestion: sinon.stub().resolves(mockVersion)
@@ -64,12 +81,18 @@ describe('lib/ingestion-queue-processor', () => {
 
 			beforeEach(() => {
 				instance.fetchNextIngestion = sinon.spy();
+				instance.collectGarbage = sinon.spy();
 				instance.start();
 			});
 
 			it('calls the `fetchNextIngestion` method', () => {
 				assert.calledOnce(instance.fetchNextIngestion);
 				assert.calledWithExactly(instance.fetchNextIngestion);
+			});
+
+			it('calls the `collectGarbage` method', () => {
+				assert.calledOnce(instance.collectGarbage);
+				assert.calledWithExactly(instance.collectGarbage);
 			});
 
 		});
@@ -342,6 +365,111 @@ describe('lib/ingestion-queue-processor', () => {
 					global.setTimeout.firstCall.args[0]();
 					assert.calledOnce(instance.fetchNextIngestion);
 					assert.calledWithExactly(instance.fetchNextIngestion);
+				});
+
+			});
+
+		});
+
+		describe('.collectGarbage()', () => {
+			let collectGarbage;
+
+			beforeEach(async () => {
+				sinon.stub(global, 'setTimeout');
+
+				mockIngestionOverAttempted.get.withArgs('url').returns('mock-over-attempted-ingestion-url');
+				mockIngestionOverAttempted.get.withArgs('tag').returns('mock-over-attempted-ingestion-tag');
+				mockIngestionOverRunning.get.withArgs('url').returns('mock-over-running-ingestion-url');
+				mockIngestionOverRunning.get.withArgs('tag').returns('mock-over-running-ingestion-tag');
+				instance.log = sinon.spy();
+
+				// We need to grab the function and then mock it because otherwise
+				// it will recurse infinitely
+				collectGarbage = instance.collectGarbage.bind(instance);
+				instance.collectGarbage = sinon.spy();
+
+				await collectGarbage();
+			});
+
+			afterEach(() => {
+				global.setTimeout.restore();
+			});
+
+			it('fetches over-attempted ingestions from the database', () => {
+				assert.calledOnce(instance.Ingestion.fetchOverAttempted);
+				assert.calledWithExactly(instance.Ingestion.fetchOverAttempted);
+			});
+
+			it('logs the garbage collection of each over-attempted ingestion', () => {
+				assert.calledWith(instance.log, {
+					type: 'garbage-collection',
+					message: 'Ingestion attempted too many times',
+					url: 'mock-over-attempted-ingestion-url',
+					tag: 'mock-over-attempted-ingestion-tag'
+				});
+			});
+
+			it('destroys all over-attempted ingestions', () => {
+				assert.calledOnce(mockIngestionOverAttempted.destroy);
+				assert.calledWithExactly(mockIngestionOverAttempted.destroy);
+			});
+
+			it('fetches over-running ingestions from the database', () => {
+				assert.calledOnce(instance.Ingestion.fetchOverRunning);
+				assert.calledWithExactly(instance.Ingestion.fetchOverRunning);
+			});
+
+			it('logs the garbage collection of each over-running ingestion', () => {
+				assert.calledWith(instance.log, {
+					type: 'garbage-collection',
+					message: 'Ingestion ran for too long',
+					url: 'mock-over-running-ingestion-url',
+					tag: 'mock-over-running-ingestion-tag'
+				});
+			});
+
+			it('resets all over-attempted ingestion start times and saves them', () => {
+				assert.calledOnce(mockIngestionOverRunning.set);
+				assert.calledWithExactly(mockIngestionOverRunning.set, 'ingestion_started_at', null);
+				assert.calledOnce(mockIngestionOverRunning.save);
+				assert.calledWithExactly(mockIngestionOverRunning.save);
+			});
+
+			it('sets a timeout to recurse', () => {
+				assert.calledOnce(global.setTimeout);
+				assert.isFunction(global.setTimeout.firstCall.args[0]);
+				assert.strictEqual(global.setTimeout.firstCall.args[1], 900000);
+				global.setTimeout.firstCall.args[0]();
+				assert.calledOnce(instance.collectGarbage);
+				assert.calledWithExactly(instance.collectGarbage);
+			});
+
+			describe('when something fails', () => {
+				let fetchError;
+
+				beforeEach(async () => {
+					global.setTimeout.resetHistory();
+					fetchError = new Error('mock fetch error');
+					instance.Ingestion.fetchOverAttempted.resetHistory();
+					instance.Ingestion.fetchOverAttempted.rejects(fetchError);
+					instance.collectGarbage.reset();
+					await collectGarbage();
+				});
+
+				it('logs the failure', () => {
+					assert.calledWith(instance.log, {
+						type: 'garbage-collection-error',
+						message: 'mock fetch error'
+					});
+				});
+
+				it('sets a timeout to recurse', () => {
+					assert.calledOnce(global.setTimeout);
+					assert.isFunction(global.setTimeout.firstCall.args[0]);
+					assert.strictEqual(global.setTimeout.firstCall.args[1], 900000);
+					global.setTimeout.firstCall.args[0]();
+					assert.calledOnce(instance.collectGarbage);
+					assert.calledWithExactly(instance.collectGarbage);
 				});
 
 			});

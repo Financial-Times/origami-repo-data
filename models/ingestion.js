@@ -179,6 +179,22 @@ function initModel(app) {
 				});
 				return ingestion;
 			});
+		},
+
+		// Fetch all ingestions that have been attempted too many times
+		async fetchOverAttempted() {
+			return Ingestion.collection().query(qb => {
+				qb.select('*');
+				qb.where('ingestion_attempts', '>=', Ingestion.maximumAttempts);
+			}).fetch();
+		},
+
+		// Fetch all ingestions that have been running for too long
+		async fetchOverRunning() {
+			return Ingestion.collection().query(qb => {
+				qb.select('*');
+				qb.where(app.database.knex.raw(`ingestion_started_at + (interval '${Ingestion.maximumRunTime}') <= now()`));
+			}).fetch();
 		}
 
 	});
@@ -186,6 +202,11 @@ function initModel(app) {
 	// The maximum number of attempts to make on
 	// an ingestion
 	Ingestion.maximumAttempts = 10;
+
+	// The maximum run time of an ingestion. This
+	// is used in a query and so must be a valid
+	// PostgreSQL interval
+	Ingestion.maximumRunTime = '15 minutes';
 
 	// Add the model to the app
 	app.model.Ingestion = Ingestion;
