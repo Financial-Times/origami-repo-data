@@ -105,8 +105,7 @@ describe('lib/service', () => {
 		});
 
 		it('creates a new morgan token named "auth"', () => {
-			assert.calledOnce(morgan.token);
-			assert.calledWith(morgan.token, 'auth');
+			assert.calledWith(morgan.token.firstCall, 'auth');
 			assert.isFunction(morgan.token.firstCall.args[1]);
 		});
 
@@ -161,6 +160,90 @@ describe('lib/service', () => {
 
 				it('returns "none"', () => {
 					assert.strictEqual(returnValue, 'none');
+				});
+
+			});
+
+		});
+
+		it('overrides the morgan token named "url"', () => {
+			assert.calledWith(morgan.token.secondCall, 'url');
+			assert.isFunction(morgan.token.secondCall.args[1]);
+		});
+
+		describe('morgan "url" token', () => {
+			let urlToken;
+			let mockRequest;
+			let returnValue;
+
+			beforeEach(() => {
+				mockRequest = {
+					originalUrl: '/mock-original-url'
+				};
+				urlToken = morgan.token.secondCall.args[1];
+				returnValue = urlToken(mockRequest);
+			});
+
+			it('returns the value of the request `originalUrl` property', () => {
+				assert.strictEqual(returnValue, '/mock-original-url');
+			});
+
+			describe('when the `originalUrl` property is not set', () => {
+
+				beforeEach(() => {
+					mockRequest = {
+						url: '/mock-url'
+					};
+					returnValue = urlToken(mockRequest);
+				});
+
+				it('returns the value of the request `url` property', () => {
+					assert.strictEqual(returnValue, '/mock-url');
+				});
+
+			});
+
+			describe('when the request querystring contains an `apiKey` property', () => {
+
+				beforeEach(() => {
+					mockRequest = {
+						url: '/mock-url?foo=bar&apiKey=123456&bar=baz'
+					};
+					returnValue = urlToken(mockRequest);
+				});
+
+				it('returns the request URL with that key masked', () => {
+					assert.strictEqual(returnValue, '/mock-url?foo=bar&apiKey=XXXXX&bar=baz');
+				});
+
+			});
+
+			describe('when the request querystring contains an `apiSecret` property', () => {
+
+				beforeEach(() => {
+					mockRequest = {
+						url: '/mock-url?foo=bar&apiSecret=123456&bar=baz'
+					};
+					returnValue = urlToken(mockRequest);
+				});
+
+				it('returns the request URL with that key masked', () => {
+					assert.strictEqual(returnValue, '/mock-url?foo=bar&apiSecret=XXXXX&bar=baz');
+				});
+
+			});
+
+			describe('when the request querystring contains an `apiSecret` property', () => {
+
+				beforeEach(() => {
+					mockRequest = {
+						url: '/mock-url?foo=bar&apiKey=123456&apiSecret=7890&bar=baz'
+					};
+					returnValue = urlToken(mockRequest);
+				});
+
+				it('returns the request URL with that key masked', () => {
+					assert.strictEqual(returnValue, '/mock-url?foo=bar&apiKey=XXXXX&apiSecret=XXXXX&bar=baz');
 				});
 
 			});
