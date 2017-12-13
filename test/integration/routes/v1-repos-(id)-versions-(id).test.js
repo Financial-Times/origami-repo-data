@@ -55,8 +55,8 @@ describe('GET /v1/repos/:repoId/versions/:versionId', () => {
 				.set('X-Api-Secret', 'mock-read-secret');
 		});
 
-		it('responds with a 301 status', () => {
-			return request.expect(301);
+		it('responds with a 307 status', () => {
+			return request.expect(307);
 		});
 
 		it('responds with a Location header pointing to the ID-based endpoint', () => {

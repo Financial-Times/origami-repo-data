@@ -369,7 +369,10 @@
 							</td>
 						</tr>
 						<tr>
-							<th scope="row">Path</th>
+							<th scope="row">
+								Path<br/>
+								<a href="#get-v1-repos-(id)-versions-(id)_aliases">(aliases)</a>
+							</th>
 							<td>
 								<code>/v1/repos/<var>:repo-id</var>/versions/<var>:version-id</var></code><br/>
 								(where <var>:repo-id</var> is the unique identifier for a
@@ -440,97 +443,24 @@
 	https://origami-repo-data.ft.com/v1/repos/XXXXXX/versions/XXXXXX</code></pre>
 
 
-			<h2 id="get-v1-repos-(id)-versions-(semver)">Get a repository version (semver)</h2>
+			<h3 id="get-v1-repos-(id)-versions-(id)_aliases">Aliases</h3>
 
 			<p>
-				Get the correct version endpoint for an Origami repository by semver number. This
-				endpoint redirects to the standard <a href="#get-v1-repos-(id)-versions-(id)">"get a repository version"</a> endpoint.
-				This endpoint requires the <code>READ</code> permission.
+				The following aliases exist for this endpoint, and each will respond with a
+				<code>307</code> status and a <code>Location</code> header pointing to the correct
+				endpoint. When redirecting, a client should forward on any authentication headers.
 			</p>
 
-			<h3>Request</h3>
-
-			<div class="o-techdocs-table-wrapper">
-				<table>
-					<tbody>
-						<tr>
-							<th scope="row">Method</th>
-							<td>
-								<code>GET</code>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Path</th>
-							<td>
-								<code>/v1/repos/<var>:repo-id</var>/versions/<var>:version-number</var></code><br/>
-								(where <var>:repo-id</var> is the unique identifier for a
-								<a href="#entity-repo">Repository</a> and <var>:version-number</var> is the
-								semver number for a <a href="#entity-version">Version</a> of it)
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Headers</th>
-							<td>
-								<dl>
-									<dt>X-Api-Key</dt>
-									<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-									<dt>X-Api-Secret</dt>
-									<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-								</dl>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-
-			<h3>Response</h3>
-
-			<div class="o-techdocs-table-wrapper">
-				<table>
-					<tbody>
-						<tr>
-							<th scope="row">Status</th>
-							<td>
-								<code>301</code> on success<br/>
-								<code>401</code> if authentication failed<br/>
-								<code>403</code> if authorization failed<br/>
-								<code>404</code> if a repo and version matching <var>:repo-id</var> and <var>:version-number</var> does not exist
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Headers</th>
-							<td>
-								<dl>
-									<dt>Content-Type</dt>
-									<dd>
-										<code>text/plain</code> on success<br/>
-										<code>text/html</code> on error
-									</dd>
-									<dt>Location</dt>
-									<dd>
-										<code>/v1/repos/:repo-id/versions/:version-id</code><br/>
-										(where <var>:repo-id</var> is the unique identifier for a
-										<a href="#entity-repo">Repository</a> and <var>:version-id</var> is the
-										unique identifier for a <a href="#entity-version">Version</a> of it)
-									</dd>
-								</dl>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Body</th>
-							<td>
-								Empty
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-
-			<h3>Example <code>curl</code> command:</h3>
-
-			<pre><code class="bash">curl \
-	-H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
-	https://origami-repo-data.ft.com/v1/repos/XXXXXX/versions/vX.X.X</code></pre>
+			<ul>
+				<li>
+					<p>
+						<code>/v1/repos/<var>:repo-id</var>/versions/<var>:version-number</var></code><br/>
+						(where <var>:repo-id</var> is the unique identifier for a
+						<a href="#entity-repo">Repository</a> and <var>:version-number</var> is the
+						semver number for a <a href="#entity-version">Version</a> of it)
+					</p>
+				</li>
+			</ul>
 
 		</div>
 
