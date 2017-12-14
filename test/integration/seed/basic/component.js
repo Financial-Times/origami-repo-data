@@ -15,8 +15,16 @@ exports.seed = async database => {
 			support_channel: '#ft-origami',
 			tag: 'v1.0.0',
 			version: '1.0.0',
-			manifests: JSON.stringify({}),
-			markdown: JSON.stringify({})
+			manifests: JSON.stringify({
+				origami: {
+					name: 'o-mock-component',
+					origamiType: 'module',
+					isMockManifest: true
+				}
+			}),
+			markdown: JSON.stringify({
+				readme: 'mock-readme'
+			})
 		},
 		{
 			id: 'b2bdfae1-cc6f-4433-9a2f-8a4b762cda71',
