@@ -2,46 +2,28 @@
 'use strict';
 
 const database = require('../helpers/database');
-const assert = require('proclaim');
 
-describe('GET /v1/repos/:repoId/versions/:versionId', () => {
+describe('GET /v1/repos/:repoId/versions/:versionNumber', () => {
 	let request;
 
 	beforeEach(async () => {
 		await database.seed(app, 'basic');
 		request = agent
-			.get('/v1/repos/c990cb4b-c82b-5071-afb0-16149debc53d/versions/5bdc1cb5-19f1-4afe-883b-83c822fbbde0')
+			.get('/v1/repos/c990cb4b-c82b-5071-afb0-16149debc53d/versions/v1.0.0')
 			.set('X-Api-Key', 'mock-read-key')
 			.set('X-Api-Secret', 'mock-read-secret');
 	});
 
-	it('responds with a 200 status', () => {
-		return request.expect(200);
+	it('responds with a 307 status', () => {
+		return request.expect(307);
 	});
 
-	it('responds with JSON', () => {
-		return request.expect('Content-Type', /application\/json/);
+	it('responds with a Location header pointing to the ID-based endpoint', () => {
+		return request.expect('Location', '/v1/repos/c990cb4b-c82b-5071-afb0-16149debc53d/versions/5bdc1cb5-19f1-4afe-883b-83c822fbbde0');
 	});
 
-	describe('JSON response', () => {
-		let response;
-
-		beforeEach(async () => {
-			response = (await request.then()).body;
-		});
-
-		it('has a `version` object property', () => {
-			assert.isObject(response.version);
-		});
-
-		it('includes the requested version', () => {
-
-			assert.isObject(response.version);
-			assert.strictEqual(response.version.id, '5bdc1cb5-19f1-4afe-883b-83c822fbbde0');
-			assert.strictEqual(response.version.name, 'o-mock-component');
-
-		});
-
+	it('responds with text', () => {
+		return request.expect('Content-Type', /text\/plain/);
 	});
 
 	describe('when :repoId is not a valid repo ID', () => {
@@ -50,7 +32,7 @@ describe('GET /v1/repos/:repoId/versions/:versionId', () => {
 		beforeEach(async () => {
 			await database.seed(app, 'basic');
 			request = agent
-				.get('/v1/repos/not-an-id/versions/5bdc1cb5-19f1-4afe-883b-83c822fbbde0')
+				.get('/v1/repos/not-an-id/versions/v1.0.0')
 				.set('X-Api-Key', 'mock-read-key')
 				.set('X-Api-Secret', 'mock-read-secret');
 		});
@@ -65,13 +47,13 @@ describe('GET /v1/repos/:repoId/versions/:versionId', () => {
 
 	});
 
-	describe('when :versionId is not a valid version ID', () => {
+	describe('when :versionNumber is not valid semver', () => {
 		let request;
 
 		beforeEach(async () => {
 			await database.seed(app, 'basic');
 			request = agent
-				.get('/v1/repos/c990cb4b-c82b-5071-afb0-16149debc53d/versions/not-an-id')
+				.get('/v1/repos/c990cb4b-c82b-5071-afb0-16149debc53d/versions/not-semver')
 				.set('X-Api-Key', 'mock-read-key')
 				.set('X-Api-Secret', 'mock-read-secret');
 		});
@@ -86,13 +68,13 @@ describe('GET /v1/repos/:repoId/versions/:versionId', () => {
 
 	});
 
-	describe('when :repoId and :versionID are mismatched', () => {
+	describe('when :versionNumber is a valid semver number but the version does not exist', () => {
 		let request;
 
 		beforeEach(async () => {
 			await database.seed(app, 'basic');
 			request = agent
-				.get('/v1/repos/c990cb4b-c82b-5071-afb0-16149debc53d/versions/3731599a-f6a0-4856-8f28-9d10bc567d5b')
+				.get('/v1/repos/c990cb4b-c82b-5071-afb0-16149debc53d/versions/v123.456.789')
 				.set('X-Api-Key', 'mock-read-key')
 				.set('X-Api-Secret', 'mock-read-secret');
 		});
@@ -112,7 +94,7 @@ describe('GET /v1/repos/:repoId/versions/:versionId', () => {
 
 		beforeEach(async () => {
 			await database.seed(app, 'basic');
-			request = agent.get('/v1/repos/c990cb4b-c82b-5071-afb0-16149debc53d/versions/5bdc1cb5-19f1-4afe-883b-83c822fbbde0');
+			request = agent.get('/v1/repos/c990cb4b-c82b-5071-afb0-16149debc53d/versions/v1.0.0');
 		});
 
 		it('responds with a 401 status', () => {
@@ -131,7 +113,7 @@ describe('GET /v1/repos/:repoId/versions/:versionId', () => {
 		beforeEach(async () => {
 			await database.seed(app, 'basic');
 			request = agent
-				.get('/v1/repos/c990cb4b-c82b-5071-afb0-16149debc53d/versions/5bdc1cb5-19f1-4afe-883b-83c822fbbde0')
+				.get('/v1/repos/c990cb4b-c82b-5071-afb0-16149debc53d/versions/v1.0.0')
 				.set('X-Api-Key', 'mock-no-key')
 				.set('X-Api-Secret', 'mock-no-secret');
 		});
