@@ -56,8 +56,21 @@
 		"isOrigami": true
 	},
 
+	// The paths for other API resources related to this repository.
+	// Each key will be either a string path or `null` if the resource does not exists
+	"resources": {
+		"self": "...",        // The canonical endpoint for this repository
+		"versions": "...",    // The endpoint which lists all versions for this repository
+		"manifests": {        // The endpoints which output named manifest files
+			"origami": "..."  // (other manifest files appear as key/value pairs)
+		},
+		"markdown": {         // The endpoints which output named markdown files
+			"readme": "..."   // (other manifest files appear as key/value pairs)
+		}
+	},
+
 	// When the repo was last ingested by {{origami.options.name}}
-	"lastUpdated": "2017-11-06T09:56:45.991Z"
+	"lastIngested": "2017-11-06T09:56:45.991Z"
 }</code></pre>
 
 			<h3 id="entity-version">Version Entity</h3>
@@ -75,8 +88,12 @@
 	// The semver version number that corresponds to this release
 	"version": "1.1.0",
 
-	// The commit hash that corresponds to this release
-	"commitHash": "XXXXXX"
+	// The paths for other API resources related to this version.
+	"resources": {
+		"self": "...",  // The canonical endpoint for this version
+		"repo": "...",  // The canonical endpoint for the repository this version belongs to
+		// The rest of these are the same as the resources for Repository entities
+	},
 }</code></pre>
 
 

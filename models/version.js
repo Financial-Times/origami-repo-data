@@ -54,7 +54,8 @@ function initModel(app) {
 					channel: Version.parseSlackChannel(this.get('support_channel')),
 					isOrigami: this.get('support_is_origami')
 				},
-				lastUpdated: this.get('updated_at')
+				resources: this.get('resource_urls'),
+				lastIngested: this.get('updated_at')
 			};
 			// TODO more data should be exposed
 		},
@@ -65,6 +66,10 @@ function initModel(app) {
 
 			// Switch the IDs
 			repo.id = this.get('repo_id');
+
+			// Switch the resource URLs
+			repo.resources.self = repo.resources.repo;
+			delete repo.resources.repo;
 
 			return repo;
 		},
@@ -129,6 +134,24 @@ function initModel(app) {
 				return keywords
 					.filter(keyword => typeof keyword === 'string')
 					.map(keyword => keyword.trim().toLowerCase());
+			},
+
+			// Get helper resource URLs for the version
+			resource_urls() {
+				const urls = {
+					self: `/v1/repos/${this.get('repo_id')}/versions/${this.get('id')}`,
+					repo: `/v1/repos/${this.get('repo_id')}`,
+					versions: `/v1/repos/${this.get('repo_id')}/versions`,
+					manifests: {},
+					markdown: {}
+				};
+				for (const [name, value] of Object.entries(this.get('manifests') || {})) {
+					urls.manifests[name] = (value ? `${urls.self}/manifests/${name}` : null);
+				}
+				for (const [name, value] of Object.entries(this.get('markdown') || {})) {
+					urls.markdown[name] = (value ? `${urls.self}/markdown/${name}` : null);
+				}
+				return urls;
 			}
 
 		}
