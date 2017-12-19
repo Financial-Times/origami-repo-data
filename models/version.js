@@ -384,7 +384,7 @@ function initModel(app) {
 // Extract keywords from a manifest file
 function extractKeywords(manifest) {
 	if (typeof manifest.keywords === 'string') {
-		return manifest.keywords.split(',');
+		return manifest.keywords.trim().split(/[,\s]+/);
 	}
 	if (Array.isArray(manifest.keywords)) {
 		return manifest.keywords;
