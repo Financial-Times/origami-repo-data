@@ -45,6 +45,7 @@ function initModel(app) {
 				name: this.get('name'),
 				url: this.get('url'),
 				type: this.get('type'),
+				subType: this.get('sub_type'),
 				version: this.get('version'),
 				description: this.get('description'),
 				keywords: this.get('keywords'),
@@ -57,7 +58,6 @@ function initModel(app) {
 				resources: this.get('resource_urls'),
 				lastIngested: this.get('updated_at')
 			};
-			// TODO more data should be exposed
 		},
 
 		// Serialize the version as if it represented a repository
@@ -134,6 +134,15 @@ function initModel(app) {
 				return keywords
 					.filter(keyword => typeof keyword === 'string')
 					.map(keyword => keyword.trim().toLowerCase());
+			},
+
+			// Get the Origami sub-type (category) for the version
+			sub_type() {
+				const manifests = this.get('manifests') || {};
+				if (manifests.origami && manifests.origami.origamiCategory && typeof manifests.origami.origamiCategory === 'string') {
+					return manifests.origami.origamiCategory;
+				}
+				return null;
 			},
 
 			// Get helper resource URLs for the version
