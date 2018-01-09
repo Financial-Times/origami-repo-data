@@ -187,6 +187,15 @@ function initModel(app) {
 			}).fetchOne();
 		},
 
+		// Fetch the latest versions of a repo with a given repo name
+		fetchLatestByRepoName(repoName) {
+			return Version.collection().query(qb => {
+				qb.select('*');
+				qb.where('name', repoName);
+				qb.orderBy('created_at', 'desc');
+			}).fetchOne();
+		},
+
 		// Fetch all versions of a repo with a given repo ID
 		fetchByRepoId(repoId) {
 			return Version.collection().query(qb => {

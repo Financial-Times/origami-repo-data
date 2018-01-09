@@ -210,7 +210,10 @@
 							</td>
 						</tr>
 						<tr>
-							<th scope="row">Path</th>
+							<th scope="row">
+								Path<br/>
+								<a href="#get-v1-repos-(id)_aliases">(aliases)</a>
+							</th>
 							<td>
 								<code>/v1/repos/<var>:repo-id</var></code><br/>
 								(where <var>:repo-id</var> is the unique identifier for a <a href="#entity-repo">Repository</a>)
@@ -277,6 +280,25 @@
 			<pre><code class="bash">curl \
 	-H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
 	https://origami-repo-data.ft.com/v1/repos/XXXXXX</code></pre>
+
+
+			<h3 id="get-v1-repos-(id)_aliases">Aliases</h3>
+
+			<p>
+				The following aliases exist for this endpoint, and each will respond with a
+				<code>307</code> status and a <code>Location</code> header pointing to the correct
+				endpoint. When redirecting, a client should forward on any authentication headers.
+			</p>
+
+			<ul>
+				<li>
+					<p>
+						<code>/v1/repos/<var>:repo-name</var></code><br/>
+						(where <var>:repo-name</var> is the name of a repository, also works for
+						all sub-routes)
+					</p>
+				</li>
+			</ul>
 
 
 			<h2 id="get-v1-repos-(id)-versions">Get all versions for a repository</h2>
@@ -478,7 +500,8 @@
 						<code>/v1/repos/<var>:repo-id</var>/versions/<var>:version-number</var></code><br/>
 						(where <var>:repo-id</var> is the unique identifier for a
 						<a href="#entity-repo">Repository</a> and <var>:version-number</var> is the
-						semver number for a <a href="#entity-version">Version</a> of it)
+						semver number for a <a href="#entity-version">Version</a> of it, also works
+						for all sub-routes)
 					</p>
 				</li>
 			</ul>
