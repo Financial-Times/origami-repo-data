@@ -56,6 +56,7 @@ function initModel(app) {
 					isOrigami: this.get('support_is_origami')
 				},
 				resources: this.get('resource_urls'),
+				supportingUrls: this.get('supporting_urls'),
 				lastIngested: this.get('updated_at')
 			};
 		},
@@ -161,6 +162,65 @@ function initModel(app) {
 					urls.markdown[name] = (value ? `${urls.self}/markdown/${name}` : null);
 				}
 				return urls;
+			},
+
+			// Get supporting URLs for the version
+			supporting_urls() {
+				return {
+					ci: this.get('ci_url'),
+					issues: this.get('issues_url'),
+					service: this.get('service_url')
+				};
+			},
+
+			// Get the continuous integration URL for the version
+			ci_url() {
+
+				// Default to the value in origami.json
+				const manifests = this.get('manifests') || {};
+				if (manifests.origami && manifests.origami.ci) {
+					if (typeof manifests.origami.ci.circle === 'string') {
+						return manifests.origami.ci.circle;
+					}
+					if (typeof manifests.origami.ci.travis === 'string') {
+						return manifests.origami.ci.travis;
+					}
+					if (typeof manifests.origami.ci.jenkins === 'string') {
+						return manifests.origami.ci.jenkins;
+					}
+				}
+
+				// Check the README for a matching CI URL
+				const markdown = this.get('markdown') || {};
+				if (markdown.readme) {
+					const {owner, repo} = app.github.extractRepoFromUrl(this.get('url'));
+					const circleRegExp = new RegExp(`https?://(www\\.)?circleci.com/gh/${owner}/${repo}`, 'i');
+					const travisRegExp = new RegExp(`https?://(www\\.)?travis-ci.(com|org)/${owner}/${repo}`, 'i');
+
+					if (circleRegExp.test(markdown.readme)) {
+						return `https://circleci.com/gh/${owner}/${repo}`;
+					}
+					if (travisRegExp.test(markdown.readme)) {
+						return `https://travis-ci.org/${owner}/${repo}`;
+					}
+				}
+
+				return null;
+			},
+
+			// Get the GitHub issues URL for the version
+			issues_url() {
+				const {owner, repo} = app.github.extractRepoFromUrl(this.get('url'));
+				return `https://github.com/${owner}/${repo}/issues`;
+			},
+
+			// Get the service URL for the version
+			service_url() {
+				const manifests = this.get('manifests') || {};
+				if (this.get('type') === 'service' && manifests.about && typeof manifests.about.primaryUrl === 'string') {
+					return manifests.about.primaryUrl;
+				}
+				return null;
 			}
 
 		}
