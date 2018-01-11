@@ -30,19 +30,16 @@ describe('GET /v1/repos', () => {
 			response = (await request.then()).body;
 		});
 
-		it('has a `repos` array property', () => {
-			assert.isArray(response.repos);
-		});
+		it('is an array of the latest stored versions for each repository in the database', () => {
+			assert.isArray(response);
+			assert.lengthEquals(response, 2);
 
-		it('includes the latest stored version for each repository in the database', () => {
-			assert.lengthEquals(response.repos, 2);
-
-			const repo1 = response.repos[0];
+			const repo1 = response[0];
 			assert.isObject(repo1);
 			assert.strictEqual(repo1.id, '855d47ce-697e-51b9-9882-0c3c9044f0f5');
 			assert.strictEqual(repo1.name, 'mock-service');
 
-			const repo2 = response.repos[1];
+			const repo2 = response[1];
 			assert.isObject(repo2);
 			assert.strictEqual(repo2.id, 'c990cb4b-c82b-5071-afb0-16149debc53d');
 			assert.strictEqual(repo2.name, 'o-mock-component');

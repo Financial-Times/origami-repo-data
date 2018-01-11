@@ -30,13 +30,9 @@ describe('GET /v1/queue/:ingestionId', () => {
 			response = (await request.then()).body;
 		});
 
-		it('has an `ingestion` object property', () => {
-			assert.isObject(response.ingestion);
-		});
-
-		it('includes the latest requested ingestion', () => {
-			assert.isObject(response.ingestion);
-			assert.strictEqual(response.ingestion.id, '5a070ea9-44f8-4312-8080-c4882d642ec4');
+		it('is the latest requested ingestion', () => {
+			assert.isObject(response);
+			assert.strictEqual(response.id, '5a070ea9-44f8-4312-8080-c4882d642ec4');
 		});
 
 	});

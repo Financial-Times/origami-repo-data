@@ -30,16 +30,10 @@ describe('GET /v1/repos/:repoId', () => {
 			response = (await request.then()).body;
 		});
 
-		it('has a `repo` object property', () => {
-			assert.isObject(response.repo);
-		});
-
-		it('includes the latest version for the requested repository', () => {
-
-			assert.isObject(response.repo);
-			assert.strictEqual(response.repo.id, 'c990cb4b-c82b-5071-afb0-16149debc53d');
-			assert.strictEqual(response.repo.name, 'o-mock-component');
-
+		it('is the latest version for the requested repository', () => {
+			assert.isObject(response);
+			assert.strictEqual(response.id, 'c990cb4b-c82b-5071-afb0-16149debc53d');
+			assert.strictEqual(response.name, 'o-mock-component');
 		});
 
 	});

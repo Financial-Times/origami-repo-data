@@ -30,18 +30,15 @@ describe('GET /v1/queue', () => {
 			response = (await request.then()).body;
 		});
 
-		it('has a `queue` array property', () => {
-			assert.isArray(response.queue);
-		});
+		it('is an array of each ingestion in the database', () => {
+			assert.isArray(response);
+			assert.lengthEquals(response, 5);
 
-		it('includes each ingestion in the database', () => {
-			assert.lengthEquals(response.queue, 5);
-
-			const ingestion1 = response.queue[0];
+			const ingestion1 = response[0];
 			assert.isObject(ingestion1);
 			assert.strictEqual(ingestion1.id, '5a070ea9-44f8-4312-8080-c4882d642ec4');
 
-			const ingestion2 = response.queue[1];
+			const ingestion2 = response[1];
 			assert.isObject(ingestion2);
 			assert.strictEqual(ingestion2.id, '988451cb-6d71-4a68-b435-3d5cf30b9614');
 
@@ -135,16 +132,13 @@ describe('POST /v1/queue', () => {
 			response = (await request.then()).body;
 		});
 
-		it('has a `ingestion` object property', () => {
-			assert.isObject(response.ingestion);
-		});
-
-		it('includes the ID of the new ingestion', async () => {
+		it('is the new ingestion', async () => {
 			const ingestions = await app.database.knex.select('*').from('ingestion_queue').where({
 				tag: 'v5.6.7'
 			});
-			assert.isString(response.ingestion.id);
-			assert.strictEqual(response.ingestion.id, ingestions[0].id);
+			assert.isObject(response);
+			assert.isString(response.id);
+			assert.strictEqual(response.id, ingestions[0].id);
 		});
 
 	});

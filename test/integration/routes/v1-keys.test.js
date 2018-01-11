@@ -31,29 +31,26 @@ describe('GET /v1/keys', () => {
 			response = (await request.then()).body;
 		});
 
-		it('has a `keys` array property', () => {
-			assert.isArray(response.keys);
-		});
+		it('is an array of each key in the database with no secrets output', () => {
+			assert.isArray(response);
+			assert.lengthEquals(response, 4);
 
-		it('includes each key in the database with no secrets output', () => {
-			assert.lengthEquals(response.keys, 4);
-
-			const key1 = response.keys[0];
+			const key1 = response[0];
 			assert.isObject(key1);
 			assert.strictEqual(key1.id, 'mock-admin-key');
 			assert.isUndefined(key1.secret);
 
-			const key2 = response.keys[1];
+			const key2 = response[1];
 			assert.isObject(key2);
 			assert.strictEqual(key2.id, 'mock-write-key');
 			assert.isUndefined(key2.secret);
 
-			const key3 = response.keys[2];
+			const key3 = response[2];
 			assert.isObject(key3);
 			assert.strictEqual(key3.id, 'mock-read-key');
 			assert.isUndefined(key3.secret);
 
-			const key4 = response.keys[3];
+			const key4 = response[3];
 			assert.isObject(key4);
 			assert.strictEqual(key4.id, 'mock-no-key');
 			assert.isUndefined(key4.secret);
@@ -153,17 +150,14 @@ describe('POST /v1/keys', () => {
 			response = (await request.then()).body;
 		});
 
-		it('has a `credentials` object property', () => {
-			assert.isObject(response.credentials);
-		});
-
-		it('includes the ID and secret of the new key', async () => {
+		it('is the ID and secret of the new key', async () => {
 			const keys = await app.database.knex.select('*').from('keys').where({
 				description: 'mock description'
 			});
-			assert.isString(response.credentials.id);
-			assert.isString(response.credentials.secret);
-			assert.isTrue(await bcrypt.compare(response.credentials.secret, keys[0].secret));
+			assert.isObject(response);
+			assert.isString(response.id);
+			assert.isString(response.secret);
+			assert.isTrue(await bcrypt.compare(response.secret, keys[0].secret));
 		});
 
 	});

@@ -30,16 +30,10 @@ describe('GET /v1/keys/:keyId', () => {
 			response = (await request.then()).body;
 		});
 
-		it('has a `key` object property', () => {
-			assert.isObject(response.key);
-		});
-
-		it('includes the requested key with no secret', () => {
-
-			assert.isObject(response.key);
-			assert.strictEqual(response.key.id, 'mock-read-key');
-			assert.isUndefined(response.key.secret);
-
+		it('is the requested key with no secret', () => {
+			assert.isObject(response);
+			assert.strictEqual(response.id, 'mock-read-key');
+			assert.isUndefined(response.secret);
 		});
 
 	});
