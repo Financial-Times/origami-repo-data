@@ -58,8 +58,23 @@ describe('GET /v1/queue', () => {
 			return request.expect(401);
 		});
 
-		it('responds with HTML', () => {
-			return request.expect('Content-Type', /text\/html/);
+		it('responds with JSON', () => {
+			return request.expect('Content-Type', /application\/json/);
+		});
+
+		describe('JSON response', () => {
+			let response;
+
+			beforeEach(async () => {
+				response = (await request.then()).body;
+			});
+
+			it('contains the error details', () => {
+				assert.isObject(response);
+				assert.match(response.message, /api key\/secret .* required/i);
+				assert.strictEqual(response.status, 401);
+			});
+
 		});
 
 	});
@@ -79,8 +94,23 @@ describe('GET /v1/queue', () => {
 			return request.expect(403);
 		});
 
-		it('responds with HTML', () => {
-			return request.expect('Content-Type', /text\/html/);
+		it('responds with JSON', () => {
+			return request.expect('Content-Type', /application\/json/);
+		});
+
+		describe('JSON response', () => {
+			let response;
+
+			beforeEach(async () => {
+				response = (await request.then()).body;
+			});
+
+			it('contains the error details', () => {
+				assert.isObject(response);
+				assert.match(response.message, /not authorized/i);
+				assert.strictEqual(response.status, 403);
+			});
+
 		});
 
 	});
@@ -162,19 +192,24 @@ describe('POST /v1/queue', () => {
 			return request.expect(409);
 		});
 
-		it('responds with HTML', () => {
-			return request.expect('Content-Type', /text\/html/);
+		it('responds with JSON', () => {
+			return request.expect('Content-Type', /application\/json/);
 		});
 
-		describe('HTML response', () => {
+		describe('JSON response', () => {
 			let response;
 
 			beforeEach(async () => {
-				response = (await request.then()).text;
+				response = (await request.then()).body;
 			});
 
-			it('includes a descriptive error', () => {
-				assert.match(response, /already exists/);
+			it('contains the error details', () => {
+				assert.isObject(response);
+				assert.strictEqual(response.message, 'Validation failed');
+				assert.deepEqual(response.validation, [
+					'An ingestion or version with the given URL and tag already exists'
+				]);
+				assert.strictEqual(response.status, 409);
 			});
 
 		});
@@ -200,19 +235,24 @@ describe('POST /v1/queue', () => {
 			return request.expect(409);
 		});
 
-		it('responds with HTML', () => {
-			return request.expect('Content-Type', /text\/html/);
+		it('responds with JSON', () => {
+			return request.expect('Content-Type', /application\/json/);
 		});
 
-		describe('HTML response', () => {
+		describe('JSON response', () => {
 			let response;
 
 			beforeEach(async () => {
-				response = (await request.then()).text;
+				response = (await request.then()).body;
 			});
 
-			it('includes a descriptive error', () => {
-				assert.match(response, /already exists/);
+			it('contains the error details', () => {
+				assert.isObject(response);
+				assert.strictEqual(response.message, 'Validation failed');
+				assert.deepEqual(response.validation, [
+					'An ingestion or version with the given URL and tag already exists'
+				]);
+				assert.strictEqual(response.status, 409);
 			});
 
 		});
@@ -235,20 +275,25 @@ describe('POST /v1/queue', () => {
 			return request.expect(400);
 		});
 
-		it('responds with HTML', () => {
-			return request.expect('Content-Type', /text\/html/);
+		it('responds with JSON', () => {
+			return request.expect('Content-Type', /application\/json/);
 		});
 
-		describe('HTML response', () => {
+		describe('JSON response', () => {
 			let response;
 
 			beforeEach(async () => {
-				response = (await request.then()).text;
+				response = (await request.then()).body;
 			});
 
-			it('includes a descriptive error', () => {
-				assert.match(response, /url.+is required/);
-				assert.match(response, /tag.+is required/);
+			it('contains the error details', () => {
+				assert.isObject(response);
+				assert.strictEqual(response.message, 'Validation failed');
+				assert.deepEqual(response.validation, [
+					'"url" is required',
+					'"tag" is required'
+				]);
+				assert.strictEqual(response.status, 400);
 			});
 
 		});
@@ -267,8 +312,23 @@ describe('POST /v1/queue', () => {
 			return request.expect(401);
 		});
 
-		it('responds with HTML', () => {
-			return request.expect('Content-Type', /text\/html/);
+		it('responds with JSON', () => {
+			return request.expect('Content-Type', /application\/json/);
+		});
+
+		describe('JSON response', () => {
+			let response;
+
+			beforeEach(async () => {
+				response = (await request.then()).body;
+			});
+
+			it('contains the error details', () => {
+				assert.isObject(response);
+				assert.match(response.message, /api key\/secret .* required/i);
+				assert.strictEqual(response.status, 401);
+			});
+
 		});
 
 	});
@@ -288,8 +348,23 @@ describe('POST /v1/queue', () => {
 			return request.expect(403);
 		});
 
-		it('responds with HTML', () => {
-			return request.expect('Content-Type', /text\/html/);
+		it('responds with JSON', () => {
+			return request.expect('Content-Type', /application\/json/);
+		});
+
+		describe('JSON response', () => {
+			let response;
+
+			beforeEach(async () => {
+				response = (await request.then()).body;
+			});
+
+			it('contains the error details', () => {
+				assert.isObject(response);
+				assert.match(response.message, /not authorized/i);
+				assert.strictEqual(response.status, 403);
+			});
+
 		});
 
 	});
@@ -355,8 +430,23 @@ describe('POST /v1/queue (accepting a GitHub webhook)', () => {
 			return request.expect(400);
 		});
 
-		it('responds with HTML', () => {
-			return request.expect('Content-Type', /text\/html/);
+		it('responds with JSON', () => {
+			return request.expect('Content-Type', /application\/json/);
+		});
+
+		describe('JSON response', () => {
+			let response;
+
+			beforeEach(async () => {
+				response = (await request.then()).body;
+			});
+
+			it('contains the error details', () => {
+				assert.isObject(response);
+				assert.strictEqual(response.message, 'Only the "create" GitHub event is supported');
+				assert.strictEqual(response.status, 400);
+			});
+
 		});
 
 	});
@@ -434,8 +524,23 @@ describe('POST /v1/queue (accepting a GitHub webhook)', () => {
 			return request.expect(400);
 		});
 
-		it('responds with HTML', () => {
-			return request.expect('Content-Type', /text\/html/);
+		it('responds with JSON', () => {
+			return request.expect('Content-Type', /application\/json/);
+		});
+
+		describe('JSON response', () => {
+			let response;
+
+			beforeEach(async () => {
+				response = (await request.then()).body;
+			});
+
+			it('contains the error details', () => {
+				assert.isObject(response);
+				assert.strictEqual(response.message, 'A repository URL is required');
+				assert.strictEqual(response.status, 400);
+			});
+
 		});
 
 	});
@@ -452,8 +557,23 @@ describe('POST /v1/queue (accepting a GitHub webhook)', () => {
 			return request.expect(401);
 		});
 
-		it('responds with HTML', () => {
-			return request.expect('Content-Type', /text\/html/);
+		it('responds with JSON', () => {
+			return request.expect('Content-Type', /application\/json/);
+		});
+
+		describe('JSON response', () => {
+			let response;
+
+			beforeEach(async () => {
+				response = (await request.then()).body;
+			});
+
+			it('contains the error details', () => {
+				assert.isObject(response);
+				assert.match(response.message, /api key\/secret .* required/i);
+				assert.strictEqual(response.status, 401);
+			});
+
 		});
 
 	});
@@ -479,8 +599,23 @@ describe('POST /v1/queue (accepting a GitHub webhook)', () => {
 			return request.expect(403);
 		});
 
-		it('responds with HTML', () => {
-			return request.expect('Content-Type', /text\/html/);
+		it('responds with JSON', () => {
+			return request.expect('Content-Type', /application\/json/);
+		});
+
+		describe('JSON response', () => {
+			let response;
+
+			beforeEach(async () => {
+				response = (await request.then()).body;
+			});
+
+			it('contains the error details', () => {
+				assert.isObject(response);
+				assert.match(response.message, /not authorized/i);
+				assert.strictEqual(response.status, 403);
+			});
+
 		});
 
 	});

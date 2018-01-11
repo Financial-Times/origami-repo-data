@@ -52,8 +52,23 @@ describe('GET /v1/queue/:ingestionId', () => {
 			return request.expect(404);
 		});
 
-		it('responds with HTML', () => {
-			return request.expect('Content-Type', /text\/html/);
+		it('responds with JSON', () => {
+			return request.expect('Content-Type', /application\/json/);
+		});
+
+		describe('JSON response', () => {
+			let response;
+
+			beforeEach(async () => {
+				response = (await request.then()).body;
+			});
+
+			it('contains the error details', () => {
+				assert.isObject(response);
+				assert.strictEqual(response.message, 'Not Found');
+				assert.strictEqual(response.status, 404);
+			});
+
 		});
 
 	});
@@ -70,8 +85,23 @@ describe('GET /v1/queue/:ingestionId', () => {
 			return request.expect(401);
 		});
 
-		it('responds with HTML', () => {
-			return request.expect('Content-Type', /text\/html/);
+		it('responds with JSON', () => {
+			return request.expect('Content-Type', /application\/json/);
+		});
+
+		describe('JSON response', () => {
+			let response;
+
+			beforeEach(async () => {
+				response = (await request.then()).body;
+			});
+
+			it('contains the error details', () => {
+				assert.isObject(response);
+				assert.match(response.message, /api key\/secret .* required/i);
+				assert.strictEqual(response.status, 401);
+			});
+
 		});
 
 	});
@@ -91,8 +121,23 @@ describe('GET /v1/queue/:ingestionId', () => {
 			return request.expect(403);
 		});
 
-		it('responds with HTML', () => {
-			return request.expect('Content-Type', /text\/html/);
+		it('responds with JSON', () => {
+			return request.expect('Content-Type', /application\/json/);
+		});
+
+		describe('JSON response', () => {
+			let response;
+
+			beforeEach(async () => {
+				response = (await request.then()).body;
+			});
+
+			it('contains the error details', () => {
+				assert.isObject(response);
+				assert.match(response.message, /not authorized/i);
+				assert.strictEqual(response.status, 403);
+			});
+
 		});
 
 	});
@@ -135,8 +180,23 @@ describe('DELETE /v1/queue/:ingestionId', () => {
 			return request.expect(404);
 		});
 
-		it('responds with HTML', () => {
-			return request.expect('Content-Type', /text\/html/);
+		it('responds with JSON', () => {
+			return request.expect('Content-Type', /application\/json/);
+		});
+
+		describe('JSON response', () => {
+			let response;
+
+			beforeEach(async () => {
+				response = (await request.then()).body;
+			});
+
+			it('contains the error details', () => {
+				assert.isObject(response);
+				assert.strictEqual(response.message, 'Not Found');
+				assert.strictEqual(response.status, 404);
+			});
+
 		});
 
 	});
@@ -153,8 +213,23 @@ describe('DELETE /v1/queue/:ingestionId', () => {
 			return request.expect(401);
 		});
 
-		it('responds with HTML', () => {
-			return request.expect('Content-Type', /text\/html/);
+		it('responds with JSON', () => {
+			return request.expect('Content-Type', /application\/json/);
+		});
+
+		describe('JSON response', () => {
+			let response;
+
+			beforeEach(async () => {
+				response = (await request.then()).body;
+			});
+
+			it('contains the error details', () => {
+				assert.isObject(response);
+				assert.match(response.message, /api key\/secret .* required/i);
+				assert.strictEqual(response.status, 401);
+			});
+
 		});
 
 	});
@@ -174,8 +249,23 @@ describe('DELETE /v1/queue/:ingestionId', () => {
 			return request.expect(403);
 		});
 
-		it('responds with HTML', () => {
-			return request.expect('Content-Type', /text\/html/);
+		it('responds with JSON', () => {
+			return request.expect('Content-Type', /application\/json/);
+		});
+
+		describe('JSON response', () => {
+			let response;
+
+			beforeEach(async () => {
+				response = (await request.then()).body;
+			});
+
+			it('contains the error details', () => {
+				assert.isObject(response);
+				assert.match(response.message, /not authorized/i);
+				assert.strictEqual(response.status, 403);
+			});
+
 		});
 
 	});

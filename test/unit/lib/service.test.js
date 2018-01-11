@@ -295,7 +295,9 @@ describe('lib/service', () => {
 
 		it('creates and mounts error handling middleware', () => {
 			assert.calledOnce(origamiService.middleware.errorHandler);
-			assert.calledWithExactly(origamiService.middleware.errorHandler);
+			assert.calledWithExactly(origamiService.middleware.errorHandler, {
+				outputJson: true
+			});
 			assert.calledWith(origamiService.mockApp.use, origamiService.middleware.errorHandler.firstCall.returnValue);
 		});
 
