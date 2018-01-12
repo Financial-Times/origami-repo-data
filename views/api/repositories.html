@@ -41,8 +41,11 @@
 	// Set to `null` when the repo type is not `module`
 	"subType": "component",
 
-	// The latest version of the repo to be published
+	// The latest version of the repo
 	"version": "1.1.0",
+
+	// The latest exact git tag of the repo
+	"version": "v1.1.0",
 
 	// A description and keywords for the repo, based on one of the JSON manifests in it
 	"description": "An example Node.js module",
@@ -57,7 +60,11 @@
 		"channel": "#ft-origami",
 
 		// An easy way to determine whether the Origami team maintains this repo
-		"isOrigami": true
+		"isOrigami": true,
+
+		// Whether the latest version of the repo is a prerelease
+		// (alpha, beta, or release-candidate)
+		"isPrerelease": false
 	},
 
 	// The paths for other API resources related to this repository.
@@ -100,12 +107,15 @@
 	// The semver version number that corresponds to this release
 	"version": "1.1.0",
 
-	// The paths for other API resources related to this version.
+	// The latest exact git tag of the version
+	"version": "v1.1.0",
+
+	// The paths for other API resources related to this version
 	"resources": {
 		"self": "...",  // The canonical endpoint for this version
 		"repo": "...",  // The canonical endpoint for the repository this version belongs to
 		// The rest of these are the same as the resources for Repository entities
-	},
+	}
 }</code></pre>
 
 

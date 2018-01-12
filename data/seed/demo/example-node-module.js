@@ -22,6 +22,10 @@ exports.seed = async database => {
 			support_channel: '#ft-origami',
 			tag: 'v1.0.0',
 			version: '1.0.0',
+			version_major: 1,
+			version_minor: 0,
+			version_patch: 0,
+			version_prerelease: null,
 			manifests: JSON.stringify({
 				about: null,
 				bower: null,
@@ -52,6 +56,10 @@ exports.seed = async database => {
 			support_channel: '#ft-origami',
 			tag: 'v1.1.0',
 			version: '1.1.0',
+			version_major: 1,
+			version_minor: 1,
+			version_patch: 0,
+			version_prerelease: null,
 			manifests: JSON.stringify({
 				about: null,
 				bower: null,

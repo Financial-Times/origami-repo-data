@@ -31,6 +31,13 @@ function initModel(app) {
 				// Fill out automatic fields
 				this.attributes.repo_id = uuidv5(this.attributes.url, uuidv5.URL);
 				this.attributes.version = Version.normaliseSemver(this.attributes.tag);
+
+				const prerelease = semver.prerelease(this.attributes.version);
+				this.attributes.version_major = semver.major(this.attributes.version);
+				this.attributes.version_minor = semver.minor(this.attributes.version);
+				this.attributes.version_patch = semver.patch(this.attributes.version);
+				this.attributes.version_prerelease = (prerelease ? prerelease.join('.') : prerelease);
+
 				this.attributes.updated_at = new Date();
 				return this;
 			});
@@ -47,13 +54,15 @@ function initModel(app) {
 				type: this.get('type'),
 				subType: this.get('sub_type'),
 				version: this.get('version'),
+				versionTag: this.get('tag'),
 				description: this.get('description'),
 				keywords: this.get('keywords'),
 				support: {
 					status: this.get('support_status'),
 					email: this.get('support_email'),
 					channel: Version.parseSlackChannel(this.get('support_channel')),
-					isOrigami: this.get('support_is_origami')
+					isOrigami: this.get('support_is_origami'),
+					isPrerelease: this.get('support_is_prerelease')
 				},
 				resources: this.get('resource_urls'),
 				supportingUrls: this.get('supporting_urls'),
@@ -94,6 +103,11 @@ function initModel(app) {
 			support_channel_url() {
 				const parsedSlackChannel = Version.parseSlackChannel(this.get('support_channel'));
 				return (parsedSlackChannel ? parsedSlackChannel.url : null);
+			},
+
+			// Get whether the repo is a prerelease
+			support_is_prerelease() {
+				return (this.get('version_prerelease') !== null);
 			},
 
 			// Get a description of the version, falling back through different manifests
@@ -228,13 +242,27 @@ function initModel(app) {
 	// Model static methods
 	}, {
 
-		// Fetch the latest version of every repo
-		fetchLatest() {
+		// Fetch the single latest version of every repo (repo search)
+		fetchRepos() {
 			return Version.collection().query(qb => {
 				qb.distinct(app.database.knex.raw('ON (name) name'));
 				qb.select('*');
+
+				// We exclude any versions with a prerelease so that
+				// the repository's latest version is considered the
+				// most recent *stable* version
+				qb.whereNull('version_prerelease');
+
+				// The order here is important, as we select *distinct* versions
+				// by name, we need the first result to be the one with the
+				// highest version number; https://semver.org/ specifies that
+				// version numbers should be sorted major, minor, patch, prerelease
 				qb.orderBy('name');
-				qb.orderBy('created_at', 'desc');
+				qb.orderBy('version_major', 'desc');
+				qb.orderBy('version_minor', 'desc');
+				qb.orderBy('version_patch', 'desc');
+				qb.orderBy('version_prerelease', 'desc');
+
 			}).fetch();
 		},
 
@@ -243,7 +271,10 @@ function initModel(app) {
 			return Version.collection().query(qb => {
 				qb.select('*');
 				qb.where('repo_id', repoId);
-				qb.orderBy('created_at', 'desc');
+				qb.orderBy('version_major', 'desc');
+				qb.orderBy('version_minor', 'desc');
+				qb.orderBy('version_patch', 'desc');
+				qb.orderBy('version_prerelease', 'desc');
 			}).fetchOne();
 		},
 
@@ -252,7 +283,10 @@ function initModel(app) {
 			return Version.collection().query(qb => {
 				qb.select('*');
 				qb.where('name', repoName);
-				qb.orderBy('created_at', 'desc');
+				qb.orderBy('version_major', 'desc');
+				qb.orderBy('version_minor', 'desc');
+				qb.orderBy('version_patch', 'desc');
+				qb.orderBy('version_prerelease', 'desc');
 			}).fetchOne();
 		},
 
@@ -261,7 +295,10 @@ function initModel(app) {
 			return Version.collection().query(qb => {
 				qb.select('*');
 				qb.where('repo_id', repoId);
-				qb.orderBy('created_at', 'desc');
+				qb.orderBy('version_major', 'desc');
+				qb.orderBy('version_minor', 'desc');
+				qb.orderBy('version_patch', 'desc');
+				qb.orderBy('version_prerelease', 'desc');
 			}).fetch();
 		},
 
@@ -302,6 +339,7 @@ function initModel(app) {
 			try {
 				const url = ingestion.get('url');
 				const tag = ingestion.get('tag');
+				const encodedTag = encodeURIComponent(tag);
 
 				// Expect a valid GitHub URL
 				if (!app.github.isValidUrl(url)) {
@@ -310,7 +348,11 @@ function initModel(app) {
 				const {owner, repo} = app.github.extractRepoFromUrl(url);
 
 				// Check that the repo/tag exist
-				const repoTagExists = await app.github.isValidRepoAndTag({owner, repo, tag});
+				const repoTagExists = await app.github.isValidRepoAndTag({
+					owner,
+					repo,
+					tag: encodedTag
+				});
 				if (!repoTagExists) {
 					throw app.github.error('Repo or tag does not exist', false);
 				}
@@ -318,7 +360,7 @@ function initModel(app) {
 				// Load the Origami manifest first
 				const origamiManifest = await app.github.loadJsonFile({
 					path: 'origami.json',
-					ref: tag,
+					ref: encodedTag,
 					owner,
 					repo
 				});
@@ -333,25 +375,25 @@ function initModel(app) {
 				const [aboutManifest, bowerManifest, imageSetManifest, packageManifest] = await Promise.all([
 					app.github.loadJsonFile({
 						path: 'about.json',
-						ref: tag,
+						ref: encodedTag,
 						owner,
 						repo
 					}),
 					app.github.loadJsonFile({
 						path: 'bower.json',
-						ref: tag,
+						ref: encodedTag,
 						owner,
 						repo
 					}),
 					app.github.loadJsonFile({
 						path: 'imageset.json',
-						ref: tag,
+						ref: encodedTag,
 						owner,
 						repo
 					}),
 					app.github.loadJsonFile({
 						path: 'package.json',
-						ref: tag,
+						ref: encodedTag,
 						owner,
 						repo
 					})
@@ -359,13 +401,13 @@ function initModel(app) {
 
 				// Load repo markdown
 				const readme = await app.github.loadReadme({
-					ref: tag,
+					ref: encodedTag,
 					owner,
 					repo
 				});
 				const designguidelines = await app.github.loadFile({
 					path: 'designguidelines.md',
-					ref: tag,
+					ref: encodedTag,
 					owner,
 					repo
 				});
