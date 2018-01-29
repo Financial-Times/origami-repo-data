@@ -14,9 +14,10 @@ describe('lib/service', () => {
 	let IngestionQueueProcessor;
 	let knex;
 	let morgan;
-	let service;
 	let origamiService;
 	let requireAll;
+	let service;
+	let SlackAnnouncer;
 
 	beforeEach(() => {
 		basePath = path.resolve(`${__dirname}/../../..`);
@@ -48,6 +49,9 @@ describe('lib/service', () => {
 		requireAll = require('../mock/require-all.mock');
 		mockery.registerMock('require-all', requireAll);
 
+		SlackAnnouncer = require('../mock/slack-announcer.mock');
+		mockery.registerMock('./slack-announcer', SlackAnnouncer);
+
 		service = require(basePath);
 	});
 
@@ -66,7 +70,9 @@ describe('lib/service', () => {
 				database: 'mock-database-url',
 				environment: 'test',
 				githubAuthToken: 'mock-github-auth-token',
-				port: 1234
+				port: 1234,
+				slackAnnouncerAuthToken: 'mock-slack-auth-token',
+				slackAnnouncerChannelId: 'mock-slack-channel-id'
 			};
 			routes = {
 				foo: sinon.spy(),
@@ -339,6 +345,17 @@ describe('lib/service', () => {
 			requireAll.secondCall.args[0].resolve(model);
 			assert.calledOnce(model);
 			assert.calledWithExactly(model, origamiService.mockApp);
+		});
+
+		it('creates a Slack announcer and stores it on the application', () => {
+			assert.calledOnce(SlackAnnouncer);
+			assert.calledWithExactly(SlackAnnouncer, {
+				authToken: options.slackAnnouncerAuthToken,
+				channelId: options.slackAnnouncerChannelId,
+				log: origamiService.mockApp.origami.log
+			});
+			assert.calledWithNew(SlackAnnouncer);
+			assert.strictEqual(origamiService.mockApp.slackAnnouncer, SlackAnnouncer.mockSlackAnnouncer);
 		});
 
 		it('creates an ingestion queue processor and stores it on the application', () => {

@@ -412,7 +412,7 @@ function initModel(app) {
 					repo
 				});
 
-				// Create and return a new version
+				// Create the new version
 				const version = new Version({
 					name: repo,
 					type: origamiManifestNormalised.origamiType,
@@ -434,6 +434,11 @@ function initModel(app) {
 					}
 				});
 				await version.save();
+
+				// Announce the new version on Slack
+				await app.slackAnnouncer.announce(version);
+
+				// Return the new version
 				return version;
 
 			} catch (error) {

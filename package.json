@@ -28,6 +28,7 @@
     "@financial-times/health-check": "^1.2.1",
     "@financial-times/origami-service": "^2.4.0",
     "@financial-times/origami-service-makefile": "^6.1.0",
+    "@slack/client": "^3.15.0",
     "bcrypt": "^1.0.3",
     "body-parser": "^1.18.2",
     "bookshelf": "^0.10.4",

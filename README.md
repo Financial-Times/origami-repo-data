@@ -85,6 +85,8 @@ We configure Origami Repo Data using environment variables. In development, conf
   * `RELEASE_LOG_API_KEY`: The change request API key to use when creating and closing release logs
   * `RELEASE_LOG_ENVIRONMENT`: The Salesforce environment to include in release logs. One of `Test` or `Production`
   * `SENTRY_DSN`: The Sentry URL to send error information to.
+  * `SLACK_ANNOUNCER_AUTH_TOKEN`: The Slack auth token to use when announcing new repo versions on Slack
+  * `SLACK_ANNOUNCER_CHANNEL_ID`: The Slack channel to announce new repo versions in (unique ID, not channel name)
 
 ### Required locally
 

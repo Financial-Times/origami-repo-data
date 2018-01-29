@@ -12,7 +12,9 @@ const options = {
 	log: console,
 	name: 'Origami Repo Data',
 	workers: process.env.WEB_CONCURRENCY || 1,
-	enableSetupStep: !!process.env.ENABLE_SETUP_STEP
+	enableSetupStep: !!process.env.ENABLE_SETUP_STEP,
+	slackAnnouncerAuthToken: process.env.SLACK_ANNOUNCER_AUTH_TOKEN,
+	slackAnnouncerChannelId: process.env.SLACK_ANNOUNCER_CHANNEL_ID
 };
 
 throng({
