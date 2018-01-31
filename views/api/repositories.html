@@ -118,6 +118,33 @@
 	}
 }</code></pre>
 
+			<h3 id="entity-demo">Demo Entity</h3>
+
+			<p>
+				Demo entities represent individual Origami demos for a <a href="#entity-version">Version</a>.
+				They differ from accessing the <code>origami.json</code> manifest demos in that they
+				are sanitized and normalised. As JSON they look like this:
+			</p>
+
+			<pre><code class="json">{
+	// The title of the demo
+	"title": "Example Demo",
+
+	// A short description of the demo, or `null` if one is not given
+	"description": "This is an example demo",
+
+	// Additional supporting URLs for this demo. Each key will be either a
+	// string URL or `null` if that supporting URL is not defined or does not apply
+	"supportingUrls": {
+		"live": "..."  // A live rendered version of this demo as an HTML page
+	},
+
+	// Flags indicating which parts of the demo should be displayed
+	"display": {
+		"html": true  // Whether the demo HTML should be considered useful and displayable
+	}
+}</code></pre>
+
 
 			<h2 id="get-v1-repos">Get all repositories</h2>
 
@@ -683,6 +710,95 @@
 			<pre><code class="bash">curl \
 	-H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
 	https://origami-repo-data.ft.com/v1/repos/XXXXXX/versions/XXXXXX/markdown/readme</code></pre>
+
+
+			<h2 id="get-v1-repos-(id)-versions-(id)-demos">Get demos for a version</h2>
+
+			<p>
+				Get a list of all demos for an Origami repository and version. This endpoint responds
+				with an array of <a href="#entity-demo">Demo entities</a> This endpoint requires the
+				<code>READ</code> permission.
+			</p>
+
+			<h3>Request</h3>
+
+			<div class="o-techdocs-table-wrapper">
+				<table>
+					<tbody>
+						<tr>
+							<th scope="row">Method</th>
+							<td>
+								<code>GET</code>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">
+								Path
+							</th>
+							<td>
+								<code>/v1/repos/<var>:repo-id</var>/versions/<var>:version-id</var>/demos</code><br/>
+								(where <var>:repo-id</var> is the unique identifier for a
+								<a href="#entity-repo">Repository</a> and <var>:version-id</var> is the
+								unique identifier for a <a href="#entity-version">Version</a> of it)
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">Headers</th>
+							<td>
+								<dl>
+									<dt>X-Api-Key</dt>
+									<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+									<dt>X-Api-Secret</dt>
+									<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+								</dl>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<h3>Response</h3>
+
+			<div class="o-techdocs-table-wrapper">
+				<table>
+					<tbody>
+						<tr>
+							<th scope="row">Status</th>
+							<td>
+								<code>200</code> on success<br/>
+								<code>401</code> if authentication failed<br/>
+								<code>403</code> if authorization failed<br/>
+								<code>404</code> if there are no non-hidden demos for the
+								<var>:repo-id</var> and <var>:version-id</var>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">Headers</th>
+							<td>
+								<dl>
+									<dt>Content-Type</dt>
+									<dd>
+										<code>application/json</code> on success<br/>
+										<code>text/html</code> on error
+									</dd>
+								</dl>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">Body</th>
+							<td>
+								Array of <a href="#entity-demo">Demo entities</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<h3>Example <code>curl</code> command:</h3>
+
+			<pre><code class="bash">curl \
+	-H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
+	https://origami-repo-data.ft.com/v1/repos/XXXXXX/versions/XXXXXX/demos</code></pre>
 
 		</div>
 

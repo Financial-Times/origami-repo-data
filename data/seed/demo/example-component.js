@@ -10,6 +10,20 @@ exports.seed = async database => {
 		version3: '9e4e450d-3b70-4672-b459-f297d434add6',
 	};
 
+	// Use the same demos for each version
+	const demos = [
+		{
+			name: 'example1',
+			title: 'Example Demo 1',
+			description: 'This is an example demo'
+		},
+		{
+			name: 'example2',
+			title: 'Example Demo 2',
+			description: 'This is an example demo'
+		}
+	];
+
 	// Create a component repo which is maintained by Origami
 	await database('versions').insert([
 		{
@@ -42,7 +56,8 @@ exports.seed = async database => {
 					keywords: 'example, mock',
 					origamiVersion: 1,
 					support: 'https://github.com/Financial-Times/o-example-component/issues',
-					supportStatus: 'active'
+					supportStatus: 'active',
+					demos: demos
 				},
 				package: null
 			}),
@@ -82,7 +97,8 @@ exports.seed = async database => {
 					keywords: 'example, mock',
 					origamiVersion: 1,
 					support: 'https://github.com/Financial-Times/o-example-component/issues',
-					supportStatus: 'active'
+					supportStatus: 'active',
+					demos: demos
 				},
 				package: null
 			}),
@@ -122,7 +138,8 @@ exports.seed = async database => {
 					keywords: 'example, mock',
 					origamiVersion: 1,
 					support: 'https://github.com/Financial-Times/o-example-component/issues',
-					supportStatus: 'active'
+					supportStatus: 'active',
+					demos: demos
 				},
 				package: null
 			}),

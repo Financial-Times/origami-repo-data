@@ -1,6 +1,7 @@
 'use strict';
 
 const cloneDeep = require('lodash/cloneDeep');
+const isPlainObject = require('lodash/isPlainObject');
 const semver = require('semver');
 const uuid = require('uuid/v4');
 const uuidv5 = require('uuid/v5');
@@ -160,14 +161,30 @@ function initModel(app) {
 				return null;
 			},
 
+			// Get the demo details for this version
+			demos() {
+				const manifests = this.get('manifests') || {};
+				if (manifests.origami && manifests.origami.demos && Array.isArray(manifests.origami.demos)) {
+					const demos = manifests.origami.demos
+						.filter(demo => demo && !demo.hidden)
+						.map(demo => Version.normaliseOrigamiDemo(this, demo))
+						.filter(demo => Boolean(demo));
+					return (demos.length ? demos : null);
+				}
+				return null;
+			},
+
 			// Get helper resource URLs for the version
 			resource_urls() {
+				const repoId = this.get('repo_id');
+				const versionId = this.get('id');
 				const urls = {
-					self: `/v1/repos/${this.get('repo_id')}/versions/${this.get('id')}`,
-					repo: `/v1/repos/${this.get('repo_id')}`,
-					versions: `/v1/repos/${this.get('repo_id')}/versions`,
+					self: `/v1/repos/${repoId}/versions/${versionId}`,
+					repo: `/v1/repos/${repoId}`,
+					versions: `/v1/repos/${repoId}/versions`,
 					manifests: {},
-					markdown: {}
+					markdown: {},
+					demos: (this.get('demos') ? `/v1/repos/${repoId}/versions/${versionId}/demos` : null)
 				};
 				for (const [name, value] of Object.entries(this.get('manifests') || {})) {
 					urls.manifests[name] = (value ? `${urls.self}/manifests/${name}` : null);
@@ -485,6 +502,32 @@ function initModel(app) {
 			}
 
 			return normalisedManifest;
+		},
+
+		// Normalise an Origami manifest demo
+		normaliseOrigamiDemo(version, demo) {
+			if (!isPlainObject(demo)) {
+				return null;
+			}
+			if (!demo.name || typeof demo.name !== 'string') {
+				return null;
+			}
+			if (!demo.title || typeof demo.title !== 'string') {
+				return null;
+			}
+			if (demo.description && typeof demo.description !== 'string') {
+				return null;
+			}
+			return {
+				title: demo.title,
+				description: demo.description || null,
+				supportingUrls: {
+					live: `https://www.ft.com/__origami/service/build/v2/demos/${version.get('name')}@${version.get('version')}/${demo.name}`
+				},
+				display: {
+					html: (demo.display_html !== false)
+				}
+			};
 		},
 
 		// Parse an origami.json Slack channel value

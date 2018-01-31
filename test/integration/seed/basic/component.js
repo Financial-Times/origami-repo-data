@@ -2,6 +2,47 @@
 
 // Create versions for a mock component
 exports.seed = async database => {
+
+	const manifests = {
+		origami: {
+			name: 'o-mock-component',
+			origamiType: 'module',
+			isMockManifest: true,
+			demos: [
+				{
+					name: 'example1',
+					title: 'Example Demo 1',
+					description: 'This is an example demo'
+				},
+				{
+					name: 'example2',
+					title: 'Example Demo 2',
+					description: ''
+				},
+				{
+					invalid: true
+				},
+				'invalid',
+				{
+					name: 'example-hidden',
+					title: 'Example Hidden Demo',
+					description: 'This is an example hidden demo',
+					hidden: true
+				},
+				{
+					name: 'example-no-html',
+					title: 'Example No-HTML Demo',
+					description: 'This is an example demo without HTMl to be displayed',
+					display_html: false
+				}
+			]
+		}
+	};
+
+	const markdown = {
+		readme: 'mock-readme'
+	};
+
 	await database('versions').insert([
 		{
 			id: '5bdc1cb5-19f1-4afe-883b-83c822fbbde0',
@@ -19,16 +60,8 @@ exports.seed = async database => {
 			version_minor: 0,
 			version_patch: 0,
 			version_prerelease: null,
-			manifests: JSON.stringify({
-				origami: {
-					name: 'o-mock-component',
-					origamiType: 'module',
-					isMockManifest: true
-				}
-			}),
-			markdown: JSON.stringify({
-				readme: 'mock-readme'
-			})
+			manifests: JSON.stringify(manifests),
+			markdown: JSON.stringify(markdown)
 		},
 		{
 			id: 'b2bdfae1-cc6f-4433-9a2f-8a4b762cda71',
@@ -46,8 +79,8 @@ exports.seed = async database => {
 			version_minor: 1,
 			version_patch: 0,
 			version_prerelease: null,
-			manifests: JSON.stringify({}),
-			markdown: JSON.stringify({})
+			manifests: JSON.stringify(manifests),
+			markdown: JSON.stringify(markdown)
 		},
 		{
 			id: '9e4e450d-3b70-4672-b459-f297d434add6',
@@ -65,8 +98,8 @@ exports.seed = async database => {
 			version_minor: 0,
 			version_patch: 0,
 			version_prerelease: null,
-			manifests: JSON.stringify({}),
-			markdown: JSON.stringify({})
+			manifests: JSON.stringify(manifests),
+			markdown: JSON.stringify(markdown)
 		},
 		{
 			id: 'dbd71199-c1ab-4482-9988-eee350b3bdca',
@@ -84,8 +117,8 @@ exports.seed = async database => {
 			version_minor: 0,
 			version_patch: 0,
 			version_prerelease: 'beta.1',
-			manifests: JSON.stringify({}),
-			markdown: JSON.stringify({})
+			manifests: JSON.stringify(manifests),
+			markdown: JSON.stringify(markdown)
 		}
 	]);
 };
