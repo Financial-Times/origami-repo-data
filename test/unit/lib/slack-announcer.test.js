@@ -4,7 +4,7 @@ const assert = require('proclaim');
 const mockery = require('mockery');
 const sinon = require('sinon');
 
-describe.only('lib/slack-announcer', () => {
+describe('lib/slack-announcer', () => {
 	let log;
 	let SlackClient;
 	let SlackAnnouncer;

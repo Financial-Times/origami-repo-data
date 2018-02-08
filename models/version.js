@@ -50,6 +50,7 @@ function initModel(app) {
 		serialize() {
 			return {
 				id: this.get('id'),
+				repo: this.get('repo_id'),
 				name: this.get('name'),
 				url: this.get('url'),
 				type: this.get('type'),
@@ -76,7 +77,8 @@ function initModel(app) {
 			const repo = this.serialize();
 
 			// Switch the IDs
-			repo.id = this.get('repo_id');
+			repo.id = repo.repo;
+			delete repo.repo;
 
 			// Switch the resource URLs
 			repo.resources.self = repo.resources.repo;
