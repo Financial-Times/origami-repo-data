@@ -514,14 +514,16 @@ function initModel(app) {
 			if (!demo.name || typeof demo.name !== 'string') {
 				return null;
 			}
-			if (!demo.title || typeof demo.title !== 'string') {
+			// The title is required according to the spec but some components do not currently conform.
+			// http://origami.ft.com/docs/syntax/origamijson/#format
+			if (demo.title && typeof demo.title !== 'string') {
 				return null;
 			}
 			if (demo.description && typeof demo.description !== 'string') {
 				return null;
 			}
 			return {
-				title: demo.title,
+				title: demo.title || demo.name,
 				description: demo.description || null,
 				supportingUrls: {
 					live: `https://www.ft.com/__origami/service/build/v2/demos/${version.get('name')}@${version.get('version')}/${demo.name}`
