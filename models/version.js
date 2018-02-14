@@ -87,6 +87,42 @@ function initModel(app) {
 			return repo;
 		},
 
+		// Get the demo details for this version
+		demos() {
+			const manifests = this.get('manifests') || {};
+			if (manifests.origami && manifests.origami.demos && Array.isArray(manifests.origami.demos)) {
+				const demos = manifests.origami.demos
+					.filter(demo => demo && !demo.hidden)
+					.map(demo => Version.normaliseOrigamiDemo(this, demo))
+					.filter(demo => Boolean(demo));
+				return (demos.length ? demos : null);
+			}
+			return null;
+		},
+
+		// Get the images for this version
+		images(sourceParameter = 'origami-repo-data') {
+			const manifests = this.get('manifests') || {};
+			if (this.get('type') === 'imageset' && manifests.imageSet && manifests.imageSet.images && Array.isArray(manifests.imageSet.images)) {
+				const scheme = manifests.imageSet.scheme || null;
+				const majorVersion = this.get('version_major');
+				return manifests.imageSet.images
+					.filter(isPlainObject)
+					.map(image => {
+						const name = `${image.name}` || null;
+						const url = `https://www.ft.com/__origami/service/image/v2/images/raw/${scheme}-v${majorVersion}:${name}?source=${sourceParameter}`;
+						return {
+							title: `${image.name}` || null,
+							supportingUrls: {
+								full: url,
+								w200: `${url}&width=200`
+							}
+						};
+					});
+			}
+			return null;
+		},
+
 		// Model virtual methods
 		outputVirtuals: false,
 		virtuals: {
@@ -163,19 +199,6 @@ function initModel(app) {
 				return null;
 			},
 
-			// Get the demo details for this version
-			demos() {
-				const manifests = this.get('manifests') || {};
-				if (manifests.origami && manifests.origami.demos && Array.isArray(manifests.origami.demos)) {
-					const demos = manifests.origami.demos
-						.filter(demo => demo && !demo.hidden)
-						.map(demo => Version.normaliseOrigamiDemo(this, demo))
-						.filter(demo => Boolean(demo));
-					return (demos.length ? demos : null);
-				}
-				return null;
-			},
-
 			// Get helper resource URLs for the version
 			resource_urls() {
 				const repoId = this.get('repo_id');
@@ -186,7 +209,8 @@ function initModel(app) {
 					versions: `/v1/repos/${repoId}/versions`,
 					manifests: {},
 					markdown: {},
-					demos: (this.get('demos') ? `/v1/repos/${repoId}/versions/${versionId}/demos` : null)
+					demos: (this.demos() ? `/v1/repos/${repoId}/versions/${versionId}/demos` : null),
+					images: (this.images() ? `/v1/repos/${repoId}/versions/${versionId}/images` : null)
 				};
 				for (const [name, value] of Object.entries(this.get('manifests') || {})) {
 					urls.manifests[name] = (value ? `${urls.self}/manifests/${name}` : null);

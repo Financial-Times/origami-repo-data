@@ -32,7 +32,7 @@ describe('GET /v1/repos', () => {
 
 		it('is an array of the latest stable versions for each repository in the database', () => {
 			assert.isArray(response);
-			assert.lengthEquals(response, 2);
+			assert.lengthEquals(response, 3);
 
 			const repo1 = response[0];
 			assert.isObject(repo1);
@@ -46,6 +46,12 @@ describe('GET /v1/repos', () => {
 			assert.strictEqual(repo2.name, 'o-mock-component');
 			// This is the latest *stable* version, even though 3.0.0-beta.1 exists
 			assert.strictEqual(repo2.version, '2.0.0');
+
+			const repo3 = response[2];
+			assert.isObject(repo3);
+			assert.strictEqual(repo3.id, '833bf423-4952-53e7-8fc0-e9e8554caf77');
+			assert.strictEqual(repo3.name, 'o-mock-imageset');
+			assert.strictEqual(repo3.version, '1.0.0');
 
 		});
 
