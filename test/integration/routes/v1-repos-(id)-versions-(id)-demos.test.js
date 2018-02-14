@@ -40,8 +40,11 @@ describe('GET /v1/repos/:repoId/versions/:versionId/demos', () => {
 			assert.strictEqual(demo1.description, 'This is an example demo');
 			assert.isObject(demo1.supportingUrls);
 			assert.strictEqual(demo1.supportingUrls.live, 'https://www.ft.com/__origami/service/build/v2/demos/o-mock-component@1.0.0/example1');
-			assert.deepEqual(demo1.display, {html: true});
-
+			assert.strictEqual(demo1.supportingUrls.html, 'https://www.ft.com/__origami/service/build/v2/demos/o-mock-component@1.0.0/example1/html');
+			assert.deepEqual(demo1.display, {
+				live: true,
+				html: true
+			});
 
 			const demo2 = response[1];
 			assert.isObject(demo2);
@@ -49,7 +52,11 @@ describe('GET /v1/repos/:repoId/versions/:versionId/demos', () => {
 			assert.isNull(demo2.description);
 			assert.isObject(demo2.supportingUrls);
 			assert.strictEqual(demo2.supportingUrls.live, 'https://www.ft.com/__origami/service/build/v2/demos/o-mock-component@1.0.0/example2');
-			assert.deepEqual(demo2.display, {html: true});
+			assert.strictEqual(demo2.supportingUrls.html, 'https://www.ft.com/__origami/service/build/v2/demos/o-mock-component@1.0.0/example2/html');
+			assert.deepEqual(demo2.display, {
+				live: true,
+				html: true
+			});
 
 			const demo3 = response[2];
 			assert.isObject(demo3);
@@ -57,7 +64,11 @@ describe('GET /v1/repos/:repoId/versions/:versionId/demos', () => {
 			assert.strictEqual(demo3.description, 'This is an example demo without HTMl to be displayed');
 			assert.isObject(demo3.supportingUrls);
 			assert.strictEqual(demo3.supportingUrls.live, 'https://www.ft.com/__origami/service/build/v2/demos/o-mock-component@1.0.0/example-no-html');
-			assert.deepEqual(demo3.display, {html: false});
+			assert.isNull(demo3.supportingUrls.html);
+			assert.deepEqual(demo3.display, {
+				live: true,
+				html: false
+			});
 
 		});
 

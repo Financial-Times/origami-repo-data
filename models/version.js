@@ -522,13 +522,16 @@ function initModel(app) {
 			if (demo.description && typeof demo.description !== 'string') {
 				return null;
 			}
+			const liveDemoUrl = `https://www.ft.com/__origami/service/build/v2/demos/${version.get('name')}@${version.get('version')}/${demo.name}`;
 			return {
 				title: demo.title || demo.name,
 				description: demo.description || null,
 				supportingUrls: {
-					live: `https://www.ft.com/__origami/service/build/v2/demos/${version.get('name')}@${version.get('version')}/${demo.name}`
+					live: liveDemoUrl,
+					html: (demo.display_html !== false ? `${liveDemoUrl}/html` : null)
 				},
 				display: {
+					live: true,
 					html: (demo.display_html !== false)
 				}
 			};
