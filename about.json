@@ -5,12 +5,12 @@
 	"purpose": "Get information about Origami repositories.",
 	"audience": "internal",
 	"primaryUrl": "https://origami-repo-data.ft.com/",
-	"serviceTier": "bronze",
+	"serviceTier": "silver",
 	"apiVersion": 1,
 	"apiVersions": [
 		{
 			"path": "/v1",
-			"supportStatus": "experimental"
+			"supportStatus": "active"
 		}
 	],
 	"dateCreated": "2017-10-18",
