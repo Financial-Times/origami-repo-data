@@ -61,6 +61,7 @@ describe('lib/slack-announcer', () => {
 					get: sinon.stub()
 				};
 				version.get.withArgs('name').returns('mock-name');
+				version.get.withArgs('type').returns('module');
 				version.get.withArgs('version').returns('mock-version');
 				version.get.withArgs('support_status').returns('active');
 				version.get.withArgs('support_is_origami').returns(true);
@@ -104,6 +105,24 @@ describe('lib/slack-announcer', () => {
 				beforeEach(async () => {
 					instance.client.chat.postMessage.resetHistory();
 					version.get.withArgs('support_is_origami').returns(false);
+					returnValue = await instance.announce(version);
+				});
+
+				it('does not post an announcement to the Slack channel', () => {
+					assert.notCalled(instance.client.chat.postMessage);
+				});
+
+				it('returns nothing', () => {
+					assert.isUndefined(returnValue);
+				});
+
+			});
+
+			describe('when the version is a service', () => {
+
+				beforeEach(async () => {
+					instance.client.chat.postMessage.resetHistory();
+					version.get.withArgs('type').returns('service');
 					returnValue = await instance.announce(version);
 				});
 
