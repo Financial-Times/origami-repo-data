@@ -35,6 +35,10 @@ describe('GET /v1/repos/:repoId', () => {
 			assert.strictEqual(response.id, 'c990cb4b-c82b-5071-afb0-16149debc53d');
 			assert.strictEqual(response.name, 'o-mock-component');
 			assert.deepEqual(response.keywords, []);
+			assert.deepEqual(response.languages, [
+				'mock1',
+				'mock2'
+			]);
 		});
 
 	});

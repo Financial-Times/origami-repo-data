@@ -2,6 +2,7 @@
 
 const cloneDeep = require('lodash/cloneDeep');
 const isPlainObject = require('lodash/isPlainObject');
+const path = require('path');
 const semver = require('semver');
 const uuid = require('uuid/v4');
 const uuidv5 = require('uuid/v5');
@@ -59,6 +60,7 @@ function initModel(app) {
 				versionTag: this.get('tag'),
 				description: this.get('description'),
 				keywords: this.get('keywords'),
+				languages: this.get('languages'),
 				support: {
 					status: this.get('support_status'),
 					email: this.get('support_email'),
@@ -188,6 +190,30 @@ function initModel(app) {
 				return keywords
 					.filter(keyword => typeof keyword === 'string')
 					.map(keyword => keyword.trim().toLowerCase());
+			},
+
+			// Get languages for the version, falling back through different manifests
+			languages() {
+				const manifests = this.get('manifests') || {};
+				let mainPaths = [];
+
+				// Order: bower, package
+				if (manifests.bower) {
+					if (typeof manifests.bower.main === 'string') {
+						mainPaths.push(manifests.bower.main);
+					} else if (Array.isArray(manifests.bower.main)) {
+						mainPaths = manifests.bower.main.filter(main => typeof main === 'string');
+					}
+				} else if (manifests.package && typeof manifests.package.main === 'string') {
+					mainPaths.push(manifests.package.main);
+				}
+
+				const languages = mainPaths
+					.map(mainPath => path.extname(mainPath).slice(1).toLowerCase())
+					.filter(mainPath => mainPath)
+					.sort();
+
+				return Array.from(new Set(languages));
 			},
 
 			// Get the Origami sub-type (category) for the version
