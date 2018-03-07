@@ -58,6 +58,7 @@ function initModel(app) {
 				subType: this.get('sub_type'),
 				version: this.get('version'),
 				versionTag: this.get('tag'),
+				imageSetScheme: this.get('imageset_scheme'),
 				description: this.get('description'),
 				keywords: this.get('keywords'),
 				languages: this.get('languages'),
@@ -149,6 +150,15 @@ function initModel(app) {
 			// Get whether the repo is a prerelease
 			support_is_prerelease() {
 				return (this.get('version_prerelease') !== null);
+			},
+
+			// Get the imageset scheme if the repo is an image-set
+			imageset_scheme() {
+				const manifests = this.get('manifests') || {};
+				if (manifests.imageSet && manifests.imageSet.scheme && typeof manifests.imageSet.scheme === 'string') {
+					return `${manifests.imageSet.scheme}-v${this.get('version_major')}`;
+				}
+				return null;
 			},
 
 			// Get a description of the version, falling back through different manifests
