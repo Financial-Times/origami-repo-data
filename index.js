@@ -12,7 +12,12 @@ let databaseUrl = process.env.DATABASE_URL;
 if (!databaseUrl) {
 	for (const [key, value] of Object.entries(process.env)) {
 		if (/^HEROKU_POSTGRESQL_[^_]+_URL$/.test(key)) {
-			databaseUrl = value;
+			if (value.includes('ssl=true')) {
+				databaseUrl = value;
+			} else {
+				const joinCharacter = (value.includes('?') ? '&' : '?');
+				databaseUrl = `${value}${joinCharacter}ssl=true`;
+			}
 			break;
 		}
 	}
