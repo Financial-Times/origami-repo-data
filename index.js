@@ -6,8 +6,23 @@ const throng = require('throng');
 
 dotenv.load();
 
+// Work out where the database URL is
+// (work with Heroku Postgres color named databases)
+let databaseUrl = process.env.DATABASE_URL;
+if (!databaseUrl) {
+	for (const [key, value] of Object.entries(process.env)) {
+		if (/^HEROKU_POSTGRESQL_[^_]+_URL$/.test(key)) {
+			databaseUrl = value;
+			break;
+		}
+	}
+}
+if (!databaseUrl) {
+	databaseUrl = 'postgres://localhost:5432/origami-repo-data';
+}
+
 const options = {
-	database: process.env.DATABASE_URL || 'postgres://localhost:5432/origami-repo-data',
+	database: databaseUrl,
 	githubAuthToken: process.env.GITHUB_AUTH_TOKEN,
 	log: console,
 	name: 'Origami Repo Data',
