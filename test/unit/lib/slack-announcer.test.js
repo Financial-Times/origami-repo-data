@@ -73,7 +73,7 @@ describe('lib/slack-announcer', () => {
 				assert.calledWithExactly(
 					instance.client.chat.postMessage,
 					'mock-channel-id',
-					'New release: *<https://origami-registry.ft.com/components/mock-name@mock-version|mock-name @ mock-version>*',
+					'New release: *<https://registry.origami.ft.com/components/mock-name@mock-version|mock-name @ mock-version>*',
 					{as_user: true}
 				);
 			});
