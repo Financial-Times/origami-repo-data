@@ -2,6 +2,30 @@
 
 // Create versions for a mock service
 exports.seed = async database => {
+
+	const manifests = {
+		package: {
+			name: 'o-mock-component',
+			dependencies: {
+				'mock-npm-dependency-1': '^1.2.3',
+				'mock-npm-dependency-2': '^4.5.6'
+			},
+			devDependencies: {
+				'mock-npm-dependency-3': '^1.2.3',
+				'mock-npm-dependency-4': '^4.5.6'
+			},
+			optionalDependencies: {
+				'mock-npm-dependency-5': '^1.2.3'
+			}
+		},
+		bower: {
+			dependencies: {
+				'mock-bower-dependency-1': '^1.2.3',
+				'mock-bower-dependency-2': '^4.5.6'
+			}
+		}
+	};
+
 	await database('versions').insert([
 		{
 			id: '3731599a-f6a0-4856-8f28-9d10bc567d5b',
@@ -19,7 +43,7 @@ exports.seed = async database => {
 			version_minor: 0,
 			version_patch: 0,
 			version_prerelease: null,
-			manifests: JSON.stringify({}),
+			manifests: JSON.stringify(manifests),
 			markdown: JSON.stringify({})
 		},
 		{
@@ -38,7 +62,7 @@ exports.seed = async database => {
 			version_minor: 0,
 			version_patch: 0,
 			version_prerelease: null,
-			manifests: JSON.stringify({}),
+			manifests: JSON.stringify(manifests),
 			markdown: JSON.stringify({})
 		},
 		{
@@ -57,8 +81,9 @@ exports.seed = async database => {
 			version_minor: 1,
 			version_patch: 0,
 			version_prerelease: null,
-			manifests: JSON.stringify({}),
+			manifests: JSON.stringify(manifests),
 			markdown: JSON.stringify({})
 		}
 	]);
+
 };

@@ -43,7 +43,15 @@ exports.seed = async database => {
 				'example.mock1',
 				'example2.mock1',
 				'example3.MOCK2'
-			]
+			],
+			dependencies: {
+				'mock-bower-dependency-1': '^1.2.3',
+				'mock-bower-dependency-2': '^4.5.6'
+			},
+			devDependencies: {
+				'mock-bower-dependency-3': '^1.2.3',
+				'mock-bower-dependency-4': '^4.5.6'
+			}
 		}
 	};
 

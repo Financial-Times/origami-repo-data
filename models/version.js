@@ -126,6 +126,43 @@ function initModel(app) {
 			return null;
 		},
 
+		// Get the dependencies for this version
+		dependencies() {
+			const manifests = this.get('manifests') || {};
+			const manifestsWithDependencies = ['bower', 'package']
+				.filter(name => manifests[name])
+				.map(name => {
+					return {
+						name,
+						data: manifests[name]
+					};
+				});
+			const dependencyKeys = ['dependencies', 'devDependencies', 'optionalDependencies'];
+			const dependencies = [];
+
+			// If the repo has either a bower or package manifest...
+			if (manifestsWithDependencies.length) {
+				for (const manifest of manifestsWithDependencies) {
+					for (const dependencyKey of dependencyKeys) {
+						if (manifest.data[dependencyKey]) {
+							for (const [name, version] of Object.entries(manifest.data[dependencyKey])) {
+								dependencies.push({
+									name,
+									version,
+									source: (manifest.name === 'bower' ? 'bower' : 'npm'),
+									isDev: (dependencyKey === 'devDependencies'),
+									isOptional: (dependencyKey === 'optionalDependencies')
+								});
+							}
+						}
+					}
+				}
+				return dependencies;
+			}
+
+			return null;
+		},
+
 		// Model virtual methods
 		outputVirtuals: false,
 		virtuals: {
@@ -246,7 +283,8 @@ function initModel(app) {
 					manifests: {},
 					markdown: {},
 					demos: (this.demos() ? `/v1/repos/${repoId}/versions/${versionId}/demos` : null),
-					images: (this.images() ? `/v1/repos/${repoId}/versions/${versionId}/images` : null)
+					images: (this.images() ? `/v1/repos/${repoId}/versions/${versionId}/images` : null),
+					dependencies: (this.dependencies() ? `/v1/repos/${repoId}/versions/${versionId}/dependencies` : null)
 				};
 				for (const [name, value] of Object.entries(this.get('manifests') || {})) {
 					urls.manifests[name] = (value ? `${urls.self}/manifests/${name}` : null);
