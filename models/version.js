@@ -60,6 +60,7 @@ function initModel(app) {
 				versionTag: this.get('tag'),
 				imageSetScheme: this.get('imageset_scheme'),
 				description: this.get('description'),
+				brands: this.get('brands'),
 				keywords: this.get('keywords'),
 				languages: this.get('languages'),
 				support: {
@@ -216,6 +217,23 @@ function initModel(app) {
 					return manifests.bower.description;
 				}
 				return null;
+			},
+
+			// Get brands for the version, falling back to default (master) if none provided
+			brands() {
+				const manifests = this.get('manifests') || {};
+				let brands = [];
+
+				if (manifests.origami && Array.isArray(manifests.origami.brands)) {
+					brands = manifests.origami.brands;
+
+				}
+
+				if (brands && manifests.origami.origamiType === 'module') {
+					return brands
+					.filter(brand => typeof brand === 'string')
+					.map(brand => brand.trim().toLowerCase());
+				}
 			},
 
 			// Get keywords for the version, falling back through different manifests

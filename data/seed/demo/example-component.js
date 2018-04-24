@@ -53,6 +53,10 @@ exports.seed = async database => {
 					description: 'An example Origami component',
 					origamiType: 'module',
 					origamiCategory: 'components',
+					brands: [
+						'master',
+						'internal'
+					],
 					keywords: 'example, mock',
 					origamiVersion: 1,
 					support: 'https://github.com/Financial-Times/o-example-component/issues',
