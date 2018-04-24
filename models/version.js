@@ -223,13 +223,14 @@ function initModel(app) {
 			brands() {
 				const manifests = this.get('manifests') || {};
 				let brands = [];
+				const type = this.get('type');
 
 				if (manifests.origami && Array.isArray(manifests.origami.brands)) {
 					brands = manifests.origami.brands;
 
 				}
 
-				if (brands && manifests.origami.origamiType === 'module') {
+				if (brands && type === 'module') {
 					return brands
 					.filter(brand => typeof brand === 'string')
 					.map(brand => brand.trim().toLowerCase());

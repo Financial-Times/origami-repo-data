@@ -39,6 +39,9 @@ describe('GET /v1/repos/:repoId', () => {
 				'mock1',
 				'mock2'
 			]);
+			assert.deepEqual(response.brands, [
+				'mock-brand'
+			]);
 		});
 
 	});

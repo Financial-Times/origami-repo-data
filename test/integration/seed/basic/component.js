@@ -7,6 +7,9 @@ exports.seed = async database => {
 		origami: {
 			name: 'o-mock-component',
 			origamiType: 'module',
+			brands: [
+				'mock-brand'
+			],
 			keywords: '',
 			isMockManifest: true,
 			demos: [
