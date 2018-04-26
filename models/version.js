@@ -227,7 +227,6 @@ function initModel(app) {
 
 				if (manifests.origami && Array.isArray(manifests.origami.brands)) {
 					brands = manifests.origami.brands;
-
 				}
 
 				if (brands && type === 'module') {
@@ -235,6 +234,8 @@ function initModel(app) {
 					.filter(brand => typeof brand === 'string')
 					.map(brand => brand.trim().toLowerCase());
 				}
+
+				return null;
 			},
 
 			// Get keywords for the version, falling back through different manifests
