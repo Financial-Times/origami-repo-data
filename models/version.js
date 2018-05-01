@@ -92,13 +92,13 @@ function initModel(app) {
 		},
 
 		// Get the demo details for this version
-		demos() {
+		demos(filter) {
 			const manifests = this.get('manifests') || {};
 			if (manifests.origami && manifests.origami.demos && Array.isArray(manifests.origami.demos)) {
 				const demos = manifests.origami.demos
 					.filter(demo => demo && !demo.hidden)
-					.map(demo => Version.normaliseOrigamiDemo(this, demo))
-					.filter(demo => Boolean(demo));
+					.map(demo => Version.normaliseOrigamiDemo(this, demo, filter))
+					.filter(demo => Boolean(demo) && Boolean(demo.display.live));
 				return (demos.length ? demos : null);
 			}
 			return null;
@@ -222,20 +222,9 @@ function initModel(app) {
 			// Get brands for the version, falling back to default (master) if none provided
 			brands() {
 				const manifests = this.get('manifests') || {};
-				let brands = [];
 				const type = this.get('type');
-
-				if (manifests.origami && Array.isArray(manifests.origami.brands)) {
-					brands = manifests.origami.brands;
-				}
-
-				if (brands && type === 'module') {
-					return brands
-					.filter(brand => typeof brand === 'string')
-					.map(brand => brand.trim().toLowerCase());
-				}
-
-				return null;
+				const brands = (manifests.origami && manifests.origami.brands ? manifests.origami.brands : []);
+				return Version.normaliseOrigamiBrandsArray(type, brands);
 			},
 
 			// Get keywords for the version, falling back through different manifests
@@ -625,7 +614,7 @@ function initModel(app) {
 		},
 
 		// Normalise an Origami manifest demo
-		normaliseOrigamiDemo(version, demo) {
+		normaliseOrigamiDemo(version, demo, filter = {}) {
 			if (!isPlainObject(demo)) {
 				return null;
 			}
@@ -640,19 +629,50 @@ function initModel(app) {
 			if (demo.description && typeof demo.description !== 'string') {
 				return null;
 			}
-			const liveDemoUrl = `https://www.ft.com/__origami/service/build/v2/demos/${version.get('name')}@${version.get('version')}/${demo.name}`;
+
+			// Work out visibility based on brands
+			const display = {
+				live: true,
+				html: (demo.display_html !== false)
+			};
+			// Filter based on brand if the filter is present
+			const demoBrands = Version.normaliseOrigamiBrandsArray(version.get('type'), demo.brands);
+			if (filter && filter.brand && Array.isArray(demoBrands) && demoBrands.length) {
+				if (!demoBrands.includes(filter.brand)) {
+					display.live = display.html = false;
+				}
+			}
+
+			// Calculate the live demo URL (including brand if necessary)
+			let liveDemoUrl = `https://www.ft.com/__origami/service/build/v2/demos/${version.get('name')}@${version.get('version')}/${demo.name}`;
+			let htmlDemoUrl = `${liveDemoUrl}/html`;
+			if (filter && filter.brand) {
+				liveDemoUrl = `${liveDemoUrl}?brand=${filter.brand}`;
+				htmlDemoUrl = `${htmlDemoUrl}?brand=${filter.brand}`;
+			}
+
 			return {
 				title: demo.title || demo.name,
 				description: demo.description || null,
 				supportingUrls: {
 					live: liveDemoUrl,
-					html: (demo.display_html !== false ? `${liveDemoUrl}/html` : null)
+					html: (demo.display_html !== false ? htmlDemoUrl : null)
 				},
-				display: {
-					live: true,
-					html: (demo.display_html !== false)
-				}
+				display
 			};
+		},
+
+		// Normalise an origami brands array
+		normaliseOrigamiBrandsArray(type, brands) {
+			if (type !== 'module') {
+				return null;
+			}
+			if (!Array.isArray(brands)) {
+				return [];
+			}
+			return brands
+				.filter(brand => typeof brand === 'string')
+				.map(brand => brand.trim().toLowerCase());
 		},
 
 		// Parse an origami.json Slack channel value
