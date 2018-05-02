@@ -36,8 +36,14 @@ exports.seed = async database => {
 				{
 					name: 'example-no-html',
 					title: 'Example No-HTML Demo',
-					description: 'This is an example demo without HTMl to be displayed',
+					description: 'This is an example demo without HTML to be displayed',
 					display_html: false
+				},
+				{
+					name: 'example-branded-demo',
+					title: 'Example Branded Demo',
+					description: 'This is an example demo for the "example-brand" brand',
+					brands: ['example-brand']
 				}
 			]
 		},

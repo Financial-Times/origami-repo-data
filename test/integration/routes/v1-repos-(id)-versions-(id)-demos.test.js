@@ -32,7 +32,7 @@ describe('GET /v1/repos/:repoId/versions/:versionId/demos', () => {
 
 		it('is the version demos with some normalisation applied, and hidden/invalid demos removed', () => {
 			assert.isArray(response);
-			assert.lengthEquals(response, 3);
+			assert.lengthEquals(response, 4);
 
 			const demo1 = response[0];
 			assert.isObject(demo1);
@@ -61,13 +61,125 @@ describe('GET /v1/repos/:repoId/versions/:versionId/demos', () => {
 			const demo3 = response[2];
 			assert.isObject(demo3);
 			assert.strictEqual(demo3.title, 'Example No-HTML Demo');
-			assert.strictEqual(demo3.description, 'This is an example demo without HTMl to be displayed');
+			assert.strictEqual(demo3.description, 'This is an example demo without HTML to be displayed');
 			assert.isObject(demo3.supportingUrls);
 			assert.strictEqual(demo3.supportingUrls.live, 'https://www.ft.com/__origami/service/build/v2/demos/o-mock-component@1.0.0/example-no-html');
 			assert.isNull(demo3.supportingUrls.html);
 			assert.deepEqual(demo3.display, {
 				live: true,
 				html: false
+			});
+
+			const demo4 = response[3];
+			assert.isObject(demo4);
+			assert.strictEqual(demo4.title, 'Example Branded Demo');
+			assert.strictEqual(demo4.description, 'This is an example demo for the "example-brand" brand');
+			assert.isObject(demo4.supportingUrls);
+			assert.strictEqual(demo4.supportingUrls.live, 'https://www.ft.com/__origami/service/build/v2/demos/o-mock-component@1.0.0/example-branded-demo');
+			assert.strictEqual(demo4.supportingUrls.html, 'https://www.ft.com/__origami/service/build/v2/demos/o-mock-component@1.0.0/example-branded-demo/html');
+			assert.deepEqual(demo4.display, {
+				live: true,
+				html: true
+			});
+
+		});
+
+	});
+
+	describe('when the `brand` query parameter is set', () => {
+		let request;
+
+		beforeEach(async () => {
+			await database.seed(app, 'basic');
+			request = agent
+				.get('/v1/repos/c990cb4b-c82b-5071-afb0-16149debc53d/versions/5bdc1cb5-19f1-4afe-883b-83c822fbbde0/demos?brand=example-brand')
+				.set('X-Api-Key', 'mock-read-key')
+				.set('X-Api-Secret', 'mock-read-secret');
+		});
+
+		it('responds with a 200 status', () => {
+			return request.expect(200);
+		});
+
+		it('responds with JSON', () => {
+			return request.expect('Content-Type', /application\/json/);
+		});
+
+		describe('JSON response', () => {
+			let response;
+
+			beforeEach(async () => {
+				response = (await request.then()).body;
+			});
+
+			it('is the expected version demos filtered by brand', () => {
+				assert.isArray(response);
+				assert.lengthEquals(response, 4);
+
+				const demo1 = response[0];
+				assert.isObject(demo1);
+				assert.strictEqual(demo1.title, 'Example Demo 1');
+
+				const demo2 = response[1];
+				assert.isObject(demo2);
+				assert.strictEqual(demo2.title, 'Example Demo 2');
+
+				const demo3 = response[2];
+				assert.isObject(demo3);
+				assert.strictEqual(demo3.title, 'Example No-HTML Demo');
+
+				const demo4 = response[3];
+				assert.isObject(demo4);
+				assert.strictEqual(demo4.title, 'Example Branded Demo');
+
+			});
+
+		});
+
+	});
+
+	describe('when the `brand` query parameter is set which should filter out demos', () => {
+		let request;
+
+		beforeEach(async () => {
+			await database.seed(app, 'basic');
+			request = agent
+				.get('/v1/repos/c990cb4b-c82b-5071-afb0-16149debc53d/versions/5bdc1cb5-19f1-4afe-883b-83c822fbbde0/demos?brand=notabrand')
+				.set('X-Api-Key', 'mock-read-key')
+				.set('X-Api-Secret', 'mock-read-secret');
+		});
+
+		it('responds with a 200 status', () => {
+			return request.expect(200);
+		});
+
+		it('responds with JSON', () => {
+			return request.expect('Content-Type', /application\/json/);
+		});
+
+		describe('JSON response', () => {
+			let response;
+
+			beforeEach(async () => {
+				response = (await request.then()).body;
+			});
+
+			it('is the expected version demos filtered by brand', () => {
+				assert.isArray(response);
+				assert.lengthEquals(response, 3);
+
+				const demo1 = response[0];
+				assert.isObject(demo1);
+				assert.strictEqual(demo1.title, 'Example Demo 1');
+
+				const demo2 = response[1];
+				assert.isObject(demo2);
+				assert.strictEqual(demo2.title, 'Example Demo 2');
+
+				const demo3 = response[2];
+				assert.isObject(demo3);
+				assert.strictEqual(demo3.title, 'Example No-HTML Demo');
+
 			});
 
 		});
