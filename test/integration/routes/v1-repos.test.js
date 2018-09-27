@@ -47,7 +47,7 @@ describe('GET /v1/repos', () => {
 			assert.strictEqual(repo2.name, 'o-mock-component');
 			// This is the latest *stable* version, even though 3.0.0-beta.1 exists
 			assert.strictEqual(repo2.version, '2.0.0');
-			assert.deepEqual(repo2.brands, ['mock-brand']);
+			assert.deepEqual(repo2.brands, ['master', 'internal']);
 
 			const repo3 = response[2];
 			assert.isObject(repo3);
@@ -129,4 +129,55 @@ describe('GET /v1/repos', () => {
 
 	});
 
+	describe.only('with a brand query', () => {
+		describe('of a specific brand', () => {
+			let response;
+
+			beforeEach(async () => {
+				await database.seed(app, 'basic');
+				request = agent
+					.get('/v1/repos?brand=master')
+					.set('X-Api-Key', 'mock-read-key')
+					.set('X-Api-Secret', 'mock-read-secret');
+
+					response = (await request.then()).body;
+			});
+
+			it('is an array of repositories with a master brand', () => {
+				assert.isArray(response);
+				assert.lengthEquals(response, 1);
+
+				const repo1 = response[0];
+				assert.isObject(repo1);
+				assert.isTrue(repo1.brands.includes('master'));
+			});
+		});
+
+		describe('of no brand', () => {
+			let response;
+
+			beforeEach(async () => {
+				await database.seed(app, 'basic');
+				request = agent
+					.get('/v1/repos?brand=none')
+					.set('X-Api-Key', 'mock-read-key')
+					.set('X-Api-Secret', 'mock-read-secret');
+
+					response = (await request.then()).body;
+			});
+
+			it('is an array of repositories with no brand', () => {
+				assert.isArray(response);
+				assert.lengthEquals(response, 2);
+
+				const repo1 = response[0];
+				assert.isObject(repo1);
+				assert.isNull(repo1.brands);
+
+				const repo2 = response[0];
+				assert.isObject(repo2);
+				assert.isNull(repo2.brands);
+			});
+		});
+	});
 });
