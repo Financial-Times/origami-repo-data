@@ -129,7 +129,7 @@ describe('GET /v1/repos', () => {
 
 	});
 
-	describe.only('with a brand query', () => {
+	describe('with a brand query', () => {
 		describe('of a specific brand', () => {
 			let response;
 
