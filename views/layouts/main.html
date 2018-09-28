@@ -30,7 +30,7 @@
 		}
 	</style>
 
-	<link rel="stylesheet" href="https://www.ft.com/__origami/service/build/v2/bundles/css?modules=o-techdocs@^7.0.5,o-grid@^4.0.0,o-icons@^4.2.0,o-header-services" />
+	<link rel="stylesheet" href="https://www.ft.com/__origami/service/build/v2/bundles/css?modules=o-layout@^2.0.1" />
 	<link rel="stylesheet" href="/main.css" />
 	<script src="https://polyfill.io/v2/polyfill.min.js?features=fetch,default"></script>
 	<script>
@@ -42,30 +42,26 @@
 				var s = document.getElementsByTagName('script')[0];
 				s.parentNode.insertBefore(o, s);
 			}
-		}('https://www.ft.com/__origami/service/build/v2/bundles/js?modules=o-techdocs@^7.0.5,o-grid@^4.0.0,o-icons@^4.2.0'));
+		}('https://www.ft.com/__origami/service/build/v2/bundles/js?modules=o-layout@^2.0.1'));
 	</script>
 
 </head>
-<body class="o-techdocs">
+<body>
+	<div class="o-layout" data-o-component="o-layout">
 
-	<header class="o-header-services" data-o-component="o-header">
-		<div class="o-header-services__top o-header-services__container">
-			<div class="o-header-services__ftlogo"></div>
-			<div class="o-header-services__title">
-				<h1 class="o-header-services__product-name">
-					<a href="{{basePath}}">{{origami.options.name}}</a>
-				</h1>
-			</div>
+		{{> header}}
+
+		<div class="o-layout__sidebar">
+			<!-- content for the sidebar goes here -->
 		</div>
-	</header>
 
-	{{{body}}}
-
-	<footer class="o-techdocs-footer">
-		<div class="o-techdocs-footer__inner">
-			<p>&copy; THE FINANCIAL TIMES LTD. FT and 'Financial Times' are trademarks of The Financial Times Ltd.</p>
+		<div class="o-layout__main">
+			<!-- {{{body}}} -->
 		</div>
-	</footer>
+
+		{{> footer}}
+
+	</div>
 
 </body>
 </html>

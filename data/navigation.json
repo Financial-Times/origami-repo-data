@@ -1,0 +1,39 @@
+{
+	"main": [
+		{
+			"name": "Overview",
+			"href": "v1"
+		},
+		{
+			"name": "API Reference",
+			"href": "v1/docs/api"
+		}
+	],
+	"hasChildren": true,
+	"ancestors": {
+		"name": "API Reference",
+		"href": "v1/docs/api"
+	},
+	"children": [
+		{
+			"name": "Clients",
+			"href":  "v1/docs/api/clients"
+		},
+		{
+			"name": "Authentication",
+			"href":  "v1/docs/api/authentication"
+		},
+		{
+			"name": "Repositories",
+			"href":  "v1/docs/api/repositories"
+		},
+		{
+			"name": "Queue",
+			"href":  "v1/docs/api/queue"
+		},
+		{
+			"name": "Keys",
+			"href":  "v1/docs/api/keys"
+		}
+	]
+}
