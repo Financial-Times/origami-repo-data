@@ -1,72 +1,52 @@
-
-<div class="o-techdocs-container">
-	<div class="o-techdocs-layout">
-
-		<div class="o-techdocs-sidebar">
-			{{>navigation}}
+{{#if origami.options.enableSetupStep}}
+	<div class="o-message o-message--notice-inner o-message--warning-light" data-o-message-close=false data-o-component="o-message" style="margin-bottom:20px;">
+		<div class="o-message__container">
+			<div class="o-message__content">
+				<p class="o-message__content-highlight">Service Set Up</p>
+				<p class="o-message__content-main">
+					{{#if setupCredentials}}
+						The API key and secret below will only ever be output once. Do not
+						refresh this page or navigate away until you've saved the credentials
+						somewhere secure, such as LastPass.
+<pre><code class="nohighlight"><b>API Key:</b> {{setupCredentials.id}}
+		<b>API Secret:</b> {{setupCredentials.secret}}</code></pre>
+					{{else}}
+						Please remove the <code>ENABLE_SETUP_STEP</code> environment
+						variable from the service configuration.
+					{{/if}}
+				</p>
+			</div>
 		</div>
-
-		<div class="o-techdocs-main o-techdocs-content">
-
-			<h1>Get information about Origami repositories</h1>
-
-			{{#if origami.options.enableSetupStep}}
-				<div class="o-techdocs-card o-techdocs-card--sev1">
-					<div class="o-techdocs-card__context">
-						<div class="o-techdocs-card__heading">
-							<div class="o-techdocs-card__title">Service Set Up</div>
-						</div>
-					</div>
-					<div class="o-techdocs-card__content">
-						{{#if setupCredentials}}
-							<p>
-								The API key and secret below will only ever be output once. Do not
-								refresh this page or navigate away until you've saved the credentials
-								somewhere secure, such as LastPass.
-							</p>
-							<pre><code class="nohighlight"><b>API Key:</b> {{setupCredentials.id}}
-<b>API Secret:</b> {{setupCredentials.secret}}</code></pre>
-						{{else}}
-							<p>
-								Please remove the <code>ENABLE_SETUP_STEP</code> environment
-								variable from the service configuration.
-							</p>
-						{{/if}}
-
-					</div>
-				</div>
-			{{/if}}
-
-			<p>
-				Origami Repo Data is an API which can be used to get information about repositories
-				which contain an <code>origami.json</code> file. These could be components, services,
-				image sets, and Node.js modules. Inclusion in this API does not mean a module is
-				supported by the Origami team.
-			</p>
-
-			<h2>Criteria for inclusion</h2>
-
-			<p>
-				To be included in Origami Repo Data, a repository must meet the following criteria.
-				When these criteria are met, the repo will be automatically ingested into this service.
-			</p>
-
-			<ul>
-				<li>
-					<strong>MUST</strong> reside in the
-					<a href="https://github.com/Financial-Times">Financial-Times GitHub organisation</a>
-				</li>
-				<li>
-					<strong>MUST</strong> contain a valid <code>origami.json</code> file
-					(see <a href="http://origami.ft.com/docs/syntax/origamijson/">the spec</a> for more information)
-				</li>
-				<li>
-					<strong>MUST</strong> have at least one git tag which complies with
-					<a href="https://semver.org/">semantic versioning</a>
-				</li>
-			</ul>
-
-		</div>
-
 	</div>
-</div>
+{{/if}}
+
+<h1>Get information about Origami repositories</h1>
+
+<p>
+	Origami Repo Data is an API which can be used to get information about repositories
+	which contain an <code>origami.json</code> file. These could be components, services,
+	image sets, and Node.js modules. Inclusion in this API does not mean a module is
+	supported by the Origami team.
+</p>
+
+<h2>Criteria for inclusion</h2>
+
+<p>
+	To be included in Origami Repo Data, a repository must meet the following criteria.
+	When these criteria are met, the repo will be automatically ingested into this service.
+</p>
+
+<ul>
+	<li>
+		<strong>MUST</strong> reside in the
+		<a href="https://github.com/Financial-Times">Financial-Times GitHub organisation</a>
+	</li>
+	<li>
+		<strong>MUST</strong> contain a valid <code>origami.json</code> file
+		(see <a href="http://origami.ft.com/docs/syntax/origamijson/">the spec</a> for more information)
+	</li>
+	<li>
+		<strong>MUST</strong> have at least one git tag which complies with
+		<a href="https://semver.org/">semantic versioning</a>
+	</li>
+</ul>
