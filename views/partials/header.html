@@ -28,23 +28,23 @@
 					<div class="o-header__subnav-wrap-inside" data-o-header-subnav-wrapper="">
 						<div class="o-header__subnav-content">
 							<ol class="o-header__subnav-list o-header__subnav-list--breadcrumb" aria-label="Breadcrumb">
-								{{#ancestors}}
+								{{#navigation.ancestors}}
 									<li class="o-header__subnav-item">
 										<a class="o-header__subnav-link" href="{{@root.basePath}}{{href}}">
 											{{name}}
 										</a>
 									</li>
-								{{/ancestors}}
+								{{/navigation.ancestors}}
 							</ol>
 
 							<ul class="o-header__subnav-list o-header__subnav-list--children" aria-label="Subsections">
-								{{#children}}
+								{{#navigation.children}}
 								<li class="o-header__subnav-item">
 									<a class="o-header__subnav-link" href="{{@root.basePath}}{{href}}"  {{#current}} aria-current {{/current}} >
 										{{name}}
 									</a>
 								</li>
-								{{/children}}
+								{{/navigation.children}}
 							</ul>
 						</div>
 					</div>

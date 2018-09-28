@@ -10,10 +10,12 @@
 		}
 	],
 	"hasChildren": true,
-	"ancestors": {
-		"name": "API Reference",
-		"href": "v1/docs/api"
-	},
+	"ancestors": [
+			{
+			"name": "API Reference",
+			"href": "v1/docs/api"
+		}
+	],
 	"children": [
 		{
 			"name": "Clients",
