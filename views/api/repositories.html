@@ -1,30 +1,20 @@
+<h1>Repository Endpoints</h1>
 
-<div class="o-techdocs-container">
-	<div class="o-techdocs-layout">
+<p>
+	The repository endpoints are used to view and manage the repositories that have been
+	ingested into the service. They respond and deal with one of the following entities:
+</p>
 
-		<div class="o-techdocs-sidebar">
-			{{>navigation}}
-		</div>
+<h2 id="entities">Entities</h2>
 
-		<div class="o-techdocs-main o-techdocs-content">
+<h3 id="entity-repo">Repository Entity</h3>
 
-			<h1>Repository Endpoints</h1>
+<p>
+	Repository entities represent repositories that have been ingested into the service.
+	As JSON they look like this:
+</p>
 
-			<p>
-				The repository endpoints are used to view and manage the repositories that have been
-				ingested into the service. They respond and deal with one of the following entities:
-			</p>
-
-			<h2 id="entities">Entities</h2>
-
-			<h3 id="entity-repo">Repository Entity</h3>
-
-			<p>
-				Repository entities represent repositories that have been ingested into the service.
-				As JSON they look like this:
-			</p>
-
-			<pre><code class="json">{
+<pre><code class="o-syntax-highlight--json">{
 	// A unique identifier for the repo
 	"id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
 
@@ -112,15 +102,15 @@
 	"lastIngested": "2017-11-06T09:56:45.991Z"
 }</code></pre>
 
-			<h3 id="entity-version">Version Entity</h3>
+<h3 id="entity-version">Version Entity</h3>
 
-			<p>
-				Version entities represent individual versions or releases of repositories that have
-				been ingested into the service. As JSON they look like very similar to
-				<a href="#entity-repo">Repository entities</a>, but with the following differences:
-			</p>
+<p>
+	Version entities represent individual versions or releases of repositories that have
+	been ingested into the service. As JSON they look like very similar to
+	<a href="#entity-repo">Repository entities</a>, but with the following differences:
+</p>
 
-			<pre><code class="json">{
+<pre><code class="o-syntax-highlight--json">{
 	// A unique identifier for the version, rather than the repo
 	"id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
 
@@ -141,15 +131,15 @@
 	}
 }</code></pre>
 
-			<h3 id="entity-demo">Demo Entity</h3>
+<h3 id="entity-demo">Demo Entity</h3>
 
-			<p>
-				Demo entities represent individual Origami demos for a <a href="#entity-version">Version</a>.
-				They differ from accessing the <code>origami.json</code> manifest demos in that they
-				are sanitized and normalised. As JSON they look like this:
-			</p>
+<p>
+	Demo entities represent individual Origami demos for a <a href="#entity-version">Version</a>.
+	They differ from accessing the <code>origami.json</code> manifest demos in that they
+	are sanitized and normalised. As JSON they look like this:
+</p>
 
-			<pre><code class="json">{
+<pre><code class="o-syntax-highlight--json">{
 	// The title of the demo
 	"title": "Example Demo",
 
@@ -170,7 +160,7 @@
 	}
 }</code></pre>
 
-			<h3 id="entity-image">Image Entity</h3>
+<h3 id="entity-image">Image Entity</h3>
 
 			<p>
 				Image entities represent individual images in an Origami image set. They differ from
@@ -178,7 +168,7 @@
 				are sanitized and normalised. As JSON they look like this:
 			</p>
 
-			<pre><code class="json">{
+<pre><code class="o-syntax-highlight--json">{
 	// The title of the image
 	"title": "example-image",
 
@@ -189,14 +179,14 @@
 	}
 }</code></pre>
 
-			<h3 id="entity-dependency">Dependency Entity</h3>
+<h3 id="entity-dependency">Dependency Entity</h3>
 
-			<p>
-				Dependency entities represent individual dependencies that an Origami repository has.
-				As JSON they look like this:
-			</p>
+<p>
+	Dependency entities represent individual dependencies that an Origami repository has.
+	As JSON they look like this:
+</p>
 
-			<pre><code class="json">{
+<pre><code class="o-syntax-highlight--json">{
 	// The name of the dependency
 	"name": "example-dependency",
 
@@ -214,862 +204,841 @@
 }</code></pre>
 
 
-			<h2 id="get-v1-repos">Get all repositories</h2>
+<h2 id="get-v1-repos">Get all repositories</h2>
 
-			<p>
-				Get a list of all available Origami repositories as an array. This endpoint responds
-				with an array of <a href="#entity-repo">Repository entities</a>. This
-				endpoint requires the <code>READ</code> permission.
-			</p>
+<p>
+	Get a list of all available Origami repositories as an array. This endpoint responds
+	with an array of <a href="#entity-repo">Repository entities</a>. This
+	endpoint requires the <code>READ</code> permission.
+</p>
 
-			<h3>Request</h3>
+<h3>Request</h3>
 
-			<div class="o-techdocs-table-wrapper">
-				<table>
-					<tbody>
-						<tr>
-							<th scope="row">Method</th>
-							<td>
-								<code>GET</code>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Path</th>
-							<td>
-								<code>/v1/repos</code>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Headers</th>
-							<td>
-								<dl>
-									<dt>X-Api-Key</dt>
-									<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-									<dt>X-Api-Secret</dt>
-									<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-								</dl>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
 
-			<h3>Response</h3>
+<table>
+	<tbody>
+		<tr>
+			<th scope="row">Method</th>
+			<td>
+				<code>GET</code>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Path</th>
+			<td>
+				<code>/v1/repos</code>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Headers</th>
+			<td>
+				<dl>
+					<dt>X-Api-Key</dt>
+					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+					<dt>X-Api-Secret</dt>
+					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+				</dl>
+			</td>
+		</tr>
+	</tbody>
+</table>
 
-			<div class="o-techdocs-table-wrapper">
-				<table>
-					<tbody>
-						<tr>
-							<th scope="row">Status</th>
-							<td>
-								<code>200</code> on success<br/>
-								<code>401</code> if authentication failed<br/>
-								<code>403</code> if authorization failed
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Headers</th>
-							<td>
-								<dl>
-									<dt>Content-Type</dt>
-									<dd>
-										<code>application/json</code> on success<br/>
-										<code>text/html</code> on error
-									</dd>
-								</dl>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Body</th>
-							<td>
-								Array of <a href="#entity-repo">Repository entities</a>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+<h3>Response</h3>
 
-			<h3>Example <code>curl</code> command:</h3>
 
-			<pre><code class="bash">curl \
+<table>
+	<tbody>
+		<tr>
+			<th scope="row">Status</th>
+			<td>
+				<code>200</code> on success<br/>
+				<code>401</code> if authentication failed<br/>
+				<code>403</code> if authorization failed
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Headers</th>
+			<td>
+				<dl>
+					<dt>Content-Type</dt>
+					<dd>
+						<code>application/json</code> on success<br/>
+						<code>text/html</code> on error
+					</dd>
+				</dl>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Body</th>
+			<td>
+				Array of <a href="#entity-repo">Repository entities</a>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<h3>Example <code>curl</code> command:</h3>
+
+<pre><code class="bash">curl \
 	-H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
 	https://origami-repo-data.ft.com/v1/repos</code></pre>
 
-			<h2 id="get-v1-branded-repos">Get all repositories by brand</h2>
+<h2 id="get-v1-branded-repos">Get all repositories by brand</h2>
 
-			<p>
-				Get a list of branded Origami repositories as an array. This endpoint responds
-				with an array of <a href="#entity-repo">Repository entities</a>. This
-				endpoint requires the <code>READ</code> permission.
+<p>
+	Get a list of branded Origami repositories as an array. This endpoint responds
+	with an array of <a href="#entity-repo">Repository entities</a>. This
+	endpoint requires the <code>READ</code> permission.
+</p>
 
-			</p>
+<h3>Request</h3>
 
-			The <code>brand</code> query accepts:
 
-			<h3>Request</h3>
+<table>
+	<tbody>
+		<tr>
+			<th scope="row">Method</th>
+			<td>
+				<code>GET</code>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Path</th>
+			<td>
+				<code>/v1/repos?brand=<var>brand<var></code>
+				<p><var>brand</var> can be:</p>
+				<ul>
+					<li><code>all</code>: returns all branded repositories</li>
+					<li><code>master</code>: returns all repositories branded with the master brand</li>
+					<li><code>internal</code>: returns all repositories branded with the internal brand</li>
+					<li><code>whitelabel</code>: returns all repositories branded with the whitelabel brand</li>
+					<li><code>none</code>: returns all repositories that have not been branded</li>
+				</ul>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Headers</th>
+			<td>
+				<dl>
+					<dt>X-Api-Key</dt>
+					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+					<dt>X-Api-Secret</dt>
+					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+				</dl>
+			</td>
+		</tr>
+	</tbody>
+</table>
 
-			<div class="o-techdocs-table-wrapper">
-				<table>
-					<tbody>
-						<tr>
-							<th scope="row">Method</th>
-							<td>
-								<code>GET</code>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Path</th>
-							<td>
-								<code>/v1/repos?brand=<var>brand<var></code>
-								<p><var>brand</var> can be:</p>
-								<ul>
-									<li><code>all</code>: returns all branded repositories</li>
-									<li><code>master</code>: returns all repositories branded with the master brand</li>
-									<li><code>internal</code>: returns all repositories branded with the internal brand</li>
-									<li><code>whitelabel</code>: returns all repositories branded with the whitelabel brand</li>
-									<li><code>none</code>: returns all repositories that have not been branded</li>
-								</ul>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Headers</th>
-							<td>
-								<dl>
-									<dt>X-Api-Key</dt>
-									<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-									<dt>X-Api-Secret</dt>
-									<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-								</dl>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+<h3>Response</h3>
 
-			<h3>Response</h3>
 
-			<div class="o-techdocs-table-wrapper">
-				<table>
-					<tbody>
-						<tr>
-							<th scope="row">Status</th>
-							<td>
-								<code>200</code> on success<br/>
-								<code>401</code> if authentication failed<br/>
-								<code>403</code> if authorization failed
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Headers</th>
-							<td>
-								<dl>
-									<dt>Content-Type</dt>
-									<dd>
-										<code>application/json</code> on success<br/>
-										<code>text/html</code> on error
-									</dd>
-								</dl>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Body</th>
-							<td>
-								Array of <a href="#entity-repo">Repository entities</a>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+<table>
+	<tbody>
+		<tr>
+			<th scope="row">Status</th>
+			<td>
+				<code>200</code> on success<br/>
+				<code>401</code> if authentication failed<br/>
+				<code>403</code> if authorization failed
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Headers</th>
+			<td>
+				<dl>
+					<dt>Content-Type</dt>
+					<dd>
+						<code>application/json</code> on success<br/>
+						<code>text/html</code> on error
+					</dd>
+				</dl>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Body</th>
+			<td>
+				Array of <a href="#entity-repo">Repository entities</a>
+			</td>
+		</tr>
+	</tbody>
+</table>
 
-			<h3>Example <code>curl</code> command:</h3>
+<h3>Example <code>curl</code> command:</h3>
 
-			<pre><code class="bash">curl \
+<pre><code class="bash">curl \
 	-H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
 	https://origami-repo-data.ft.com/v1/repos?brand=XXXX</code></pre>
 
 
-			<h2 id="get-v1-repos-(id)">Get a repository</h2>
+<h2 id="get-v1-repos-(id)">Get a repository</h2>
 
-			<p>
-				Get a single Origami repository by ID. This endpoint responds with a
-				<a href="#entity-repo">Repository entity</a>. This endpoint requires the
-				<code>READ</code> permission.
-			</p>
+<p>
+	Get a single Origami repository by ID. This endpoint responds with a
+	<a href="#entity-repo">Repository entity</a>. This endpoint requires the
+	<code>READ</code> permission.
+</p>
 
-			<h3>Request</h3>
+<h3>Request</h3>
 
-			<div class="o-techdocs-table-wrapper">
-				<table>
-					<tbody>
-						<tr>
-							<th scope="row">Method</th>
-							<td>
-								<code>GET</code>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">
-								Path<br/>
-								<a href="#get-v1-repos-(id)_aliases">(aliases)</a>
-							</th>
-							<td>
-								<code>/v1/repos/<var>:repo-id</var></code><br/>
-								(where <var>:repo-id</var> is the unique identifier for a <a href="#entity-repo">Repository</a>)
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Headers</th>
-							<td>
-								<dl>
-									<dt>X-Api-Key</dt>
-									<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-									<dt>X-Api-Secret</dt>
-									<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-								</dl>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
 
-			<h3>Response</h3>
+<table>
+	<tbody>
+		<tr>
+			<th scope="row">Method</th>
+			<td>
+				<code>GET</code>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">
+				Path<br/>
+				<a href="#get-v1-repos-(id)_aliases">(aliases)</a>
+			</th>
+			<td>
+				<code>/v1/repos/<var>:repo-id</var></code><br/>
+				(where <var>:repo-id</var> is the unique identifier for a <a href="#entity-repo">Repository</a>)
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Headers</th>
+			<td>
+				<dl>
+					<dt>X-Api-Key</dt>
+					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+					<dt>X-Api-Secret</dt>
+					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+				</dl>
+			</td>
+		</tr>
+	</tbody>
+</table>
 
-			<div class="o-techdocs-table-wrapper">
-				<table>
-					<tbody>
-						<tr>
-							<th scope="row">Status</th>
-							<td>
-								<code>200</code> on success<br/>
-								<code>401</code> if authentication failed<br/>
-								<code>403</code> if authorization failed<br/>
-								<code>404</code> if a repo matching <var>:repo-id</var> does not exist
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Headers</th>
-							<td>
-								<dl>
-									<dt>Content-Type</dt>
-									<dd>
-										<code>application/json</code> on success<br/>
-										<code>text/html</code> on error
-									</dd>
-								</dl>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Body</th>
-							<td>
-								<a href="#entity-repo">Repository entity</a>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+<h3>Response</h3>
 
-			<h3>Example <code>curl</code> command:</h3>
 
-			<pre><code class="bash">curl \
+<table>
+	<tbody>
+		<tr>
+			<th scope="row">Status</th>
+			<td>
+				<code>200</code> on success<br/>
+				<code>401</code> if authentication failed<br/>
+				<code>403</code> if authorization failed<br/>
+				<code>404</code> if a repo matching <var>:repo-id</var> does not exist
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Headers</th>
+			<td>
+				<dl>
+					<dt>Content-Type</dt>
+					<dd>
+						<code>application/json</code> on success<br/>
+						<code>text/html</code> on error
+					</dd>
+				</dl>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Body</th>
+			<td>
+				<a href="#entity-repo">Repository entity</a>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<h3>Example <code>curl</code> command:</h3>
+
+<pre><code class="bash">curl \
 	-H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
 	https://origami-repo-data.ft.com/v1/repos/XXXXXX</code></pre>
 
 
-			<h3 id="get-v1-repos-(id)_aliases">Aliases</h3>
+<h3 id="get-v1-repos-(id)_aliases">Aliases</h3>
 
-			<p>
-				The following aliases exist for this endpoint, and each will respond with a
-				<code>307</code> status and a <code>Location</code> header pointing to the correct
-				endpoint. When redirecting, a client should forward on any authentication headers.
-			</p>
+<p>
+	The following aliases exist for this endpoint, and each will respond with a
+	<code>307</code> status and a <code>Location</code> header pointing to the correct
+	endpoint. When redirecting, a client should forward on any authentication headers.
+</p>
 
-			<ul>
-				<li>
-					<p>
-						<code>/v1/repos/<var>:repo-name</var></code><br/>
-						(where <var>:repo-name</var> is the name of a repository, this works for
-						all sub-routes)
-					</p>
-				</li>
-			</ul>
+<ul>
+	<li>
+		<p>
+			<code>/v1/repos/<var>:repo-name</var></code><br/>
+			(where <var>:repo-name</var> is the name of a repository, this works for
+			all sub-routes)
+		</p>
+	</li>
+</ul>
 
 
-			<h2 id="get-v1-repos-(id)-versions">Get all versions for a repository</h2>
+<h2 id="get-v1-repos-(id)-versions">Get all versions for a repository</h2>
 
-			<p>
-				Get a list of all versions for an Origami repository as an array. This endpoint responds
-				with an array of <a href="#entity-version">Version entities</a>. This
-				endpoint requires the <code>READ</code> permission.
-			</p>
+<p>
+	Get a list of all versions for an Origami repository as an array. This endpoint responds
+	with an array of <a href="#entity-version">Version entities</a>. This
+	endpoint requires the <code>READ</code> permission.
+</p>
 
-			<h3>Request</h3>
+<h3>Request</h3>
 
-			<div class="o-techdocs-table-wrapper">
-				<table>
-					<tbody>
-						<tr>
-							<th scope="row">Method</th>
-							<td>
-								<code>GET</code>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Path</th>
-							<td>
-								<code>/v1/repos/<var>:repo-id</var>/versions</code><br/>
-								(where <var>:repo-id</var> is the unique identifier for a <a href="#entity-repo">Repository</a>)
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Headers</th>
-							<td>
-								<dl>
-									<dt>X-Api-Key</dt>
-									<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-									<dt>X-Api-Secret</dt>
-									<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-								</dl>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
 
-			<h3>Response</h3>
+<table>
+	<tbody>
+		<tr>
+			<th scope="row">Method</th>
+			<td>
+				<code>GET</code>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Path</th>
+			<td>
+				<code>/v1/repos/<var>:repo-id</var>/versions</code><br/>
+				(where <var>:repo-id</var> is the unique identifier for a <a href="#entity-repo">Repository</a>)
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Headers</th>
+			<td>
+				<dl>
+					<dt>X-Api-Key</dt>
+					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+					<dt>X-Api-Secret</dt>
+					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+				</dl>
+			</td>
+		</tr>
+	</tbody>
+</table>
 
-			<div class="o-techdocs-table-wrapper">
-				<table>
-					<tbody>
-						<tr>
-							<th scope="row">Status</th>
-							<td>
-								<code>200</code> on success<br/>
-								<code>401</code> if authentication failed<br/>
-								<code>403</code> if authorization failed<br/>
-								<code>404</code> if a repo matching <var>:repo-id</var> does not exist
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Headers</th>
-							<td>
-								<dl>
-									<dt>Content-Type</dt>
-									<dd>
-										<code>application/json</code> on success<br/>
-										<code>text/html</code> on error
-									</dd>
-								</dl>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Body</th>
-							<td>
-								Array of <a href="#entity-version">Version entities</a>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+<h3>Response</h3>
 
-			<h3>Example <code>curl</code> command:</h3>
 
-			<pre><code class="bash">curl \
+<table>
+	<tbody>
+		<tr>
+			<th scope="row">Status</th>
+			<td>
+				<code>200</code> on success<br/>
+				<code>401</code> if authentication failed<br/>
+				<code>403</code> if authorization failed<br/>
+				<code>404</code> if a repo matching <var>:repo-id</var> does not exist
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Headers</th>
+			<td>
+				<dl>
+					<dt>Content-Type</dt>
+					<dd>
+						<code>application/json</code> on success<br/>
+						<code>text/html</code> on error
+					</dd>
+				</dl>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Body</th>
+			<td>
+				Array of <a href="#entity-version">Version entities</a>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<h3>Example <code>curl</code> command:</h3>
+
+<pre><code class="bash">curl \
 	-H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
 	https://origami-repo-data.ft.com/v1/repos/XXXXXX/versions</code></pre>
 
 
-			<h2 id="get-v1-repos-(id)-versions-(id)">Get a repository version</h2>
+<h2 id="get-v1-repos-(id)-versions-(id)">Get a repository version</h2>
 
-			<p>
-				Get a single version for an Origami repository by ID. This endpoint responds with a
-				<a href="#entity-version">Version entity</a>. This endpoint requires the
-				<code>READ</code> permission.
-			</p>
+<p>
+Get a single version for an Origami repository by ID. This endpoint responds with a
+<a href="#entity-version">Version entity</a>. This endpoint requires the
+<code>READ</code> permission.
+</p>
 
-			<h3>Request</h3>
+<h3>Request</h3>
 
-			<div class="o-techdocs-table-wrapper">
-				<table>
-					<tbody>
-						<tr>
-							<th scope="row">Method</th>
-							<td>
-								<code>GET</code>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">
-								Path<br/>
-								<a href="#get-v1-repos-(id)-versions-(id)_aliases">(aliases)</a>
-							</th>
-							<td>
-								<code>/v1/repos/<var>:repo-id</var>/versions/<var>:version-id</var></code><br/>
-								(where <var>:repo-id</var> is the unique identifier for a
-								<a href="#entity-repo">Repository</a> and <var>:version-id</var> is the
-								unique identifier for a <a href="#entity-version">Version</a> of it)
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Headers</th>
-							<td>
-								<dl>
-									<dt>X-Api-Key</dt>
-									<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-									<dt>X-Api-Secret</dt>
-									<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-								</dl>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
 
-			<h3>Response</h3>
+<table>
+	<tbody>
+		<tr>
+			<th scope="row">Method</th>
+			<td>
+				<code>GET</code>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">
+				Path<br/>
+				<a href="#get-v1-repos-(id)-versions-(id)_aliases">(aliases)</a>
+			</th>
+			<td>
+				<code>/v1/repos/<var>:repo-id</var>/versions/<var>:version-id</var></code><br/>
+				(where <var>:repo-id</var> is the unique identifier for a
+				<a href="#entity-repo">Repository</a> and <var>:version-id</var> is the
+				unique identifier for a <a href="#entity-version">Version</a> of it)
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Headers</th>
+			<td>
+				<dl>
+					<dt>X-Api-Key</dt>
+					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+					<dt>X-Api-Secret</dt>
+					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+				</dl>
+			</td>
+		</tr>
+	</tbody>
+</table>
 
-			<div class="o-techdocs-table-wrapper">
-				<table>
-					<tbody>
-						<tr>
-							<th scope="row">Status</th>
-							<td>
-								<code>200</code> on success<br/>
-								<code>401</code> if authentication failed<br/>
-								<code>403</code> if authorization failed<br/>
-								<code>404</code> if a repo and version matching <var>:repo-id</var> and <var>:version-id</var> does not exist
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Headers</th>
-							<td>
-								<dl>
-									<dt>Content-Type</dt>
-									<dd>
-										<code>application/json</code> on success<br/>
-										<code>text/html</code> on error
-									</dd>
-								</dl>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Body</th>
-							<td>
-								<a href="#entity-version">Version entity</a>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+<h3>Response</h3>
 
-			<h3>Example <code>curl</code> command:</h3>
 
-			<pre><code class="bash">curl \
+<table>
+	<tbody>
+		<tr>
+			<th scope="row">Status</th>
+			<td>
+				<code>200</code> on success<br/>
+				<code>401</code> if authentication failed<br/>
+				<code>403</code> if authorization failed<br/>
+				<code>404</code> if a repo and version matching <var>:repo-id</var> and <var>:version-id</var> does not exist
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Headers</th>
+			<td>
+				<dl>
+					<dt>Content-Type</dt>
+					<dd>
+						<code>application/json</code> on success<br/>
+						<code>text/html</code> on error
+					</dd>
+				</dl>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Body</th>
+			<td>
+				<a href="#entity-version">Version entity</a>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<h3>Example <code>curl</code> command:</h3>
+
+<pre><code class="bash">curl \
 	-H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
 	https://origami-repo-data.ft.com/v1/repos/XXXXXX/versions/XXXXXX</code></pre>
 
 
-			<h3 id="get-v1-repos-(id)-versions-(id)_aliases">Aliases</h3>
+<h3 id="get-v1-repos-(id)-versions-(id)_aliases">Aliases</h3>
 
-			<p>
-				The following aliases exist for this endpoint, and each will respond with a
-				<code>307</code> status and a <code>Location</code> header pointing to the correct
-				endpoint. When redirecting, a client should forward on any authentication headers.
-			</p>
+<p>
+The following aliases exist for this endpoint, and each will respond with a
+<code>307</code> status and a <code>Location</code> header pointing to the correct
+endpoint. When redirecting, a client should forward on any authentication headers.
+</p>
 
-			<ul>
-				<li>
-					<p>
-						<code>/v1/repos/<var>:repo-id</var>/versions/<var>:version-number</var></code><br/>
-						(where <var>:repo-id</var> is the unique identifier for a
-						<a href="#entity-repo">Repository</a> and <var>:version-number</var> is the
-						semver number for a <a href="#entity-version">Version</a> of it, this works
-						for all sub-routes)
-					</p>
-				</li>
-			</ul>
+<ul>
+<li>
+	<p>
+		<code>/v1/repos/<var>:repo-id</var>/versions/<var>:version-number</var></code><br/>
+		(where <var>:repo-id</var> is the unique identifier for a
+		<a href="#entity-repo">Repository</a> and <var>:version-number</var> is the
+		semver number for a <a href="#entity-version">Version</a> of it, this works
+		for all sub-routes)
+	</p>
+</li>
+</ul>
 
 
-			<h2 id="get-v1-repos-(id)-versions-(id)-manifests-(type)">Get a raw manifest file</h2>
+<h2 id="get-v1-repos-(id)-versions-(id)-manifests-(type)">Get a raw manifest file</h2>
 
-			<p>
-				Get a single manifest for an Origami repository and version by type. This endpoint
-				responds with the JSON contents of the requested manifest file. This endpoint requires
-				the <code>READ</code> permission.
-			</p>
+<p>
+Get a single manifest for an Origami repository and version by type. This endpoint
+responds with the JSON contents of the requested manifest file. This endpoint requires
+the <code>READ</code> permission.
+</p>
 
-			<h3>Request</h3>
+<h3>Request</h3>
 
-			<div class="o-techdocs-table-wrapper">
-				<table>
-					<tbody>
-						<tr>
-							<th scope="row">Method</th>
-							<td>
-								<code>GET</code>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">
-								Path
-							</th>
-							<td>
-								<code>/v1/repos/<var>:repo-id</var>/versions/<var>:version-id</var>/manifests/<var>:manifest-type</var></code><br/>
-								(where <var>:repo-id</var> is the unique identifier for a
-								<a href="#entity-repo">Repository</a>, <var>:version-id</var> is the
-								unique identifier for a <a href="#entity-version">Version</a> of it,
-								and <var>:manifest-type</var> is the type of manifest to retrieve –
-								one of <code>about</code>, <code>bower</code>, <code>imageset</code>,
-								<code>origami</code>, or <code>package</code>. The only manifest type
-								that is guaranteed to exist is <code>origami</code>)
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Headers</th>
-							<td>
-								<dl>
-									<dt>X-Api-Key</dt>
-									<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-									<dt>X-Api-Secret</dt>
-									<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-								</dl>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
 
-			<h3>Response</h3>
+<table>
+	<tbody>
+		<tr>
+			<th scope="row">Method</th>
+			<td>
+				<code>GET</code>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">
+				Path
+			</th>
+			<td>
+				<code>/v1/repos/<var>:repo-id</var>/versions/<var>:version-id</var>/manifests/<var>:manifest-type</var></code><br/>
+				(where <var>:repo-id</var> is the unique identifier for a
+				<a href="#entity-repo">Repository</a>, <var>:version-id</var> is the
+				unique identifier for a <a href="#entity-version">Version</a> of it,
+				and <var>:manifest-type</var> is the type of manifest to retrieve –
+				one of <code>about</code>, <code>bower</code>, <code>imageset</code>,
+				<code>origami</code>, or <code>package</code>. The only manifest type
+				that is guaranteed to exist is <code>origami</code>)
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Headers</th>
+			<td>
+				<dl>
+					<dt>X-Api-Key</dt>
+					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+					<dt>X-Api-Secret</dt>
+					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+				</dl>
+			</td>
+		</tr>
+	</tbody>
+</table>
 
-			<div class="o-techdocs-table-wrapper">
-				<table>
-					<tbody>
-						<tr>
-							<th scope="row">Status</th>
-							<td>
-								<code>200</code> on success<br/>
-								<code>401</code> if authentication failed<br/>
-								<code>403</code> if authorization failed<br/>
-								<code>404</code> if a manifest matching <var>:repo-id</var>,
-								<var>:version-id</var>, and <var>:manifest-type</var> does not exist
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Headers</th>
-							<td>
-								<dl>
-									<dt>Content-Type</dt>
-									<dd>
-										<code>application/json</code> on success<br/>
-										<code>text/html</code> on error
-									</dd>
-								</dl>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Body</th>
-							<td>
-								Manifest contents
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+<h3>Response</h3>
 
-			<h3>Example <code>curl</code> command:</h3>
 
-			<pre><code class="bash">curl \
+<table>
+	<tbody>
+		<tr>
+			<th scope="row">Status</th>
+			<td>
+				<code>200</code> on success<br/>
+				<code>401</code> if authentication failed<br/>
+				<code>403</code> if authorization failed<br/>
+				<code>404</code> if a manifest matching <var>:repo-id</var>,
+				<var>:version-id</var>, and <var>:manifest-type</var> does not exist
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Headers</th>
+			<td>
+				<dl>
+					<dt>Content-Type</dt>
+					<dd>
+						<code>application/json</code> on success<br/>
+						<code>text/html</code> on error
+					</dd>
+				</dl>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Body</th>
+			<td>
+				Manifest contents
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<h3>Example <code>curl</code> command:</h3>
+
+<pre><code class="bash">curl \
 	-H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
 	https://origami-repo-data.ft.com/v1/repos/XXXXXX/versions/XXXXXX/manifests/origami</code></pre>
 
 
-			<h2 id="get-v1-repos-(id)-versions-(id)-markdown-(type)">Get a raw markdown document</h2>
+<h2 id="get-v1-repos-(id)-versions-(id)-markdown-(type)">Get a raw markdown document</h2>
 
-			<p>
-				Get a single markdown document for an Origami repository and version by type. This endpoint
-				responds with the markdown contents of the requested document. This endpoint requires
-				the <code>READ</code> permission.
-			</p>
+<p>
+Get a single markdown document for an Origami repository and version by type. This endpoint
+responds with the markdown contents of the requested document. This endpoint requires
+the <code>READ</code> permission.
+</p>
 
-			<h3>Request</h3>
+<h3>Request</h3>
 
-			<div class="o-techdocs-table-wrapper">
-				<table>
-					<tbody>
-						<tr>
-							<th scope="row">Method</th>
-							<td>
-								<code>GET</code>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">
-								Path
-							</th>
-							<td>
-								<code>/v1/repos/<var>:repo-id</var>/versions/<var>:version-id</var>/markdown/<var>:markdown-type</var></code><br/>
-								(where <var>:repo-id</var> is the unique identifier for a
-								<a href="#entity-repo">Repository</a>, <var>:version-id</var> is the
-								unique identifier for a <a href="#entity-version">Version</a> of it,
-								and <var>:markdown-type</var> is the name of the document to retrieve –
-								one of <code>designguidelines</code> or <code>readme</code>)
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Headers</th>
-							<td>
-								<dl>
-									<dt>X-Api-Key</dt>
-									<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-									<dt>X-Api-Secret</dt>
-									<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-								</dl>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
 
-			<h3>Response</h3>
+<table>
+	<tbody>
+		<tr>
+			<th scope="row">Method</th>
+			<td>
+				<code>GET</code>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">
+				Path
+			</th>
+			<td>
+				<code>/v1/repos/<var>:repo-id</var>/versions/<var>:version-id</var>/markdown/<var>:markdown-type</var></code><br/>
+				(where <var>:repo-id</var> is the unique identifier for a
+				<a href="#entity-repo">Repository</a>, <var>:version-id</var> is the
+				unique identifier for a <a href="#entity-version">Version</a> of it,
+				and <var>:markdown-type</var> is the name of the document to retrieve –
+				one of <code>designguidelines</code> or <code>readme</code>)
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Headers</th>
+			<td>
+				<dl>
+					<dt>X-Api-Key</dt>
+					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+					<dt>X-Api-Secret</dt>
+					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+				</dl>
+			</td>
+		</tr>
+	</tbody>
+</table>
 
-			<div class="o-techdocs-table-wrapper">
-				<table>
-					<tbody>
-						<tr>
-							<th scope="row">Status</th>
-							<td>
-								<code>200</code> on success<br/>
-								<code>401</code> if authentication failed<br/>
-								<code>403</code> if authorization failed<br/>
-								<code>404</code> if a markdown document matching <var>:repo-id</var>,
-								<var>:version-id</var>, and <var>:markdown-type</var> does not exist
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Headers</th>
-							<td>
-								<dl>
-									<dt>Content-Type</dt>
-									<dd>
-										<code>text/markdown</code> on success<br/>
-										<code>text/html</code> on error
-									</dd>
-								</dl>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Body</th>
-							<td>
-								Markdown contents
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+<h3>Response</h3>
 
-			<h3>Example <code>curl</code> command:</h3>
 
-			<pre><code class="bash">curl \
+<table>
+	<tbody>
+		<tr>
+			<th scope="row">Status</th>
+			<td>
+				<code>200</code> on success<br/>
+				<code>401</code> if authentication failed<br/>
+				<code>403</code> if authorization failed<br/>
+				<code>404</code> if a markdown document matching <var>:repo-id</var>,
+				<var>:version-id</var>, and <var>:markdown-type</var> does not exist
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Headers</th>
+			<td>
+				<dl>
+					<dt>Content-Type</dt>
+					<dd>
+						<code>text/markdown</code> on success<br/>
+						<code>text/html</code> on error
+					</dd>
+				</dl>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Body</th>
+			<td>
+				Markdown contents
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<h3>Example <code>curl</code> command:</h3>
+
+<pre><code class="bash">curl \
 	-H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
 	https://origami-repo-data.ft.com/v1/repos/XXXXXX/versions/XXXXXX/markdown/readme</code></pre>
 
 
-			<h2 id="get-v1-repos-(id)-versions-(id)-demos">Get demos for a version</h2>
+<h2 id="get-v1-repos-(id)-versions-(id)-demos">Get demos for a version</h2>
 
-			<p>
-				Get a list of all demos for an Origami repository and version. This endpoint responds
-				with an array of <a href="#entity-demo">Demo entities</a>. This endpoint requires the
-				<code>READ</code> permission.
-			</p>
+<p>
+Get a list of all demos for an Origami repository and version. This endpoint responds
+with an array of <a href="#entity-demo">Demo entities</a>. This endpoint requires the
+<code>READ</code> permission.
+</p>
 
-			<h3>Request</h3>
+<h3>Request</h3>
 
-			<div class="o-techdocs-table-wrapper">
-				<table>
-					<tbody>
-						<tr>
-							<th scope="row">Method</th>
-							<td>
-								<code>GET</code>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">
-								Path
-							</th>
-							<td>
-								<code>/v1/repos/<var>:repo-id</var>/versions/<var>:version-id</var>/demos</code><br/>
-								(where <var>:repo-id</var> is the unique identifier for a
-								<a href="#entity-repo">Repository</a> and <var>:version-id</var> is the
-								unique identifier for a <a href="#entity-version">Version</a> of it)
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Querystring</th>
-							<td>
-								<dl>
-									<dt>brand</dt>
-									<dd>
-										Used to filter out any demos which shouldn't be displayed
-										for the given brand. Demos with a brand configuration that
-										<em>doesn't</em> include this brand will not be output.
-									</dd>
-								</dl>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Headers</th>
-							<td>
-								<dl>
-									<dt>X-Api-Key</dt>
-									<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-									<dt>X-Api-Secret</dt>
-									<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-								</dl>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
 
-			<h3>Response</h3>
+<table>
+	<tbody>
+		<tr>
+			<th scope="row">Method</th>
+			<td>
+				<code>GET</code>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">
+				Path
+			</th>
+			<td>
+				<code>/v1/repos/<var>:repo-id</var>/versions/<var>:version-id</var>/demos</code><br/>
+				(where <var>:repo-id</var> is the unique identifier for a
+				<a href="#entity-repo">Repository</a> and <var>:version-id</var> is the
+				unique identifier for a <a href="#entity-version">Version</a> of it)
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Querystring</th>
+			<td>
+				<dl>
+					<dt>brand</dt>
+					<dd>
+						Used to filter out any demos which shouldn't be displayed
+						for the given brand. Demos with a brand configuration that
+						<em>doesn't</em> include this brand will not be output.
+					</dd>
+				</dl>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Headers</th>
+			<td>
+				<dl>
+					<dt>X-Api-Key</dt>
+					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+					<dt>X-Api-Secret</dt>
+					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+				</dl>
+			</td>
+		</tr>
+	</tbody>
+</table>
 
-			<div class="o-techdocs-table-wrapper">
-				<table>
-					<tbody>
-						<tr>
-							<th scope="row">Status</th>
-							<td>
-								<code>200</code> on success<br/>
-								<code>401</code> if authentication failed<br/>
-								<code>403</code> if authorization failed<br/>
-								<code>404</code> if there are no non-hidden demos for the
-								<var>:repo-id</var> and <var>:version-id</var>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Headers</th>
-							<td>
-								<dl>
-									<dt>Content-Type</dt>
-									<dd>
-										<code>application/json</code> on success<br/>
-										<code>text/html</code> on error
-									</dd>
-								</dl>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Body</th>
-							<td>
-								Array of <a href="#entity-demo">Demo entities</a>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+<h3>Response</h3>
 
-			<h3>Example <code>curl</code> command:</h3>
 
-			<pre><code class="bash">curl \
+<table>
+	<tbody>
+		<tr>
+			<th scope="row">Status</th>
+			<td>
+				<code>200</code> on success<br/>
+				<code>401</code> if authentication failed<br/>
+				<code>403</code> if authorization failed<br/>
+				<code>404</code> if there are no non-hidden demos for the
+				<var>:repo-id</var> and <var>:version-id</var>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Headers</th>
+			<td>
+				<dl>
+					<dt>Content-Type</dt>
+					<dd>
+						<code>application/json</code> on success<br/>
+						<code>text/html</code> on error
+					</dd>
+				</dl>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Body</th>
+			<td>
+				Array of <a href="#entity-demo">Demo entities</a>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<h3>Example <code>curl</code> command:</h3>
+
+<pre><code class="bash">curl \
 	-H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
 	https://origami-repo-data.ft.com/v1/repos/XXXXXX/versions/XXXXXX/demos</code></pre>
 
 
-			<h2 id="get-v1-repos-(id)-versions-(id)-images">Get images for a version</h2>
+<h2 id="get-v1-repos-(id)-versions-(id)-images">Get images for a version</h2>
 
-			<p>
-				Get a list of all images for an Origami repository and version, assuming that the
-				repository is an image set. This endpoint responds with an array of
-				<a href="#entity-image">Image entities</a>. This endpoint requires the
-				<code>READ</code> permission.
-			</p>
+<p>
+Get a list of all images for an Origami repository and version, assuming that the
+repository is an image set. This endpoint responds with an array of
+<a href="#entity-image">Image entities</a>. This endpoint requires the
+<code>READ</code> permission.
+</p>
 
-			<h3>Request</h3>
+<h3>Request</h3>
 
-			<div class="o-techdocs-table-wrapper">
-				<table>
-					<tbody>
-						<tr>
-							<th scope="row">Method</th>
-							<td>
-								<code>GET</code>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">
-								Path
-							</th>
-							<td>
-								<code>/v1/repos/<var>:repo-id</var>/versions/<var>:version-id</var>/images</code><br/>
-								(where <var>:repo-id</var> is the unique identifier for a
-								<a href="#entity-repo">Repository</a> and <var>:version-id</var> is the
-								unique identifier for a <a href="#entity-version">Version</a> of it)
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Querystring</th>
-							<td>
-								<dl>
-									<dt>sourceParam</dt>
-									<dd>Used to set the <code>source</code> querystring parameter for returned image URLs</dd>
-								</dl>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Headers</th>
-							<td>
-								<dl>
-									<dt>X-Api-Key</dt>
-									<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-									<dt>X-Api-Secret</dt>
-									<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-								</dl>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
 
-			<h3>Response</h3>
+<table>
+	<tbody>
+		<tr>
+			<th scope="row">Method</th>
+			<td>
+				<code>GET</code>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">
+				Path
+			</th>
+			<td>
+				<code>/v1/repos/<var>:repo-id</var>/versions/<var>:version-id</var>/images</code><br/>
+				(where <var>:repo-id</var> is the unique identifier for a
+				<a href="#entity-repo">Repository</a> and <var>:version-id</var> is the
+				unique identifier for a <a href="#entity-version">Version</a> of it)
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Querystring</th>
+			<td>
+				<dl>
+					<dt>sourceParam</dt>
+					<dd>Used to set the <code>source</code> querystring parameter for returned image URLs</dd>
+				</dl>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Headers</th>
+			<td>
+				<dl>
+					<dt>X-Api-Key</dt>
+					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+					<dt>X-Api-Secret</dt>
+					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+				</dl>
+			</td>
+		</tr>
+	</tbody>
+</table>
 
-			<div class="o-techdocs-table-wrapper">
-				<table>
-					<tbody>
-						<tr>
-							<th scope="row">Status</th>
-							<td>
-								<code>200</code> on success<br/>
-								<code>401</code> if authentication failed<br/>
-								<code>403</code> if authorization failed<br/>
-								<code>404</code> if there are no images for the
-								<var>:repo-id</var> and <var>:version-id</var>, or the repository
-								is not an image set
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Headers</th>
-							<td>
-								<dl>
-									<dt>Content-Type</dt>
-									<dd>
-										<code>application/json</code> on success<br/>
-										<code>text/html</code> on error
-									</dd>
-								</dl>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Body</th>
-							<td>
-								Array of <a href="#entity-image">Image entities</a>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+<h3>Response</h3>
 
-			<h3>Example <code>curl</code> command:</h3>
 
-			<pre><code class="bash">curl \
+<table>
+	<tbody>
+		<tr>
+			<th scope="row">Status</th>
+			<td>
+				<code>200</code> on success<br/>
+				<code>401</code> if authentication failed<br/>
+				<code>403</code> if authorization failed<br/>
+				<code>404</code> if there are no images for the
+				<var>:repo-id</var> and <var>:version-id</var>, or the repository
+				is not an image set
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Headers</th>
+			<td>
+				<dl>
+					<dt>Content-Type</dt>
+					<dd>
+						<code>application/json</code> on success<br/>
+						<code>text/html</code> on error
+					</dd>
+				</dl>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Body</th>
+			<td>
+				Array of <a href="#entity-image">Image entities</a>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<h3>Example <code>curl</code> command:</h3>
+
+<pre><code class="bash">curl \
 	-H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
 	https://origami-repo-data.ft.com/v1/repos/XXXXXX/versions/XXXXXX/images?sourceParam=curl</code></pre>
 
@@ -1082,87 +1051,80 @@
 				endpoint requires the <code>READ</code> permission.
 			</p>
 
-			<h3>Request</h3>
+<h3>Request</h3>
 
-			<div class="o-techdocs-table-wrapper">
-				<table>
-					<tbody>
-						<tr>
-							<th scope="row">Method</th>
-							<td>
-								<code>GET</code>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">
-								Path
-							</th>
-							<td>
-								<code>/v1/repos/<var>:repo-id</var>/versions/<var>:version-id</var>/dependencies</code><br/>
-								(where <var>:repo-id</var> is the unique identifier for a
-								<a href="#entity-repo">Repository</a> and <var>:version-id</var> is the
-								unique identifier for a <a href="#entity-version">Version</a> of it)
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Headers</th>
-							<td>
-								<dl>
-									<dt>X-Api-Key</dt>
-									<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-									<dt>X-Api-Secret</dt>
-									<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-								</dl>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
 
-			<h3>Response</h3>
+<table>
+	<tbody>
+		<tr>
+			<th scope="row">Method</th>
+			<td>
+				<code>GET</code>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">
+				Path
+			</th>
+			<td>
+				<code>/v1/repos/<var>:repo-id</var>/versions/<var>:version-id</var>/dependencies</code><br/>
+				(where <var>:repo-id</var> is the unique identifier for a
+				<a href="#entity-repo">Repository</a> and <var>:version-id</var> is the
+				unique identifier for a <a href="#entity-version">Version</a> of it)
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Headers</th>
+			<td>
+				<dl>
+					<dt>X-Api-Key</dt>
+					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+					<dt>X-Api-Secret</dt>
+					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+				</dl>
+			</td>
+		</tr>
+	</tbody>
+</table>
 
-			<div class="o-techdocs-table-wrapper">
-				<table>
-					<tbody>
-						<tr>
-							<th scope="row">Status</th>
-							<td>
-								<code>200</code> on success<br/>
-								<code>401</code> if authentication failed<br/>
-								<code>403</code> if authorization failed<br/>
-								<code>404</code> if there are no dependencies for the
-								<var>:repo-id</var> and <var>:version-id</var>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Headers</th>
-							<td>
-								<dl>
-									<dt>Content-Type</dt>
-									<dd>
-										<code>application/json</code> on success<br/>
-										<code>text/html</code> on error
-									</dd>
-								</dl>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Body</th>
-							<td>
-								Array of <a href="#entity-dependency">Dependency entities</a>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+<h3>Response</h3>
 
-			<h3>Example <code>curl</code> command:</h3>
 
-			<pre><code class="bash">curl \
+<table>
+	<tbody>
+		<tr>
+			<th scope="row">Status</th>
+			<td>
+				<code>200</code> on success<br/>
+				<code>401</code> if authentication failed<br/>
+				<code>403</code> if authorization failed<br/>
+				<code>404</code> if there are no dependencies for the
+				<var>:repo-id</var> and <var>:version-id</var>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Headers</th>
+			<td>
+				<dl>
+					<dt>Content-Type</dt>
+					<dd>
+						<code>application/json</code> on success<br/>
+						<code>text/html</code> on error
+					</dd>
+				</dl>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Body</th>
+			<td>
+				Array of <a href="#entity-dependency">Dependency entities</a>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<h3>Example <code>curl</code> command:</h3>
+
+<pre><code class="bash">curl \
 	-H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
 	https://origami-repo-data.ft.com/v1/repos/XXXXXX/versions/XXXXXX/dependencies</code></pre>
-
-		</div>
-
-	</div>
-</div>

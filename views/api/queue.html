@@ -1,30 +1,20 @@
+<h1>Ingestion Queue Endpoints</h1>
 
-<div class="o-techdocs-container">
-	<div class="o-techdocs-layout">
+<p>
+	The ingestion queue endpoints are used to view and manage the queue of repositories
+	to be added to the service. They respond and deal with one of the following entities:
+</p>
 
-		<div class="o-techdocs-sidebar">
-			{{>navigation}}
-		</div>
+<h2 id="entities">Entities</h2>
 
-		<div class="o-techdocs-main o-techdocs-content">
+<h3 id="entity-ingestion">Ingestion Entity</h3>
 
-			<h1>Ingestion Queue Endpoints</h1>
+<p>
+	Ingestion entities represent individual repositories in the queue, which are waiting
+	to be ingested or are currently being ingested. As JSON they look like this:
+</p>
 
-			<p>
-				The ingestion queue endpoints are used to view and manage the queue of repositories
-				to be added to the service. They respond and deal with one of the following entities:
-			</p>
-
-			<h2 id="entities">Entities</h2>
-
-			<h3 id="entity-ingestion">Ingestion Entity</h3>
-
-			<p>
-				Ingestion entities represent individual repositories in the queue, which are waiting
-				to be ingested or are currently being ingested. As JSON they look like this:
-			</p>
-
-			<pre><code class="json">{
+<pre><code class="o-syntax-highlight--json">{
 	// A unique identifier for the ingestion
 	"id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
 
@@ -60,408 +50,390 @@
 }</code></pre>
 
 
-			<h2 id="get-v1-queue">Get the full queue</h2>
+<h2 id="get-v1-queue">Get the full queue</h2>
 
-			<p>
-				Get a list of all current ingestions in the queue as an array. This endpoint
-				responds with an array of <a href="#entity-ingestion">Ingestion entities</a>. This
-				endpoint requires the <code>READ</code> permission.
-			</p>
+<p>
+	Get a list of all current ingestions in the queue as an array. This endpoint
+	responds with an array of <a href="#entity-ingestion">Ingestion entities</a>. This
+	endpoint requires the <code>READ</code> permission.
+</p>
 
-			<h3>Request</h3>
+<h3>Request</h3>
 
-			<div class="o-techdocs-table-wrapper">
-				<table>
-					<tbody>
-						<tr>
-							<th scope="row">Method</th>
-							<td>
-								<code>GET</code>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Path</th>
-							<td>
-								<code>/v1/queue</code>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Headers</th>
-							<td>
-								<dl>
-									<dt>X-Api-Key</dt>
-									<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-									<dt>X-Api-Secret</dt>
-									<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-								</dl>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+<table class="o-layout__main__single-span">
+	<tbody>
+		<tr>
+			<th scope="row">Method</th>
+			<td>
+				<code>GET</code>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Path</th>
+			<td>
+				<code>/v1/queue</code>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Headers</th>
+			<td>
+				<dl>
+					<dt>X-Api-Key</dt>
+					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+					<dt>X-Api-Secret</dt>
+					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+				</dl>
+			</td>
+		</tr>
+	</tbody>
+</table>
 
-			<h3>Response</h3>
+<h3>Response</h3>
 
-			<div class="o-techdocs-table-wrapper">
-				<table>
-					<tbody>
-						<tr>
-							<th scope="row">Status</th>
-							<td>
-								<code>200</code> on success<br/>
-								<code>401</code> if authentication failed<br/>
-								<code>403</code> if authorization failed
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Headers</th>
-							<td>
-								<dl>
-									<dt>Content-Type</dt>
-									<dd>
-										<code>application/json</code> on success<br/>
-										<code>text/html</code> on error
-									</dd>
-								</dl>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Body</th>
-							<td>
-								Array of <a href="#entity-ingestion">Ingestion entities</a>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
 
-			<h3>Example <code>curl</code> command:</h3>
+	<table class="o-layout__main__single-span">
+		<tbody>
+			<tr>
+				<th scope="row">Status</th>
+				<td>
+					<code>200</code> on success<br/>
+					<code>401</code> if authentication failed<br/>
+					<code>403</code> if authorization failed
+				</td>
+			</tr>
+			<tr>
+				<th scope="row">Headers</th>
+				<td>
+					<dl>
+						<dt>Content-Type</dt>
+						<dd>
+							<code>application/json</code> on success<br/>
+							<code>text/html</code> on error
+						</dd>
+					</dl>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row">Body</th>
+				<td>
+					Array of <a href="#entity-ingestion">Ingestion entities</a>
+				</td>
+			</tr>
+		</tbody>
+	</table>
 
-			<pre><code class="bash">curl \
+<h4>Example <code>curl</code> command:</h4>
+
+<pre><code class="o-syntax-highlight--bash">curl \
 	-H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
 	https://origami-repo-data.ft.com/v1/queue</code></pre>
 
+<h2 id="get-v1-queue-(id)">Get an ingestion</h2>
 
-			<h2 id="get-v1-queue-(id)">Get an ingestion</h2>
+<p>
+	Get a single ingestion in the queue by ID. This endpoint responds with a
+	<a href="#entity-ingestion">Ingestion entity</a>. This endpoint requires the
+	<code>READ</code> permission.
+</p>
 
-			<p>
-				Get a single ingestion in the queue by ID. This endpoint responds with a
-				<a href="#entity-ingestion">Ingestion entity</a>. This endpoint requires the
-				<code>READ</code> permission.
-			</p>
+<h3>Request</h3>
 
-			<h3>Request</h3>
+<table class="o-layout__main__single-span">
+	<tbody>
+		<tr>
+			<th scope="row">Method</th>
+			<td>
+				<code>GET</code>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Path</th>
+			<td>
+				<code>/v1/queue/<var>:ingestion-id</var></code><br/>
+				(where <var>:ingestion-id</var> is the unique identifier for a
+				<a href="#entity-ingestion">Ingestion</a>)
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Headers</th>
+			<td>
+				<dl>
+					<dt>X-Api-Key</dt>
+					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+					<dt>X-Api-Secret</dt>
+					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+				</dl>
+			</td>
+		</tr>
+	</tbody>
+</table>
 
-			<div class="o-techdocs-table-wrapper">
-				<table>
-					<tbody>
-						<tr>
-							<th scope="row">Method</th>
-							<td>
-								<code>GET</code>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Path</th>
-							<td>
-								<code>/v1/queue/<var>:ingestion-id</var></code><br/>
-								(where <var>:ingestion-id</var> is the unique identifier for a
-								<a href="#entity-ingestion">Ingestion</a>)
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Headers</th>
-							<td>
-								<dl>
-									<dt>X-Api-Key</dt>
-									<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-									<dt>X-Api-Secret</dt>
-									<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-								</dl>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+<h3>Response</h3>
 
-			<h3>Response</h3>
 
-			<div class="o-techdocs-table-wrapper">
-				<table>
-					<tbody>
-						<tr>
-							<th scope="row">Status</th>
-							<td>
-								<code>200</code> on success<br/>
-								<code>401</code> if authentication failed<br/>
-								<code>403</code> if authorization failed<br/>
-								<code>404</code> if an ingestion matching <var>:ingestion-id</var> does not exist
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Headers</th>
-							<td>
-								<dl>
-									<dt>Content-Type</dt>
-									<dd>
-										<code>application/json</code> on success<br/>
-										<code>text/html</code> on error
-									</dd>
-								</dl>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Body</th>
-							<td>
-								<a href="#entity-ingestion">Ingestion entity</a>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+<table class="o-layout__main__single-span">
+	<tbody>
+		<tr>
+			<th scope="row">Status</th>
+			<td>
+				<code>200</code> on success<br/>
+				<code>401</code> if authentication failed<br/>
+				<code>403</code> if authorization failed<br/>
+				<code>404</code> if an ingestion matching <var>:ingestion-id</var> does not exist
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Headers</th>
+			<td>
+				<dl>
+					<dt>Content-Type</dt>
+					<dd>
+						<code>application/json</code> on success<br/>
+						<code>text/html</code> on error
+					</dd>
+				</dl>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Body</th>
+			<td>
+				<a href="#entity-ingestion">Ingestion entity</a>
+			</td>
+		</tr>
+	</tbody>
+</table>
 
-			<h3>Example <code>curl</code> command:</h3>
+<h4>Example <code>curl</code> command:</h4>
 
-			<pre><code class="bash">curl \
+<pre><code class="o-syntax-highlight--bash">curl \
 	-H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
 	https://origami-repo-data.ft.com/v1/queue/XXXXXX</code></pre>
 
 
-			<h2 id="post-v1-queue">Add an ingestion to the queue</h2>
+<h2 id="post-v1-queue">Add an ingestion to the queue</h2>
 
-			<p>
-				Create a new ingestion and add it to the queue. This endpoint accepts
-				ingestion details and responds with a newly created
-				<a href="#entity-ingestion">Ingestion entity</a>. This endpoint requires the
-				<code>WRITE</code> permission.
-			</p>
+<p>
+Create a new ingestion and add it to the queue. This endpoint accepts
+ingestion details and responds with a newly created <a href="#entity-ingestion">Ingestion entity</a>. This endpoint requires the
+<code>WRITE</code> permission.
+</p>
 
-			<p>
-				<strong aria-label="Notice">ℹ️</strong> This endpoint can also function as a
-				<a href="https://developer.github.com/webhooks/">GitHub webhook</a>.
-				There's a section on this <a href="#post-v1-queue-github-webhook">below the standard request/response documentation</a>.
-			</p>
+<p>
+<strong aria-label="Notice">ℹ️</strong> This endpoint can also function as a <a href="https://developer.github.com/webhooks/">GitHub webhook</a>.
+There's a section on this <a href="#post-v1-queue-github-webhook">below the standard request/response documentation</a>.
+</p>
 
-			<h3>Request</h3>
+<h3>Request</h3>
 
-			<div class="o-techdocs-table-wrapper">
-				<table>
-					<tbody>
-						<tr>
-							<th scope="row">Method</th>
-							<td>
-								<code>POST</code>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Path</th>
-							<td>
-								<code>/v1/queue</code>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Headers</th>
-							<td>
-								<dl>
-									<dt>Content-Type</dt>
-									<dd><code>application/json</code></dd>
-									<dt>X-Api-Key</dt>
-									<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-									<dt>X-Api-Secret</dt>
-									<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-								</dl>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Body</th>
-							<td>
-								<pre><code class="json">{
+
+<table class="o-layout__main__single-span">
+	<tbody>
+		<tr>
+			<th scope="row">Method</th>
+			<td>
+				<code>POST</code>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Path</th>
+			<td>
+				<code>/v1/queue</code>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Headers</th>
+			<td>
+				<dl>
+					<dt>Content-Type</dt>
+					<dd><code>application/json</code></dd>
+					<dt>X-Api-Key</dt>
+					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+					<dt>X-Api-Secret</dt>
+					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+				</dl>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Body</th>
+			<td>
+				<pre><code class="o-syntax-highlight--json">{
 	// The GitHub repository URL to ingest (required)
 	"url": "https://github.com/Financial-Times/example",
 
 	// The GitHub repository tag to ingest (required)
 	"tag": "v1.0.0"
 }</code></pre>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+			</td>
+		</tr>
+	</tbody>
+</table>
 
-			<h3>Response</h3>
+<h3>Response</h3>
 
-			<div class="o-techdocs-table-wrapper">
-				<table>
-					<tbody>
-						<tr>
-							<th scope="row">Status</th>
-							<td>
-								<code>201</code> on success<br/>
-								<code>400</code> if the request data is invalid or malformed<br/>
-								<code>401</code> if authentication failed<br/>
-								<code>403</code> if authorization failed
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Headers</th>
-							<td>
-								<dl>
-									<dt>Content-Type</dt>
-									<dd>
-										<code>application/json</code> on success<br/>
-										<code>text/html</code> on error
-									</dd>
-								</dl>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Body</th>
-							<td>
-								<a href="#entity-ingestion">Ingestion entity</a>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
 
-			<h3>Example <code>curl</code> command:</h3>
+<table class="o-layout__main__single-span">
+	<tbody>
+		<tr>
+			<th scope="row">Status</th>
+			<td>
+				<code>201</code> on success<br/>
+				<code>400</code> if the request data is invalid or malformed<br/>
+				<code>401</code> if authentication failed<br/>
+				<code>403</code> if authorization failed
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Headers</th>
+			<td>
+				<dl>
+					<dt>Content-Type</dt>
+					<dd>
+						<code>application/json</code> on success<br/>
+						<code>text/html</code> on error
+					</dd>
+				</dl>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Body</th>
+			<td>
+				<a href="#entity-ingestion">Ingestion entity</a>
+			</td>
+		</tr>
+	</tbody>
+</table>
 
-			<pre><code class="bash">curl -X POST \
+<h4>Example <code>curl</code> command:</h4>
+
+<pre><code class="o-syntax-highlight--bash">curl -X POST \
 	-H 'Content-Type: application/json' -H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
 	-d '{"url": "https://github.com/Financial-Times/example", "tag": "v1.0.0"}' \
 	https://origami-repo-data.ft.com/v1/queue</code></pre>
 
-			<h3 id="post-v1-queue-github-webhook">GitHub Webhook</h3>
+<h3 id="post-v1-queue-github-webhook">GitHub Webhook</h3>
 
-			<p>
-				You can also automatically add repository/tag combinations to the queue via a
-				<a href="https://developer.github.com/webhooks/">GitHub webhook</a>. This further
-				automates the service. We recommend doing this as an organisation-wide hook.
-			</p>
+<p>
+	You can also automatically add repository/tag combinations to the queue via a
+	<a href="https://developer.github.com/webhooks/">GitHub webhook</a>. This further
+	automates the service. We recommend doing this as an organisation-wide hook.
+</p>
 
-			<ol>
-				<li>
-					<p>
-						Create a new webhook on either your repository or origanisation
-					</p>
-				</li>
-				<li>
-					<p>
-						Set the <b>Payload URL</b> to this endpoint. You'll need to include the
-						<code>apiKey</code> and <code>apiSecret</code> query parameters rather than
-						headers, as GitHub does not allow you to send custom headers with webhooks.
-						See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a>
-						for more detail
-					</p>
-				</li>
-				<li>
-					<p>
-						Set the <b>Content type</b> to <code>application/json</code>
-					</p>
-				</li>
-				<li>
-					<p>
-						Select the <b>Let me select individual events</b> radio button
-					</p>
-				</li>
-				<li>
-					<p>
-						Uncheck all event types <em>except</em> <b>Create</b> – this should be the
-						only one checked
-					</p>
-				</li>
-				<li>
-					<p>
-						Click <b>Add webhook</b>
-					</p>
-				</li>
-			</ol>
+<ol>
+	<li>
+		<p>
+			Create a new webhook on either your repository or origanisation
+		</p>
+	</li>
+	<li>
+		<p>
+			Set the <b>Payload URL</b> to this endpoint. You'll need to include the
+			<code>apiKey</code> and <code>apiSecret</code> query parameters rather than
+			headers, as GitHub does not allow you to send custom headers with webhooks.
+			See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a>
+			for more detail
+		</p>
+	</li>
+	<li>
+		<p>
+			Set the <b>Content type</b> to <code>application/json</code>
+		</p>
+	</li>
+	<li>
+		<p>
+			Select the <b>Let me select individual events</b> radio button
+		</p>
+	</li>
+	<li>
+		<p>
+			Uncheck all event types <em>except</em> <b>Create</b> – this should be the
+			only one checked
+		</p>
+	</li>
+	<li>
+		<p>
+			Click <b>Add webhook</b>
+		</p>
+	</li>
+</ol>
 
 
-			<h2 id="delete-v1-queue-(id)">Delete an ingestion</h2>
+<h2 id="delete-v1-queue-(id)">Delete an ingestion</h2>
 
-			<p>
-				Delete a single ingestion from the queue by ID, preventing that repo/tag combination
-				from being ingested. This endpoint requires the <code>ADMIN</code> permission.
-			</p>
+<p>
+	Delete a single ingestion from the queue by ID, preventing that repo/tag combination
+	from being ingested. This endpoint requires the <code>ADMIN</code> permission.
+</p>
 
-			<h3>Request</h3>
+<h3>Request</h3>
 
-			<div class="o-techdocs-table-wrapper">
-				<table>
-					<tbody>
-						<tr>
-							<th scope="row">Method</th>
-							<td>
-								<code>DELETE</code>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Path</th>
-							<td>
-								<code>/v1/queue/<var>:ingestion-id</var></code><br/>
-								(where <var>:ingestion-id</var> is the unique identifier for a
-								<a href="#entity-ingestion">Ingestion</a>)
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Headers</th>
-							<td>
-								<dl>
-									<dt>X-Api-Key</dt>
-									<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-									<dt>X-Api-Secret</dt>
-									<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-								</dl>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
 
-			<h3>Response</h3>
+<table class="o-layout__main__single-span">
+	<tbody>
+		<tr>
+			<th scope="row">Method</th>
+			<td>
+				<code>DELETE</code>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Path</th>
+			<td>
+				<code>/v1/queue/<var>:ingestion-id</var></code><br/>
+				(where <var>:ingestion-id</var> is the unique identifier for a
+				<a href="#entity-ingestion">Ingestion</a>)
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Headers</th>
+			<td>
+				<dl>
+					<dt>X-Api-Key</dt>
+					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+					<dt>X-Api-Secret</dt>
+					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+				</dl>
+			</td>
+		</tr>
+	</tbody>
+</table>
 
-			<div class="o-techdocs-table-wrapper">
-				<table>
-					<tbody>
-						<tr>
-							<th scope="row">Status</th>
-							<td>
-								<code>204</code> on success<br/>
-								<code>401</code> if authentication failed<br/>
-								<code>403</code> if authorization failed<br/>
-								<code>404</code> if an ingestion matching <var>:ingestion-id</var> does not exist
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Headers</th>
-							<td>
-								<dl>
-									<dt>Content-Type</dt>
-									<dd>
-										Empty on success<br/>
-										<code>text/html</code> on error
-									</dd>
-								</dl>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Body</th>
-							<td>
-								Empty
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+<h3>Response</h3>
 
-			<h3>Example <code>curl</code> command:</h3>
 
-			<pre><code class="bash">curl -X DELETE \
+<table class="o-layout__main__single-span">
+	<tbody>
+		<tr>
+			<th scope="row">Status</th>
+			<td>
+				<code>204</code> on success<br/>
+				<code>401</code> if authentication failed<br/>
+				<code>403</code> if authorization failed<br/>
+				<code>404</code> if an ingestion matching <var>:ingestion-id</var> does not exist
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Headers</th>
+			<td>
+				<dl>
+					<dt>Content-Type</dt>
+					<dd>
+						Empty on success<br/>
+						<code>text/html</code> on error
+					</dd>
+				</dl>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Body</th>
+			<td>
+				Empty
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<h4>Example <code>curl</code> command:</h4>
+
+<pre><code class="o-syntax-highlight--bash">curl -X DELETE \
 	-H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
 	https://origami-repo-data.ft.com/v1/queue/XXXXXX</code></pre>
-
-		</div>
-
-	</div>
-</div>

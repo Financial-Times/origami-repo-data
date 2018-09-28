@@ -1,30 +1,20 @@
+<h1>API Key Endpoints</h1>
 
-<div class="o-techdocs-container">
-	<div class="o-techdocs-layout">
+<p>
+	The API key endpoints are used to view and manage API keys to grant access to the
+	service. They respond and deal with one of the following entities:
+</p>
 
-		<div class="o-techdocs-sidebar">
-			{{>navigation}}
-		</div>
+<h2 id="entities">Entities</h2>
 
-		<div class="o-techdocs-main o-techdocs-content">
+<h3 id="entity-key">Key Entity</h3>
 
-			<h1>API Key Endpoints</h1>
+<p>
+	Key entities represent API keys which have access to the service.
+	As JSON they look like this:
+</p>
 
-			<p>
-				The API key endpoints are used to view and manage API keys to grant access to the
-				service. They respond and deal with one of the following entities:
-			</p>
-
-			<h2 id="entities">Entities</h2>
-
-			<h3 id="entity-key">Key Entity</h3>
-
-			<p>
-				Key entities represent API keys which have access to the service.
-				As JSON they look like this:
-			</p>
-
-			<pre><code class="json">{
+<pre><code class="o-syntax-highlight--json">{
 	// A unique identifier for the key, used in the X-Api-Key header
 	"id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
 
@@ -42,14 +32,14 @@
 	}
 }</code></pre>
 
-			<h3 id="entity-credentials">Credentials Entity</h3>
+<h3 id="entity-credentials">Credentials Entity</h3>
 
-			<p>
-				Credentials entities represent a full set of credentials (key and secret) which have
-				access to the service. As JSON they look like this:
-			</p>
+<p>
+	Credentials entities represent a full set of credentials (key and secret) which have
+	access to the service. As JSON they look like this:
+</p>
 
-			<pre><code class="json">{
+<pre><code class="o-syntax-highlight--json">{
 	// A unique identifier for the key, used in the X-Api-Key header
 	"id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
 
@@ -58,221 +48,210 @@
 }</code></pre>
 
 
-			<h2 id="get-v1-keys">Get all API keys</h2>
+<h2 id="get-v1-keys">Get all API keys</h2>
 
-			<p>
-				Get a list of all available API keys for this service as an array. This endpoint
-				responds with an array of <a href="#entity-key">Key entities</a>. This
-				endpoint requires the <code>ADMIN</code> permission.
-			</p>
+<p>
+	Get a list of all available API keys for this service as an array. This endpoint
+	responds with an array of <a href="#entity-key">Key entities</a>. This
+	endpoint requires the <code>ADMIN</code> permission.
+</p>
 
-			<h3>Request</h3>
+<h3>Request</h3>
 
-			<div class="o-techdocs-table-wrapper">
-				<table>
-					<tbody>
-						<tr>
-							<th scope="row">Method</th>
-							<td>
-								<code>GET</code>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Path</th>
-							<td>
-								<code>/v1/keys</code>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Headers</th>
-							<td>
-								<dl>
-									<dt>X-Api-Key</dt>
-									<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-									<dt>X-Api-Secret</dt>
-									<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-								</dl>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+<table class="o-layout__main__single-span">
+	<tbody>
+		<tr>
+			<th scope="row">Method</th>
+			<td>
+				<code>GET</code>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Path</th>
+			<td>
+				<code>/v1/keys</code>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Headers</th>
+			<td>
+				<dl>
+					<dt>X-Api-Key</dt>
+					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+					<dt>X-Api-Secret</dt>
+					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+				</dl>
+			</td>
+		</tr>
+	</tbody>
+</table>
 
-			<h3>Response</h3>
+<h3>Response</h3>
 
-			<div class="o-techdocs-table-wrapper">
-				<table>
-					<tbody>
-						<tr>
-							<th scope="row">Status</th>
-							<td>
-								<code>200</code> on success<br/>
-								<code>401</code> if authentication failed<br/>
-								<code>403</code> if authorization failed
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Headers</th>
-							<td>
-								<dl>
-									<dt>Content-Type</dt>
-									<dd>
-										<code>application/json</code> on success<br/>
-										<code>text/html</code> on error
-									</dd>
-								</dl>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Body</th>
-							<td>
-								Array of <a href="#entity-key">Key entities</a>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+<table class="o-layout__main__single-span">
+	<tbody>
+		<tr>
+			<th scope="row">Status</th>
+			<td>
+				<code>200</code> on success<br/>
+				<code>401</code> if authentication failed<br/>
+				<code>403</code> if authorization failed
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Headers</th>
+			<td>
+				<dl>
+					<dt>Content-Type</dt>
+					<dd>
+						<code>application/json</code> on success<br/>
+						<code>text/html</code> on error
+					</dd>
+				</dl>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Body</th>
+			<td>
+				Array of <a href="#entity-key">Key entities</a>
+			</td>
+		</tr>
+	</tbody>
+</table>
 
-			<h3>Example <code>curl</code> command:</h3>
+<h4>Example <code>curl</code> command:</h4>
 
-			<pre><code class="bash">curl \
+<pre><code class="o-syntax-highlight--bash">curl \
 	-H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
 	https://origami-repo-data.ft.com/v1/keys</code></pre>
 
+<h2 id="get-v1-keys-(id)">Get an API key</h2>
 
-			<h2 id="get-v1-keys-(id)">Get an API key</h2>
+<p>
+	Get a single API key for this service by ID. This endpoint responds with a
+	<a href="#entity-key">Key entity</a>. This endpoint requires the
+	<code>ADMIN</code> permission.
+</p>
 
-			<p>
-				Get a single API key for this service by ID. This endpoint responds with a
-				<a href="#entity-key">Key entity</a>. This endpoint requires the
-				<code>ADMIN</code> permission.
-			</p>
+<h3>Request</h3>
 
-			<h3>Request</h3>
+<table class="o-layout__main__single-span">
+	<tbody>
+		<tr>
+			<th scope="row">Method</th>
+			<td>
+				<code>GET</code>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Path</th>
+			<td>
+				<code>/v1/keys/<var>:key-id</var></code><br/>
+				(where <var>:key-id</var> is the unique identifier for a
+				<a href="#entity-key">Key</a>)
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Headers</th>
+			<td>
+				<dl>
+					<dt>X-Api-Key</dt>
+					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+					<dt>X-Api-Secret</dt>
+					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+				</dl>
+			</td>
+		</tr>
+	</tbody>
+</table>
 
-			<div class="o-techdocs-table-wrapper">
-				<table>
-					<tbody>
-						<tr>
-							<th scope="row">Method</th>
-							<td>
-								<code>GET</code>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Path</th>
-							<td>
-								<code>/v1/keys/<var>:key-id</var></code><br/>
-								(where <var>:key-id</var> is the unique identifier for a
-								<a href="#entity-key">Key</a>)
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Headers</th>
-							<td>
-								<dl>
-									<dt>X-Api-Key</dt>
-									<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-									<dt>X-Api-Secret</dt>
-									<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-								</dl>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+<h3>Response</h3>
 
-			<h3>Response</h3>
+<table class="o-layout__main__single-span">
+	<tbody>
+		<tr>
+			<th scope="row">Status</th>
+			<td>
+				<code>200</code> on success<br/>
+				<code>401</code> if authentication failed<br/>
+				<code>403</code> if authorization failed<br/>
+				<code>404</code> if a key matching <var>:key-id</var> does not exist
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Headers</th>
+			<td>
+				<dl>
+					<dt>Content-Type</dt>
+					<dd>
+						<code>application/json</code> on success<br/>
+						<code>text/html</code> on error
+					</dd>
+				</dl>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Body</th>
+			<td>
+				<a href="#entity-key">Key entity</a>
+			</td>
+		</tr>
+	</tbody>
+</table>
 
-			<div class="o-techdocs-table-wrapper">
-				<table>
-					<tbody>
-						<tr>
-							<th scope="row">Status</th>
-							<td>
-								<code>200</code> on success<br/>
-								<code>401</code> if authentication failed<br/>
-								<code>403</code> if authorization failed<br/>
-								<code>404</code> if a key matching <var>:key-id</var> does not exist
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Headers</th>
-							<td>
-								<dl>
-									<dt>Content-Type</dt>
-									<dd>
-										<code>application/json</code> on success<br/>
-										<code>text/html</code> on error
-									</dd>
-								</dl>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Body</th>
-							<td>
-								<a href="#entity-key">Key entity</a>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+<h4>Example <code>curl</code> command:</h4>
 
-			<h3>Example <code>curl</code> command:</h3>
-
-			<pre><code class="bash">curl \
+<pre><code class="o-syntax-highlight--bash">curl \
 	-H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
 	https://origami-repo-data.ft.com/v1/keys/XXXXXX</code></pre>
 
+<h2 id="post-v1-keys">Create an API key</h2>
 
-			<h2 id="post-v1-keys">Create an API key</h2>
+<p>
+	Create a new API key which can be used to access the service. This endpoint accepts
+	key details and responds with a <a href="#entity-credentials">Credentials entity</a>: the new
+	API key and secret. This endpoint requires the <code>ADMIN</code> permission.
+</p>
 
-			<p>
-				Create a new API key which can be used to access the service. This endpoint accepts
-				key details and responds with a <a href="#entity-credentials">Credentials entity</a>: the new
-				API key and secret. This endpoint requires the <code>ADMIN</code> permission.
-			</p>
+<p>
+	<strong aria-label="Warning">⚠️</strong> The API secret will only ever be output once
+	when the key is created. After this point it is hashed and unreadable even by the
+	service. Be sure to save the output somewhere secure, such as LastPass.
+</p>
 
-			<p>
-				<strong aria-label="Warning">⚠️</strong> The API secret will only ever be output once
-				when the key is created. After this point it is hashed and unreadable even by the
-				service. Be sure to save the output somewhere secure, such as LastPass.
-			</p>
+<h3>Request</h3>
 
-			<h3>Request</h3>
-
-			<div class="o-techdocs-table-wrapper">
-				<table>
-					<tbody>
-						<tr>
-							<th scope="row">Method</th>
-							<td>
-								<code>POST</code>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Path</th>
-							<td>
-								<code>/v1/keys</code>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Headers</th>
-							<td>
-								<dl>
-									<dt>Content-Type</dt>
-									<dd><code>application/json</code></dd>
-									<dt>X-Api-Key</dt>
-									<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-									<dt>X-Api-Secret</dt>
-									<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-								</dl>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Body</th>
-							<td>
-								<pre><code class="json">{
+<table class="o-layout__main__single-span">
+	<tbody>
+		<tr>
+			<th scope="row">Method</th>
+			<td>
+				<code>POST</code>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Path</th>
+			<td>
+				<code>/v1/keys</code>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Headers</th>
+			<td>
+				<dl>
+					<dt>Content-Type</dt>
+					<dd><code>application/json</code></dd>
+					<dt>X-Api-Key</dt>
+					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+					<dt>X-Api-Secret</dt>
+					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+				</dl>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Body</th>
+			<td>
+				<pre><code class="o-syntax-highlight--json">{
 	// A short human-readable description of the key (required)
 	"description": "A read key for Origami dashboards",
 
@@ -281,141 +260,129 @@
 	"write": false, // defaults to false
 	"admin": false  // defaults to false
 }</code></pre>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+			</td>
+		</tr>
+	</tbody>
+</table>
 
-			<h3>Response</h3>
+<h3>Response</h3>
 
-			<div class="o-techdocs-table-wrapper">
-				<table>
-					<tbody>
-						<tr>
-							<th scope="row">Status</th>
-							<td>
-								<code>201</code> on success<br/>
-								<code>400</code> if the request data is invalid or malformed<br/>
-								<code>401</code> if authentication failed<br/>
-								<code>403</code> if authorization failed
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Headers</th>
-							<td>
-								<dl>
-									<dt>Content-Type</dt>
-									<dd>
-										<code>application/json</code> on success<br/>
-										<code>text/html</code> on error
-									</dd>
-								</dl>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Body</th>
-							<td>
-								<a href="#entity-credentials">Credentials entity</a>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+<table class="o-layout__main__single-span">
+	<tbody>
+		<tr>
+			<th scope="row">Status</th>
+			<td>
+				<code>201</code> on success<br/>
+				<code>400</code> if the request data is invalid or malformed<br/>
+				<code>401</code> if authentication failed<br/>
+				<code>403</code> if authorization failed
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Headers</th>
+			<td>
+				<dl>
+					<dt>Content-Type</dt>
+					<dd>
+						<code>application/json</code> on success<br/>
+						<code>text/html</code> on error
+					</dd>
+				</dl>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Body</th>
+			<td>
+				<a href="#entity-credentials">Credentials entity</a>
+			</td>
+		</tr>
+	</tbody>
+</table>
 
-			<h3>Example <code>curl</code> command:</h3>
+<h4>Example <code>curl</code> command:</h4>
 
-			<pre><code class="bash">curl -X POST \
+<pre><code class="o-syntax-highlight--bash">curl -X POST \
 	-H 'Content-Type: application/json' -H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
 	-d '{"description": "A new API key", "read": true, "write": true, "admin": false}' \
 	https://origami-repo-data.ft.com/v1/keys</code></pre>
 
 
-			<h2 id="delete-v1-keys-(id)">Delete an API key</h2>
+<h2 id="delete-v1-keys-(id)">Delete an API key</h2>
 
-			<p>
-				Delete a single API key from this service by ID. This endpoint requires the
-				<code>ADMIN</code> permission. Additionally, you are not permitted to delete the
-				same API key that you are currently authenticating with.
-			</p>
+<p>
+	Delete a single API key from this service by ID. This endpoint requires the
+	<code>ADMIN</code> permission. Additionally, you are not permitted to delete the
+	same API key that you are currently authenticating with.
+</p>
 
-			<h3>Request</h3>
+<h3>Request</h3>
 
-			<div class="o-techdocs-table-wrapper">
-				<table>
-					<tbody>
-						<tr>
-							<th scope="row">Method</th>
-							<td>
-								<code>DELETE</code>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Path</th>
-							<td>
-								<code>/v1/keys/<var>:key-id</var></code><br/>
-								(where <var>:key-id</var> is the unique identifier for a
-								<a href="#entity-key">Key</a>)
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Headers</th>
-							<td>
-								<dl>
-									<dt>X-Api-Key</dt>
-									<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-									<dt>X-Api-Secret</dt>
-									<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-								</dl>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+<table class="o-layout__main__single-span">
+	<tbody>
+		<tr>
+			<th scope="row">Method</th>
+			<td>
+				<code>DELETE</code>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Path</th>
+			<td>
+				<code>/v1/keys/<var>:key-id</var></code><br/>
+				(where <var>:key-id</var> is the unique identifier for a
+				<a href="#entity-key">Key</a>)
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Headers</th>
+			<td>
+				<dl>
+					<dt>X-Api-Key</dt>
+					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+					<dt>X-Api-Secret</dt>
+					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+				</dl>
+			</td>
+		</tr>
+	</tbody>
+</table>
 
-			<h3>Response</h3>
+<h3>Response</h3>
 
-			<div class="o-techdocs-table-wrapper">
-				<table>
-					<tbody>
-						<tr>
-							<th scope="row">Status</th>
-							<td>
-								<code>204</code> on success<br/>
-								<code>401</code> if authentication failed<br/>
-								<code>403</code> if authorization failed<br/>
-								<code>404</code> if a key matching <var>:key-id</var> does not exist
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Headers</th>
-							<td>
-								<dl>
-									<dt>Content-Type</dt>
-									<dd>
-										Empty on success<br/>
-										<code>text/html</code> on error
-									</dd>
-								</dl>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">Body</th>
-							<td>
-								Empty
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+<table class="o-layout__main__single-span">
+	<tbody>
+		<tr>
+			<th scope="row">Status</th>
+			<td>
+				<code>204</code> on success<br/>
+				<code>401</code> if authentication failed<br/>
+				<code>403</code> if authorization failed<br/>
+				<code>404</code> if a key matching <var>:key-id</var> does not exist
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Headers</th>
+			<td>
+				<dl>
+					<dt>Content-Type</dt>
+					<dd>
+						Empty on success<br/>
+						<code>text/html</code> on error
+					</dd>
+				</dl>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row">Body</th>
+			<td>
+				Empty
+			</td>
+		</tr>
+	</tbody>
+</table>
 
-			<h3>Example <code>curl</code> command:</h3>
+<h4>Example <code>curl</code> command:</h4>
 
-			<pre><code class="bash">curl -X DELETE \
+<pre><code class="o-syntax-highlight--bash">curl -X DELETE \
 	-H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
 	https://origami-repo-data.ft.com/v1/keys/XXXXXX</code></pre>
-
-		</div>
-
-	</div>
-</div>
