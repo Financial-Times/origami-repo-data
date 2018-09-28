@@ -295,6 +295,98 @@
 	-H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
 	https://origami-repo-data.ft.com/v1/repos</code></pre>
 
+			<h2 id="get-v1-branded-repos">Get all repositories by brand</h2>
+
+			<p>
+				Get a list of branded Origami repositories as an array. This endpoint responds
+				with an array of <a href="#entity-repo">Repository entities</a>. This
+				endpoint requires the <code>READ</code> permission.
+
+			</p>
+
+			The <code>brand</code> query accepts:
+
+			<h3>Request</h3>
+
+			<div class="o-techdocs-table-wrapper">
+				<table>
+					<tbody>
+						<tr>
+							<th scope="row">Method</th>
+							<td>
+								<code>GET</code>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">Path</th>
+							<td>
+								<code>/v1/repos?brand=<var>brand<var></code>
+								<p><var>brand</var> can be:</p>
+								<ul>
+									<li><code>all</code>: returns all branded repositories</li>
+									<li><code>master</code>: returns all repositories branded with the master brand</li>
+									<li><code>internal</code>: returns all repositories branded with the internal brand</li>
+									<li><code>whitelabel</code>: returns all repositories branded with the whitelabel brand</li>
+									<li><code>none</code>: returns all repositories that have not been branded</li>
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">Headers</th>
+							<td>
+								<dl>
+									<dt>X-Api-Key</dt>
+									<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+									<dt>X-Api-Secret</dt>
+									<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+								</dl>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<h3>Response</h3>
+
+			<div class="o-techdocs-table-wrapper">
+				<table>
+					<tbody>
+						<tr>
+							<th scope="row">Status</th>
+							<td>
+								<code>200</code> on success<br/>
+								<code>401</code> if authentication failed<br/>
+								<code>403</code> if authorization failed
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">Headers</th>
+							<td>
+								<dl>
+									<dt>Content-Type</dt>
+									<dd>
+										<code>application/json</code> on success<br/>
+										<code>text/html</code> on error
+									</dd>
+								</dl>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">Body</th>
+							<td>
+								Array of <a href="#entity-repo">Repository entities</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<h3>Example <code>curl</code> command:</h3>
+
+			<pre><code class="bash">curl \
+	-H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
+	https://origami-repo-data.ft.com/v1/repos?brand=XXXX</code></pre>
+
 
 			<h2 id="get-v1-repos-(id)">Get a repository</h2>
 
