@@ -40,7 +40,8 @@ describe('GET /v1/repos/:repoId', () => {
 				'mock2'
 			]);
 			assert.deepEqual(response.brands, [
-				'mock-brand'
+				'master',
+				'internal'
 			]);
 		});
 
