@@ -13,23 +13,28 @@
 			"children": [
 				{
 					"name": "Clients",
-					"href":  "v1/docs/api/clients"
+					"href":  "v1/docs/api/clients",
+					"current": false
 				},
 				{
 					"name": "Authentication",
-					"href":  "v1/docs/api/authentication"
+					"href":  "v1/docs/api/authentication",
+					"current": false
 				},
 				{
 					"name": "Repositories",
-					"href":  "v1/docs/api/repositories"
+					"href":  "v1/docs/api/repositories",
+					"current": false
 				},
 				{
 					"name": "Queue",
-					"href":  "v1/docs/api/queue"
+					"href":  "v1/docs/api/queue",
+					"current": false
 				},
 				{
 					"name": "Keys",
-					"href":  "v1/docs/api/keys"
+					"href":  "v1/docs/api/keys",
+					"current": false
 				}
 			]
 		}
