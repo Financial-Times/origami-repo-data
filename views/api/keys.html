@@ -58,65 +58,61 @@
 
 <h3>Request</h3>
 
-<table class="o-layout__main__single-span">
-	<tbody>
-		<tr>
-			<th scope="row">Method</th>
-			<td>
-				<code>GET</code>
-			</td>
-		</tr>
-		<tr>
-			<th scope="row">Path</th>
-			<td>
-				<code>/v1/keys</code>
-			</td>
-		</tr>
-		<tr>
-			<th scope="row">Headers</th>
-			<td>
-				<dl>
-					<dt>X-Api-Key</dt>
-					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-					<dt>X-Api-Secret</dt>
-					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-				</dl>
-			</td>
-		</tr>
-	</tbody>
+<table class="o-table o-table--row-headings o-layout__main__single-span" data-o-component="o-table">
+	<tr>
+		<th scope="row">Method</th>
+		<td>
+			<code>GET</code>
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Path</th>
+		<td>
+			<code>/v1/keys</code>
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Headers</th>
+		<td>
+			<dl>
+				<dt>X-Api-Key</dt>
+				<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+				<dt>X-Api-Secret</dt>
+				<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+			</dl>
+		</td>
+	</tr>
 </table>
 
 <h3>Response</h3>
 
-<table class="o-layout__main__single-span">
-	<tbody>
-		<tr>
-			<th scope="row">Status</th>
-			<td>
-				<code>200</code> on success<br/>
-				<code>401</code> if authentication failed<br/>
-				<code>403</code> if authorization failed
-			</td>
-		</tr>
-		<tr>
-			<th scope="row">Headers</th>
-			<td>
-				<dl>
-					<dt>Content-Type</dt>
-					<dd>
-						<code>application/json</code> on success<br/>
-						<code>text/html</code> on error
-					</dd>
-				</dl>
-			</td>
-		</tr>
-		<tr>
-			<th scope="row">Body</th>
-			<td>
-				Array of <a href="#entity-key">Key entities</a>
-			</td>
-		</tr>
-	</tbody>
+<table class="o-table o-table--row-headings o-layout__main__single-span" data-o-component="o-table">
+	<tr>
+		<th scope="row">Status</th>
+		<td>
+			<code>200</code> on success<br/>
+			<code>401</code> if authentication failed<br/>
+			<code>403</code> if authorization failed
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Headers</th>
+		<td>
+			<dl>
+				<dt>Content-Type</dt>
+				<dd>
+					<code>application/json</code> on success<br/>
+					<code>text/html</code> on error
+				</dd>
+			</dl>
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Body</th>
+		<td>
+			Array of <a href="#entity-key">Key entities</a>
+		</td>
+	</tr>
 </table>
 
 <h4>Example <code>curl</code> command:</h4>
@@ -135,68 +131,64 @@
 
 <h3>Request</h3>
 
-<table class="o-layout__main__single-span">
-	<tbody>
-		<tr>
-			<th scope="row">Method</th>
-			<td>
-				<code>GET</code>
-			</td>
-		</tr>
-		<tr>
-			<th scope="row">Path</th>
-			<td>
-				<code>/v1/keys/<var>:key-id</var></code><br/>
-				(where <var>:key-id</var> is the unique identifier for a
-				<a href="#entity-key">Key</a>)
-			</td>
-		</tr>
-		<tr>
-			<th scope="row">Headers</th>
-			<td>
-				<dl>
-					<dt>X-Api-Key</dt>
-					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-					<dt>X-Api-Secret</dt>
-					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-				</dl>
-			</td>
-		</tr>
-	</tbody>
+<table class="o-table o-table--row-headings o-layout__main__single-span" data-o-component="o-table">
+	<tr>
+		<th scope="row">Method</th>
+		<td>
+			<code>GET</code>
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Path</th>
+		<td>
+			<code>/v1/keys/<var>:key-id</var></code><br/>
+			(where <var>:key-id</var> is the unique identifier for a
+			<a href="#entity-key">Key</a>)
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Headers</th>
+		<td>
+			<dl>
+				<dt>X-Api-Key</dt>
+				<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+				<dt>X-Api-Secret</dt>
+				<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+			</dl>
+		</td>
+	</tr>
 </table>
 
 <h3>Response</h3>
 
-<table class="o-layout__main__single-span">
-	<tbody>
-		<tr>
-			<th scope="row">Status</th>
-			<td>
-				<code>200</code> on success<br/>
-				<code>401</code> if authentication failed<br/>
-				<code>403</code> if authorization failed<br/>
-				<code>404</code> if a key matching <var>:key-id</var> does not exist
-			</td>
-		</tr>
-		<tr>
-			<th scope="row">Headers</th>
-			<td>
-				<dl>
-					<dt>Content-Type</dt>
-					<dd>
-						<code>application/json</code> on success<br/>
-						<code>text/html</code> on error
-					</dd>
-				</dl>
-			</td>
-		</tr>
-		<tr>
-			<th scope="row">Body</th>
-			<td>
-				<a href="#entity-key">Key entity</a>
-			</td>
-		</tr>
-	</tbody>
+<table class="o-table o-table--row-headings o-layout__main__single-span" data-o-component="o-table">
+	<tr>
+		<th scope="row">Status</th>
+		<td>
+			<code>200</code> on success<br/>
+			<code>401</code> if authentication failed<br/>
+			<code>403</code> if authorization failed<br/>
+			<code>404</code> if a key matching <var>:key-id</var> does not exist
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Headers</th>
+		<td>
+			<dl>
+				<dt>Content-Type</dt>
+				<dd>
+					<code>application/json</code> on success<br/>
+					<code>text/html</code> on error
+				</dd>
+			</dl>
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Body</th>
+		<td>
+			<a href="#entity-key">Key entity</a>
+		</td>
+	</tr>
 </table>
 
 <h4>Example <code>curl</code> command:</h4>
@@ -221,37 +213,36 @@
 
 <h3>Request</h3>
 
-<table class="o-layout__main__single-span">
-	<tbody>
-		<tr>
-			<th scope="row">Method</th>
-			<td>
-				<code>POST</code>
-			</td>
-		</tr>
-		<tr>
-			<th scope="row">Path</th>
-			<td>
-				<code>/v1/keys</code>
-			</td>
-		</tr>
-		<tr>
-			<th scope="row">Headers</th>
-			<td>
-				<dl>
-					<dt>Content-Type</dt>
-					<dd><code>application/json</code></dd>
-					<dt>X-Api-Key</dt>
-					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-					<dt>X-Api-Secret</dt>
-					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-				</dl>
-			</td>
-		</tr>
-		<tr>
-			<th scope="row">Body</th>
-			<td>
-				<pre><code class="o-syntax-highlight--json">{
+<table class="o-table o-table--row-headings o-layout__main__single-span" data-o-component="o-table">
+	<tr>
+		<th scope="row">Method</th>
+		<td>
+			<code>POST</code>
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Path</th>
+		<td>
+			<code>/v1/keys</code>
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Headers</th>
+		<td>
+			<dl>
+				<dt>Content-Type</dt>
+				<dd><code>application/json</code></dd>
+				<dt>X-Api-Key</dt>
+				<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+				<dt>X-Api-Secret</dt>
+				<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+			</dl>
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Body</th>
+		<td>
+<pre><code class="o-syntax-highlight--json">{
 	// A short human-readable description of the key (required)
 	"description": "A read key for Origami dashboards",
 
@@ -260,43 +251,40 @@
 	"write": false, // defaults to false
 	"admin": false  // defaults to false
 }</code></pre>
-			</td>
-		</tr>
-	</tbody>
+		</td>
+	</tr>
 </table>
 
 <h3>Response</h3>
 
-<table class="o-layout__main__single-span">
-	<tbody>
-		<tr>
-			<th scope="row">Status</th>
-			<td>
-				<code>201</code> on success<br/>
-				<code>400</code> if the request data is invalid or malformed<br/>
-				<code>401</code> if authentication failed<br/>
-				<code>403</code> if authorization failed
-			</td>
-		</tr>
-		<tr>
-			<th scope="row">Headers</th>
-			<td>
-				<dl>
-					<dt>Content-Type</dt>
-					<dd>
-						<code>application/json</code> on success<br/>
-						<code>text/html</code> on error
-					</dd>
-				</dl>
-			</td>
-		</tr>
-		<tr>
-			<th scope="row">Body</th>
-			<td>
-				<a href="#entity-credentials">Credentials entity</a>
-			</td>
-		</tr>
-	</tbody>
+<table class="o-table o-table--row-headings o-layout__main__single-span" data-o-component="o-table">
+	<tr>
+		<th scope="row">Status</th>
+		<td>
+			<code>201</code> on success<br/>
+			<code>400</code> if the request data is invalid or malformed<br/>
+			<code>401</code> if authentication failed<br/>
+			<code>403</code> if authorization failed
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Headers</th>
+		<td>
+			<dl>
+				<dt>Content-Type</dt>
+				<dd>
+					<code>application/json</code> on success<br/>
+					<code>text/html</code> on error
+				</dd>
+			</dl>
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Body</th>
+		<td>
+			<a href="#entity-credentials">Credentials entity</a>
+		</td>
+	</tr>
 </table>
 
 <h4>Example <code>curl</code> command:</h4>
@@ -317,68 +305,64 @@
 
 <h3>Request</h3>
 
-<table class="o-layout__main__single-span">
-	<tbody>
+<table class="o-table o-table--row-headings o-layout__main__single-span" data-o-component="o-table">
 		<tr>
-			<th scope="row">Method</th>
-			<td>
-				<code>DELETE</code>
-			</td>
-		</tr>
-		<tr>
-			<th scope="row">Path</th>
-			<td>
-				<code>/v1/keys/<var>:key-id</var></code><br/>
-				(where <var>:key-id</var> is the unique identifier for a
-				<a href="#entity-key">Key</a>)
-			</td>
-		</tr>
-		<tr>
-			<th scope="row">Headers</th>
-			<td>
-				<dl>
-					<dt>X-Api-Key</dt>
-					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-					<dt>X-Api-Secret</dt>
-					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-				</dl>
-			</td>
-		</tr>
-	</tbody>
+		<th scope="row">Method</th>
+		<td>
+			<code>DELETE</code>
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Path</th>
+		<td>
+			<code>/v1/keys/<var>:key-id</var></code><br/>
+			(where <var>:key-id</var> is the unique identifier for a
+			<a href="#entity-key">Key</a>)
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Headers</th>
+		<td>
+			<dl>
+				<dt>X-Api-Key</dt>
+				<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+				<dt>X-Api-Secret</dt>
+				<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+			</dl>
+		</td>
+	</tr>
 </table>
 
 <h3>Response</h3>
 
-<table class="o-layout__main__single-span">
-	<tbody>
-		<tr>
-			<th scope="row">Status</th>
-			<td>
-				<code>204</code> on success<br/>
-				<code>401</code> if authentication failed<br/>
-				<code>403</code> if authorization failed<br/>
-				<code>404</code> if a key matching <var>:key-id</var> does not exist
-			</td>
-		</tr>
-		<tr>
-			<th scope="row">Headers</th>
-			<td>
-				<dl>
-					<dt>Content-Type</dt>
-					<dd>
-						Empty on success<br/>
-						<code>text/html</code> on error
-					</dd>
-				</dl>
-			</td>
-		</tr>
-		<tr>
-			<th scope="row">Body</th>
-			<td>
-				Empty
-			</td>
-		</tr>
-	</tbody>
+<table class="o-table o-table--row-headings o-layout__main__single-span" data-o-component="o-table">
+	<tr>
+		<th scope="row">Status</th>
+		<td>
+			<code>204</code> on success<br/>
+			<code>401</code> if authentication failed<br/>
+			<code>403</code> if authorization failed<br/>
+			<code>404</code> if a key matching <var>:key-id</var> does not exist
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Headers</th>
+		<td>
+			<dl>
+				<dt>Content-Type</dt>
+				<dd>
+					Empty on success<br/>
+					<code>text/html</code> on error
+				</dd>
+			</dl>
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Body</th>
+		<td>
+			Empty
+		</td>
+	</tr>
 </table>
 
 <h4>Example <code>curl</code> command:</h4>
