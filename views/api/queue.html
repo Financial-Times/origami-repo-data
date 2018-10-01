@@ -60,67 +60,63 @@
 
 <h3>Request</h3>
 
-<table class="o-layout__main__single-span">
-	<tbody>
-		<tr>
-			<th scope="row">Method</th>
-			<td>
-				<code>GET</code>
-			</td>
-		</tr>
-		<tr>
-			<th scope="row">Path</th>
-			<td>
-				<code>/v1/queue</code>
-			</td>
-		</tr>
-		<tr>
-			<th scope="row">Headers</th>
-			<td>
-				<dl>
-					<dt>X-Api-Key</dt>
-					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-					<dt>X-Api-Secret</dt>
-					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-				</dl>
-			</td>
-		</tr>
-	</tbody>
+<table class="o-table o-table--row-headings o-layout__main__single-span" data-o-component="o-table">
+	<tr>
+		<th scope="row">Method</th>
+		<td>
+			<code>GET</code>
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Path</th>
+		<td>
+			<code>/v1/queue</code>
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Headers</th>
+		<td>
+			<dl>
+				<dt>X-Api-Key</dt>
+				<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+				<dt>X-Api-Secret</dt>
+				<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+			</dl>
+		</td>
+	</tr>
 </table>
 
 <h3>Response</h3>
 
 
-	<table class="o-layout__main__single-span">
-		<tbody>
-			<tr>
-				<th scope="row">Status</th>
-				<td>
-					<code>200</code> on success<br/>
-					<code>401</code> if authentication failed<br/>
-					<code>403</code> if authorization failed
-				</td>
-			</tr>
-			<tr>
-				<th scope="row">Headers</th>
-				<td>
-					<dl>
-						<dt>Content-Type</dt>
-						<dd>
-							<code>application/json</code> on success<br/>
-							<code>text/html</code> on error
-						</dd>
-					</dl>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row">Body</th>
-				<td>
-					Array of <a href="#entity-ingestion">Ingestion entities</a>
-				</td>
-			</tr>
-		</tbody>
-	</table>
+<table class="o-table o-table--row-headings o-layout__main__single-span" data-o-component="o-table">
+	<tr>
+		<th scope="row">Status</th>
+		<td>
+			<code>200</code> on success<br/>
+			<code>401</code> if authentication failed<br/>
+			<code>403</code> if authorization failed
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Headers</th>
+		<td>
+			<dl>
+				<dt>Content-Type</dt>
+				<dd>
+					<code>application/json</code> on success<br/>
+					<code>text/html</code> on error
+				</dd>
+			</dl>
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Body</th>
+		<td>
+			Array of <a href="#entity-ingestion">Ingestion entities</a>
+		</td>
+	</tr>
+</table>
 
 <h4>Example <code>curl</code> command:</h4>
 
@@ -138,69 +134,65 @@
 
 <h3>Request</h3>
 
-<table class="o-layout__main__single-span">
-	<tbody>
-		<tr>
-			<th scope="row">Method</th>
-			<td>
-				<code>GET</code>
-			</td>
-		</tr>
-		<tr>
-			<th scope="row">Path</th>
-			<td>
-				<code>/v1/queue/<var>:ingestion-id</var></code><br/>
-				(where <var>:ingestion-id</var> is the unique identifier for a
-				<a href="#entity-ingestion">Ingestion</a>)
-			</td>
-		</tr>
-		<tr>
-			<th scope="row">Headers</th>
-			<td>
-				<dl>
-					<dt>X-Api-Key</dt>
-					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-					<dt>X-Api-Secret</dt>
-					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-				</dl>
-			</td>
-		</tr>
-	</tbody>
+<table class="o-table o-table--row-headings o-layout__main__single-span" data-o-component="o-table">
+	<tr>
+		<th scope="row">Method</th>
+		<td>
+			<code>GET</code>
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Path</th>
+		<td>
+			<code>/v1/queue/<var>:ingestion-id</var></code><br/>
+			(where <var>:ingestion-id</var> is the unique identifier for a
+			<a href="#entity-ingestion">Ingestion</a>)
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Headers</th>
+		<td>
+			<dl>
+				<dt>X-Api-Key</dt>
+				<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+				<dt>X-Api-Secret</dt>
+				<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+			</dl>
+		</td>
+	</tr>
 </table>
 
 <h3>Response</h3>
 
 
-<table class="o-layout__main__single-span">
-	<tbody>
-		<tr>
-			<th scope="row">Status</th>
-			<td>
-				<code>200</code> on success<br/>
-				<code>401</code> if authentication failed<br/>
-				<code>403</code> if authorization failed<br/>
-				<code>404</code> if an ingestion matching <var>:ingestion-id</var> does not exist
-			</td>
-		</tr>
-		<tr>
-			<th scope="row">Headers</th>
-			<td>
-				<dl>
-					<dt>Content-Type</dt>
-					<dd>
-						<code>application/json</code> on success<br/>
-						<code>text/html</code> on error
-					</dd>
-				</dl>
-			</td>
-		</tr>
-		<tr>
-			<th scope="row">Body</th>
-			<td>
-				<a href="#entity-ingestion">Ingestion entity</a>
-			</td>
-		</tr>
-	</tbody>
+<table class="o-table o-table--row-headings o-layout__main__single-span" data-o-component="o-table">
+	<tr>
+		<th scope="row">Status</th>
+		<td>
+			<code>200</code> on success<br/>
+			<code>401</code> if authentication failed<br/>
+			<code>403</code> if authorization failed<br/>
+			<code>404</code> if an ingestion matching <var>:ingestion-id</var> does not exist
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Headers</th>
+		<td>
+			<dl>
+				<dt>Content-Type</dt>
+				<dd>
+					<code>application/json</code> on success<br/>
+					<code>text/html</code> on error
+				</dd>
+			</dl>
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Body</th>
+		<td>
+			<a href="#entity-ingestion">Ingestion entity</a>
+		</td>
+	</tr>
 </table>
 
 <h4>Example <code>curl</code> command:</h4>
@@ -226,81 +218,77 @@ There's a section on this <a href="#post-v1-queue-github-webhook">below the stan
 <h3>Request</h3>
 
 
-<table class="o-layout__main__single-span">
-	<tbody>
-		<tr>
-			<th scope="row">Method</th>
-			<td>
-				<code>POST</code>
-			</td>
-		</tr>
-		<tr>
-			<th scope="row">Path</th>
-			<td>
-				<code>/v1/queue</code>
-			</td>
-		</tr>
-		<tr>
-			<th scope="row">Headers</th>
-			<td>
-				<dl>
-					<dt>Content-Type</dt>
-					<dd><code>application/json</code></dd>
-					<dt>X-Api-Key</dt>
-					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-					<dt>X-Api-Secret</dt>
-					<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-				</dl>
-			</td>
-		</tr>
-		<tr>
-			<th scope="row">Body</th>
-			<td>
-				<pre><code class="o-syntax-highlight--json">{
+<table class="o-table o-table--row-headings o-layout__main__single-span" data-o-component="o-table">
+	<tr>
+		<th scope="row">Method</th>
+		<td>
+			<code>POST</code>
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Path</th>
+		<td>
+			<code>/v1/queue</code>
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Headers</th>
+		<td>
+			<dl>
+				<dt>Content-Type</dt>
+				<dd><code>application/json</code></dd>
+				<dt>X-Api-Key</dt>
+				<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+				<dt>X-Api-Secret</dt>
+				<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+			</dl>
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Body</th>
+		<td>
+			<pre><code class="o-syntax-highlight--json">{
 	// The GitHub repository URL to ingest (required)
 	"url": "https://github.com/Financial-Times/example",
 
 	// The GitHub repository tag to ingest (required)
 	"tag": "v1.0.0"
 }</code></pre>
-			</td>
-		</tr>
-	</tbody>
+		</td>
+	</tr>
 </table>
 
 <h3>Response</h3>
 
 
-<table class="o-layout__main__single-span">
-	<tbody>
-		<tr>
-			<th scope="row">Status</th>
-			<td>
-				<code>201</code> on success<br/>
-				<code>400</code> if the request data is invalid or malformed<br/>
-				<code>401</code> if authentication failed<br/>
-				<code>403</code> if authorization failed
-			</td>
-		</tr>
-		<tr>
-			<th scope="row">Headers</th>
-			<td>
-				<dl>
-					<dt>Content-Type</dt>
-					<dd>
-						<code>application/json</code> on success<br/>
-						<code>text/html</code> on error
-					</dd>
-				</dl>
-			</td>
-		</tr>
-		<tr>
-			<th scope="row">Body</th>
-			<td>
-				<a href="#entity-ingestion">Ingestion entity</a>
-			</td>
-		</tr>
-	</tbody>
+<table class="o-table o-table--row-headings o-layout__main__single-span" data-o-component="o-table">
+	<tr>
+		<th scope="row">Status</th>
+		<td>
+			<code>201</code> on success<br/>
+			<code>400</code> if the request data is invalid or malformed<br/>
+			<code>401</code> if authentication failed<br/>
+			<code>403</code> if authorization failed
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Headers</th>
+		<td>
+			<dl>
+				<dt>Content-Type</dt>
+				<dd>
+					<code>application/json</code> on success<br/>
+					<code>text/html</code> on error
+				</dd>
+			</dl>
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Body</th>
+		<td>
+			<a href="#entity-ingestion">Ingestion entity</a>
+		</td>
+	</tr>
 </table>
 
 <h4>Example <code>curl</code> command:</h4>
@@ -367,8 +355,7 @@ There's a section on this <a href="#post-v1-queue-github-webhook">below the stan
 <h3>Request</h3>
 
 
-<table class="o-layout__main__single-span">
-	<tbody>
+<table class="o-table o-table--row-headings o-layout__main__single-span" data-o-component="o-table">
 		<tr>
 			<th scope="row">Method</th>
 			<td>
@@ -394,14 +381,12 @@ There's a section on this <a href="#post-v1-queue-github-webhook">below the stan
 				</dl>
 			</td>
 		</tr>
-	</tbody>
 </table>
 
 <h3>Response</h3>
 
 
-<table class="o-layout__main__single-span">
-	<tbody>
+<table class="o-table o-table--row-headings o-layout__main__single-span" data-o-component="o-table">
 		<tr>
 			<th scope="row">Status</th>
 			<td>
@@ -429,7 +414,6 @@ There's a section on this <a href="#post-v1-queue-github-webhook">below the stan
 				Empty
 			</td>
 		</tr>
-	</tbody>
 </table>
 
 <h4>Example <code>curl</code> command:</h4>
