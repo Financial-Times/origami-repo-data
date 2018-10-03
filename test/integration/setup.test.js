@@ -25,7 +25,7 @@ before(async () => {
 
 after(() => {
 	if (global.app) {
-		global.app.origami.server.close();
+		global.app.ft.server.close();
 		const connectionPool = global.app.database.knex.client.pool;
 		connectionPool.drain(connectionPool.destroyAllNow);
 	}

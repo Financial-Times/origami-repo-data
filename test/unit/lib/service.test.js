@@ -352,7 +352,7 @@ describe('lib/service', () => {
 			assert.calledWithExactly(SlackAnnouncer, {
 				authToken: options.slackAnnouncerAuthToken,
 				channelId: options.slackAnnouncerChannelId,
-				log: origamiService.mockApp.origami.log
+				log: origamiService.mockApp.ft.log
 			});
 			assert.calledWithNew(SlackAnnouncer);
 			assert.strictEqual(origamiService.mockApp.slackAnnouncer, SlackAnnouncer.mockSlackAnnouncer);

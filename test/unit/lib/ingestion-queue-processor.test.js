@@ -66,7 +66,7 @@ describe('lib/ingestion-queue-processor', () => {
 		});
 
 		it('has a `logger` property set to the application logger', () => {
-			assert.strictEqual(instance.logger, app.origami.options.log);
+			assert.strictEqual(instance.logger, app.ft.options.log);
 		});
 
 		it('has an `Ingestion` property set to the Ingestion model', () => {
