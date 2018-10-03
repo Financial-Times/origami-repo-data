@@ -3,7 +3,7 @@
 
 const database = require('../helpers/database');
 
-describe.only('GET /v1', () => {
+describe('GET /v1', () => {
 	let request;
 
 	beforeEach(async () => {
