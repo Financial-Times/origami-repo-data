@@ -36,6 +36,7 @@ describe('GET /v1/repos/:repoId/versions/:versionId/demos', () => {
 
 			const demo1 = response[0];
 			assert.isObject(demo1);
+			assert.strictEqual(demo1.id, 'example1');
 			assert.strictEqual(demo1.title, 'Example Demo 1');
 			assert.strictEqual(demo1.description, 'This is an example demo');
 			assert.isObject(demo1.supportingUrls);
@@ -48,6 +49,7 @@ describe('GET /v1/repos/:repoId/versions/:versionId/demos', () => {
 
 			const demo2 = response[1];
 			assert.isObject(demo2);
+			assert.strictEqual(demo2.id, 'example2');
 			assert.strictEqual(demo2.title, 'Example Demo 2');
 			assert.isNull(demo2.description);
 			assert.isObject(demo2.supportingUrls);
@@ -60,6 +62,7 @@ describe('GET /v1/repos/:repoId/versions/:versionId/demos', () => {
 
 			const demo3 = response[2];
 			assert.isObject(demo3);
+			assert.strictEqual(demo3.id, 'example-no-html');
 			assert.strictEqual(demo3.title, 'Example No-HTML Demo');
 			assert.strictEqual(demo3.description, 'This is an example demo without HTML to be displayed');
 			assert.isObject(demo3.supportingUrls);
@@ -72,6 +75,7 @@ describe('GET /v1/repos/:repoId/versions/:versionId/demos', () => {
 
 			const demo4 = response[3];
 			assert.isObject(demo4);
+			assert.strictEqual(demo4.id, 'example-branded-demo');
 			assert.strictEqual(demo4.title, 'Example Branded Demo');
 			assert.strictEqual(demo4.description, 'This is an example demo for the "example-brand" brand');
 			assert.isObject(demo4.supportingUrls);

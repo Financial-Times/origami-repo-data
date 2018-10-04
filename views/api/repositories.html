@@ -47,6 +47,11 @@
 		"example"
 	],
 
+	// Keywords inferred from the repo description and component demos (excludes explicitly-defined keywords). This property should be considered experimental.
+	"inferredKeywords": [
+		"module"
+	],
+
 	// A list of brands that this repo supports if it is a component.
 	// If it does not explicitly support brands, it will be an empty Array.
 	// If it is not a component, the value will be `null`
@@ -140,6 +145,9 @@
 </p>
 
 <pre><code class="o-syntax-highlight--json">{
+	// The identifier for the demo (normally the file name)
+	"id": "example",
+
 	// The title of the demo
 	"title": "Example Demo",
 

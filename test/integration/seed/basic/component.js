@@ -11,7 +11,7 @@ exports.seed = async database => {
 				'master',
 				'internal'
 			],
-			keywords: '',
+			keywords: 'keyword1, keyword2',
 			isMockManifest: true,
 			demos: [
 				{

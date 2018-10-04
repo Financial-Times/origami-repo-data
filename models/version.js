@@ -4,6 +4,7 @@ const cloneDeep = require('lodash/cloneDeep');
 const isPlainObject = require('lodash/isPlainObject');
 const path = require('path');
 const semver = require('semver');
+const {removeStopwords} = require('stopword');
 const uuid = require('uuid/v4');
 const uuidv5 = require('uuid/v5');
 const union = require('lodash/union');
@@ -62,6 +63,7 @@ function initModel(app) {
 				description: this.get('description'),
 				brands: this.get('brands'),
 				keywords: this.get('keywords'),
+				inferredKeywords: this.get('inferred_keywords'),
 				languages: this.get('languages'),
 				support: {
 					status: this.get('support_status'),
@@ -246,6 +248,28 @@ function initModel(app) {
 				return keywords
 					.filter(keyword => typeof keyword === 'string')
 					.map(keyword => keyword.trim().toLowerCase());
+			},
+
+			// Get inferred keywords
+			inferred_keywords() {
+				const sources = [this.get('description')];
+				const demos = this.demos();
+				const definedKeywords = this.get('keywords');
+				if (demos) {
+					for (const demo of demos) {
+						if (demo.title && demo.title !== demo.id) {
+							sources.push(demo.title);
+						}
+					}
+				}
+				const words = sources
+					.filter(source => source && typeof source === 'string')
+					.reduce((words, source) => {
+						return words.concat(source.toLowerCase().split(/[^a-z0-9\-_]+/));
+					}, [])
+					.filter(word => (word && word.length >= 3 && !definedKeywords.includes(word)));
+				const dedupedWords = Array.from(new Set(words));
+				return removeStopwords(dedupedWords).sort();
 			},
 
 			// Get languages for the version, falling back through different manifests
@@ -652,6 +676,7 @@ function initModel(app) {
 			}
 
 			return {
+				id: demo.name,
 				title: demo.title || demo.name,
 				description: demo.description || null,
 				supportingUrls: {
