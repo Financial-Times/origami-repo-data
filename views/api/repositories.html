@@ -215,9 +215,9 @@
 <h2 id="get-v1-repos">Get all repositories</h2>
 
 <p>
-	Get a list of all available Origami repositories as an array. This endpoint responds
-	with an array of <a href="#entity-repo">Repository entities</a>. This
-	endpoint requires the <code>READ</code> permission.
+	Get a list of all available Origami repositories as an array, with optional filtering.
+	This endpoint responds with an array of <a href="#entity-repo">Repository entities</a>.
+	This endpoint requires the <code>READ</code> permission.
 </p>
 
 <h3>Request</h3>
@@ -234,6 +234,43 @@
 		<th scope="row">Path</th>
 		<td>
 			<code>/v1/repos</code>
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Querystring</th>
+		<td>
+			<dl>
+				<dt>brand</dt>
+				<dd>
+					Specify a brand (or a comma-delimited list of brands) to filter repositories by.
+					Possible values are: <code>master</code>, <code>internal</code>, <code>whitelabel</code>.
+					Any repository which <em>doesn't</em> include this brand will not be output.
+					If this parameter is set to <code>none</code>, <code>null</code>,
+					or <code>undefined</code> then only repositories which are not branded will be output.
+					If this parameter is set to <code>all</code> then only repositories which have at least
+					one brand will be output.
+				</dd>
+				<dt>q</dt>
+				<dd>
+					Specify text to search repositories by. Searchable fields are name, description,
+					keywords, and demo titles. Any repository which <em>doesn't</em> match the search
+					string will not be output.
+				</dd>
+				<dt>status</dt>
+				<dd>
+					Specify an <a href="https://origami.ft.com/docs/syntax/origamijson/" target="_blank">Origami component support status</a>
+					(or a comma-delimited list of statuses) to filter repositories by.
+					Possible values are: <code>active</code>, <code>maintained</code>,
+					<code>experimental</code>, <code>deprecated</code>, <code>dead</code>.
+					Any repository which <em>doesn't</em> have this status will not be output.
+				</dd>
+				<dt>type</dt>
+				<dd>
+					Specify an Origami repo type (or a comma-delimited list of types) to filter repositories by.
+					Possible values are: <code>module</code>, <code>service</code>, <code>imageset</code>.
+					Any repository which <em>doesn't</em> have this type will not be output.
+				</dd>
+			</dl>
 		</td>
 	</tr>
 	<tr>
@@ -286,89 +323,6 @@
 <pre><code class="o-syntax-highlight--bash">curl \
 	-H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
 	https://origami-repo-data.ft.com/v1/repos</code></pre>
-
-<h2 id="get-v1-branded-repos">Get all repositories by brand</h2>
-
-<p>
-	Get a list of branded Origami repositories as an array. This endpoint responds
-	with an array of <a href="#entity-repo">Repository entities</a>. This
-	endpoint requires the <code>READ</code> permission.
-</p>
-
-<h3>Request</h3>
-
-
-<table class="o-table o-table--row-headings o-layout__main__single-span" data-o-component="o-table">
-	<tr>
-		<th scope="row">Method</th>
-		<td>
-			<code>GET</code>
-		</td>
-	</tr>
-	<tr>
-		<th scope="row">Path</th>
-		<td>
-			<code>/v1/repos?brand=<var>brand<var></code>
-			<p><var>brand</var> can be:</p>
-			<ul>
-				<li><code>all</code>: returns all branded repositories</li>
-				<li><code>master</code>: returns all repositories branded with the master brand</li>
-				<li><code>internal</code>: returns all repositories branded with the internal brand</li>
-				<li><code>whitelabel</code>: returns all repositories branded with the whitelabel brand</li>
-				<li><code>none</code>: returns all repositories that have not been branded</li>
-			</ul>
-		</td>
-	</tr>
-	<tr>
-		<th scope="row">Headers</th>
-		<td>
-			<dl>
-				<dt>X-Api-Key</dt>
-				<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-				<dt>X-Api-Secret</dt>
-				<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-			</dl>
-		</td>
-	</tr>
-</table>
-
-<h3>Response</h3>
-
-
-<table class="o-table o-table--row-headings o-layout__main__single-span" data-o-component="o-table">
-	<tr>
-		<th scope="row">Status</th>
-		<td>
-			<code>200</code> on success<br/>
-			<code>401</code> if authentication failed<br/>
-			<code>403</code> if authorization failed
-		</td>
-	</tr>
-	<tr>
-		<th scope="row">Headers</th>
-		<td>
-			<dl>
-				<dt>Content-Type</dt>
-				<dd>
-					<code>application/json</code> on success<br/>
-					<code>text/html</code> on error
-				</dd>
-			</dl>
-		</td>
-	</tr>
-	<tr>
-		<th scope="row">Body</th>
-		<td>
-			Array of <a href="#entity-repo">Repository entities</a>
-		</td>
-	</tr>
-</table>
-
-<h3>Example <code>curl</code> command:</h3>
-
-<pre><code class="o-syntax-highlight--bash">curl \
-	-H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
-	https://origami-repo-data.ft.com/v1/repos?brand=XXXX</code></pre>
 
 
 <h2 id="get-v1-repos-(id)">Get a repository</h2>

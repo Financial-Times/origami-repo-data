@@ -392,7 +392,7 @@ function initModel(app) {
 	// Model static methods
 	}, {
 
-		// Fetch the single latest version of every repo (repo search)
+		// Fetch the single latest version of every repo
 		fetchRepos() {
 			return Version.collection().query(qb => {
 				qb.distinct(app.database.knex.raw('ON (name) name'));
@@ -414,6 +414,55 @@ function initModel(app) {
 				qb.orderBy('version_prerelease', 'desc');
 
 			}).fetch();
+		},
+
+		// Fetch the single latest version of every repo with filters
+		async fetchFilteredRepos(filters) {
+
+			// Create a regular expression for the search
+			let search;
+			if (filters.search && typeof filters.search === 'string') {
+				const regExpSafeQuery = filters.search.trim().replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
+				const searchRegExp = new RegExp(`${regExpSafeQuery}`, 'i');
+				search = searchRegExp.test.bind(searchRegExp);
+			}
+
+			return (await this.fetchRepos())
+				.filter(createModelPropertyFilter('brands', filters.brand))
+				.filter(createModelPropertyFilter('type', filters.type))
+				.filter(createModelPropertyFilter('support_status', filters.status))
+				.filter(repo => {
+					if (!search) {
+						return true;
+					}
+					repo.searchScore = 0;
+
+					// If the search matches the repo name, score highly
+					if (search(repo.get('name'))) {
+						repo.searchScore += 10;
+					}
+
+					// For each matched explicit keyword, score medium
+					repo.searchScore += repo.get('keywords')
+						.filter(keyword => search(keyword))
+						.length * 2;
+
+					// For each matched inferred keyword, score low
+					repo.searchScore += repo.get('inferred_keywords')
+						.filter(keyword => search(keyword))
+						.length;
+
+					return (repo.searchScore !== 0);
+				})
+				.sort((a, b) => {
+					if (a.searchScore < b.searchScore) {
+						return 1;
+					}
+					if (a.searchScore > b.searchScore) {
+						return -1;
+					}
+					return 0;
+				});
 		},
 
 		// Fetch the latest versions of a repo with a given repo ID
@@ -728,4 +777,40 @@ function extractKeywords(manifest) {
 		return manifest.keywords;
 	}
 	return [];
+}
+
+// Create a property filter for use in repo filtering
+function createModelPropertyFilter(property, value) {
+	const values = (value && typeof value === 'string' ? value.split(',') : []);
+	return (repo) => {
+		const propertyValue = repo.get(property);
+
+		// If there's no filter, include the repo
+		if (!values.length) {
+			return true;
+		}
+
+		// If the filter contains the word "all" and the property is an array with at least one value,
+		// include the repo.
+		if (values.includes('all') && Array.isArray(propertyValue) && propertyValue.length > 0) {
+			return true;
+		}
+
+		// If the filter is just "none", "null", or "undefined", keep the repo if it has a falsy or empty value
+		if (values.length === 1 && (values[0] === 'none' || values[0] === 'null' || values[0] === 'undefined')) {
+			if (Array.isArray(propertyValue)) {
+				return (propertyValue.length === 0);
+			} else {
+				return (Boolean(propertyValue) === false);
+			}
+		}
+
+		// Keep the repo if the property is set to one of the filter values
+		if (Array.isArray(propertyValue)) {
+			return values.some(value => propertyValue.includes(value));
+		} else {
+			return values.includes(propertyValue);
+		}
+
+	};
 }
