@@ -454,15 +454,7 @@ function initModel(app) {
 
 					return (repo.searchScore !== 0);
 				})
-				.sort((a, b) => {
-					if (a.searchScore < b.searchScore) {
-						return 1;
-					}
-					if (a.searchScore > b.searchScore) {
-						return -1;
-					}
-					return 0;
-				});
+				.sort((a, b) => b.searchScore - a.searchScore);
 		},
 
 		// Fetch the latest versions of a repo with a given repo ID
