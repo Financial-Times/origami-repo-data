@@ -32,7 +32,7 @@ describe('GET /v1/repos/:repoId/versions', () => {
 
 		it('is an array of all the versions for then given repository', () => {
 			assert.isArray(response);
-			assert.lengthEquals(response, 4);
+			assert.lengthEquals(response, 5);
 
 			const version1 = response[0];
 			assert.isObject(version1);
@@ -57,6 +57,14 @@ describe('GET /v1/repos/:repoId/versions', () => {
 			assert.strictEqual(version4.id, '5bdc1cb5-19f1-4afe-883b-83c822fbbde0');
 			assert.strictEqual(version4.name, 'o-mock-component');
 			assert.strictEqual(version4.version, '1.0.0');
+			assert.strictEqual(version4.versionTag, 'v1.0.0');
+
+			const version5 = response[4];
+			assert.isObject(version5);
+			assert.strictEqual(version5.id, '567fa7fa-d79e-46d9-a698-d61ab6a09399');
+			assert.strictEqual(version5.name, 'o-mock-component');
+			assert.strictEqual(version5.version, '1.0.0');
+			assert.strictEqual(version5.versionTag, '1.0.0');
 
 		});
 

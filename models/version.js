@@ -407,11 +407,14 @@ function initModel(app) {
 				// by name, we need the first result to be the one with the
 				// highest version number; https://semver.org/ specifies that
 				// version numbers should be sorted major, minor, patch, prerelease
+				// returning the latest handles cases of re-tagging, where the same
+				// semver version has been used against a new tag e.g. 1.0.0 to v1.0.0
 				qb.orderBy('name');
 				qb.orderBy('version_major', 'desc');
 				qb.orderBy('version_minor', 'desc');
 				qb.orderBy('version_patch', 'desc');
 				qb.orderBy('version_prerelease', 'desc');
+				qb.orderBy('created_at', 'desc');
 
 			}).fetch();
 		},
@@ -466,6 +469,7 @@ function initModel(app) {
 				qb.orderBy('version_minor', 'desc');
 				qb.orderBy('version_patch', 'desc');
 				qb.orderBy('version_prerelease', 'desc');
+				qb.orderBy('created_at', 'desc');
 			}).fetchOne();
 		},
 
@@ -478,6 +482,7 @@ function initModel(app) {
 				qb.orderBy('version_minor', 'desc');
 				qb.orderBy('version_patch', 'desc');
 				qb.orderBy('version_prerelease', 'desc');
+				qb.orderBy('created_at', 'desc');
 			}).fetchOne();
 		},
 
@@ -490,6 +495,7 @@ function initModel(app) {
 				qb.orderBy('version_minor', 'desc');
 				qb.orderBy('version_patch', 'desc');
 				qb.orderBy('version_prerelease', 'desc');
+				qb.orderBy('created_at', 'desc');
 			}).fetch();
 		},
 
@@ -508,6 +514,7 @@ function initModel(app) {
 				qb.select('*');
 				qb.where('repo_id', repoId);
 				qb.where('version', Version.normaliseSemver(versionNumber));
+				qb.orderBy('created_at', 'desc');
 			}).fetchOne();
 		},
 
