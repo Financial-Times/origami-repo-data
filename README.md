@@ -3,7 +3,7 @@
 
 Get information about Origami repositories. See [the production service][production-url] for API information.
 
-[![Build status](https://img.shields.io/circleci/project/Financial-Times/origami-repo-data.svg)][ci]
+[![Build status](https://circleci.com/gh/Financial-Times/origami-repo-data.svg?style=shield)](https://circleci.com/gh/Financial-Times/origami-repo-data)
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)][license]
 
 
