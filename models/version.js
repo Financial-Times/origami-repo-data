@@ -201,6 +201,11 @@ function initModel(app) {
 				return null;
 			},
 
+			// Get the normalised name of a repo for sorting (stripping out "o-" prefixes and lower-casing)
+			name_sortable() {
+				return this.get('name').toLowerCase().replace(/^[a-z]\-/, '');
+			},
+
 			// Get a description of the version, falling back through different manifests
 			description() {
 				const manifests = this.get('manifests') || {};
@@ -393,8 +398,8 @@ function initModel(app) {
 	}, {
 
 		// Fetch the single latest version of every repo
-		fetchRepos() {
-			return Version.collection().query(qb => {
+		async fetchRepos() {
+			const repos = await Version.collection().query(qb => {
 				qb.distinct(app.database.knex.raw('ON (name) name'));
 				qb.select('*');
 
@@ -417,6 +422,9 @@ function initModel(app) {
 				qb.orderBy('created_at', 'desc');
 
 			}).fetch();
+
+			// We sort again here so that we can do so on a virtual normalised name
+			return repos.sortBy('name_sortable');
 		},
 
 		// Fetch the single latest version of every repo with filters
@@ -435,10 +443,10 @@ function initModel(app) {
 				.filter(createModelPropertyFilter('type', filters.type))
 				.filter(createModelPropertyFilter('support_status', filters.status))
 				.filter(repo => {
+					repo.searchScore = 0;
 					if (!search) {
 						return true;
 					}
-					repo.searchScore = 0;
 
 					// If the search matches the repo name, score highly
 					if (search(repo.get('name'))) {
@@ -457,7 +465,25 @@ function initModel(app) {
 
 					return (repo.searchScore !== 0);
 				})
-				.sort((a, b) => b.searchScore - a.searchScore);
+				.sort((a, b) => {
+
+					// First sort by search score
+					if (a.searchScore > b.searchScore) {
+						return -1;
+					}
+					if (b.searchScore > a.searchScore) {
+						return 1;
+					}
+
+					// Fall back to sorting by normalised name if search score is equal
+					if (a.get('name_sortable') > b.get('name_sortable')) {
+						return 1;
+					}
+					if (b.get('name_sortable') > a.get('name_sortable')) {
+						return -1;
+					}
+					return 0;
+				});
 		},
 
 		// Fetch the latest versions of a repo with a given repo ID

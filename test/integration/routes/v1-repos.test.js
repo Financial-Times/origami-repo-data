@@ -36,24 +36,24 @@ describe('GET /v1/repos', () => {
 
 			const repo1 = response[0];
 			assert.isObject(repo1);
-			assert.strictEqual(repo1.id, '855d47ce-697e-51b9-9882-0c3c9044f0f5');
-			assert.strictEqual(repo1.name, 'mock-service');
-			assert.strictEqual(repo1.version, '2.1.0');
-			assert.strictEqual(repo1.brands, null);
+			assert.strictEqual(repo1.id, 'c990cb4b-c82b-5071-afb0-16149debc53d');
+			assert.strictEqual(repo1.name, 'o-mock-component');
+			// This is the latest *stable* version, even though 3.0.0-beta.1 exists
+			assert.strictEqual(repo1.version, '2.0.0');
+			assert.deepEqual(repo1.brands, ['master', 'internal']);
 
 			const repo2 = response[1];
 			assert.isObject(repo2);
-			assert.strictEqual(repo2.id, 'c990cb4b-c82b-5071-afb0-16149debc53d');
-			assert.strictEqual(repo2.name, 'o-mock-component');
-			// This is the latest *stable* version, even though 3.0.0-beta.1 exists
-			assert.strictEqual(repo2.version, '2.0.0');
-			assert.deepEqual(repo2.brands, ['master', 'internal']);
+			assert.strictEqual(repo2.id, '833bf423-4952-53e7-8fc0-e9e8554caf77');
+			assert.strictEqual(repo2.name, 'o-mock-imageset');
+			assert.strictEqual(repo2.version, '1.0.0');
+			assert.strictEqual(repo2.brands, null);
 
 			const repo3 = response[2];
 			assert.isObject(repo3);
-			assert.strictEqual(repo3.id, '833bf423-4952-53e7-8fc0-e9e8554caf77');
-			assert.strictEqual(repo3.name, 'o-mock-imageset');
-			assert.strictEqual(repo3.version, '1.0.0');
+			assert.strictEqual(repo3.id, '855d47ce-697e-51b9-9882-0c3c9044f0f5');
+			assert.strictEqual(repo3.name, 'mock-service');
+			assert.strictEqual(repo3.version, '2.1.0');
 			assert.strictEqual(repo3.brands, null);
 
 		});
