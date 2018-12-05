@@ -39,7 +39,7 @@
     "joi": "^13.0.1",
     "joi-extension-semver": "^2.0.0",
     "knex": "^0.13.0",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.5",
     "pg": "^7.3.0",
     "require-all": "^2.2.0",
     "semver": "^5.4.1",
