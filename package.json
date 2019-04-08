@@ -29,7 +29,7 @@
     "@financial-times/origami-service": "^4.0.0",
     "@financial-times/origami-service-makefile": "^6.4.0",
     "@slack/client": "^3.16.0",
-    "bcrypt": "^1.0.3",
+    "bcrypt": "^2.0.0",
     "body-parser": "^1.18.3",
     "bookshelf": "^0.10.4",
     "dotenv": "^4.0.0",
