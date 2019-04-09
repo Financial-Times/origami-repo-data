@@ -26,7 +26,10 @@ before(async () => {
 after(() => {
 	if (global.app) {
 		global.app.ft.server.close();
-		const connectionPool = global.app.database.knex.client.pool;
-		connectionPool.drain(connectionPool.destroyAllNow);
+		global.app.database.knex.destroy(() => {
+			// This is temporary, we need to debug why the process
+			// is being held open
+			process.exit(0);
+		});
 	}
 });

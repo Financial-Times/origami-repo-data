@@ -4,7 +4,7 @@ const dotenv = require('dotenv');
 const service = require('./lib/service');
 const throng = require('throng');
 
-dotenv.load();
+dotenv.config();
 
 // Work out where the database URL is
 // (work with Heroku Postgres color named databases)
