@@ -5,7 +5,7 @@ const dotenv = require('dotenv');
 const knex = require('knex');
 
 // Load options from an .env file if present
-dotenv.load();
+dotenv.config();
 
 // Connect to the database
 const database = knex({
