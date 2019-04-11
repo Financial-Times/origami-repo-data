@@ -372,7 +372,7 @@ describe('lib/service', () => {
 		describe('when `options.disableIngestionQueue` is `true`', () => {
 
 			beforeEach(() => {
-				IngestionQueueProcessor.mockIngestionQueueProcessor.start.reset();
+				IngestionQueueProcessor.mockIngestionQueueProcessor.start.resetHistory();
 				options.disableIngestionQueue = true;
 				service(options);
 			});

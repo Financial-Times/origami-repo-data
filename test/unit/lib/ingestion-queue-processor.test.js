@@ -167,7 +167,7 @@ describe('lib/ingestion-queue-processor', () => {
 					instance.Ingestion.fetchLatestAndMarkAsRunning.resetHistory();
 					instance.Ingestion.fetchLatestAndMarkAsRunning.resolves(null);
 					instance.Version.createFromIngestion.resetHistory();
-					instance.fetchNextIngestion.reset();
+					instance.fetchNextIngestion.resetHistory();
 					await fetchNextIngestion();
 				});
 
@@ -203,7 +203,7 @@ describe('lib/ingestion-queue-processor', () => {
 					creationError = new Error('mock creation error');
 					instance.Version.createFromIngestion.resetHistory();
 					instance.Version.createFromIngestion.rejects(creationError);
-					instance.fetchNextIngestion.reset();
+					instance.fetchNextIngestion.resetHistory();
 					mockIngestion.get.withArgs('ingestion_attempts').returns(1);
 					await fetchNextIngestion();
 				});
@@ -346,7 +346,7 @@ describe('lib/ingestion-queue-processor', () => {
 					fetchError = new Error('mock fetch error');
 					instance.Ingestion.fetchLatestAndMarkAsRunning.resetHistory();
 					instance.Ingestion.fetchLatestAndMarkAsRunning.rejects(fetchError);
-					instance.fetchNextIngestion.reset();
+					instance.fetchNextIngestion.resetHistory();
 					await fetchNextIngestion();
 				});
 
@@ -452,7 +452,7 @@ describe('lib/ingestion-queue-processor', () => {
 					fetchError = new Error('mock fetch error');
 					instance.Ingestion.fetchOverAttempted.resetHistory();
 					instance.Ingestion.fetchOverAttempted.rejects(fetchError);
-					instance.collectGarbage.reset();
+					instance.collectGarbage.resetHistory();
 					await collectGarbage();
 				});
 
