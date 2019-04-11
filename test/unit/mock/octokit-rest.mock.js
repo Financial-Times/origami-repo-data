@@ -7,10 +7,10 @@ const GitHubApiClient = module.exports = sinon.stub();
 const mockGitHubApiClient = module.exports.mockGitHubApiClient = {
 	authenticate: sinon.stub(),
 	gitdata: {
-		getReference: sinon.stub()
+		getRef: sinon.stub()
 	},
 	repos: {
-		getContent: sinon.stub(),
+		getContents: sinon.stub(),
 		getReadme: sinon.stub()
 	}
 };

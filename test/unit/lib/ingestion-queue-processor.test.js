@@ -304,7 +304,7 @@ describe('lib/ingestion-queue-processor', () => {
 					expectedWaitDate = '1988-01-26T11:00:00.000Z'; // Date.now plus wait time as an ISO string
 
 					rateLimitError = new Error('mock creation error');
-					rateLimitError.code = 403;
+					rateLimitError.status = 403;
 					rateLimitError.headers = {
 						'x-ratelimit-reset': '570193200'
 					};

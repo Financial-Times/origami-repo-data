@@ -9,8 +9,8 @@ describe('lib/github-client', () => {
 	let GitHubClient;
 
 	beforeEach(() => {
-		GitHubApiClient = require('../mock/github.mock');
-		mockery.registerMock('github', GitHubApiClient);
+		GitHubApiClient = require('../mock/octokit-rest.mock');
+		mockery.registerMock('@octokit/rest', GitHubApiClient);
 
 		GitHubClient = require('../../../lib/github-client');
 	});
@@ -27,19 +27,13 @@ describe('lib/github-client', () => {
 			instance = new GitHubClient('mock-auth-token');
 		});
 
-		it('has a `client` property set to a new GitHub API client', () => {
+		it('has a `client` property set to a new authenticated GitHub API client', () => {
 			assert.calledOnce(GitHubApiClient);
 			assert.calledWithNew(GitHubApiClient);
-			assert.calledWithExactly(GitHubApiClient);
-			assert.strictEqual(instance.client, GitHubApiClient.mockGitHubApiClient);
-		});
-
-		it('authenticates the API client', () => {
-			assert.calledOnce(instance.client.authenticate);
-			assert.calledWithExactly(instance.client.authenticate, {
-				type: 'oauth',
-				token: 'mock-auth-token'
+			assert.calledWithExactly(GitHubApiClient, {
+				auth: 'mock-auth-token'
 			});
+			assert.strictEqual(instance.client, GitHubApiClient.mockGitHubApiClient);
 		});
 
 		describe('.extractRepoFromUrl(url)', () => {
@@ -81,7 +75,7 @@ describe('lib/github-client', () => {
 			let returnValue;
 
 			beforeEach(async () => {
-				instance.client.gitdata.getReference.resolves();
+				instance.client.gitdata.getRef.resolves();
 				returnValue = await instance.isValidRepoAndTag({
 					owner: 'mock-owner',
 					repo: 'mock-repo',
@@ -90,8 +84,8 @@ describe('lib/github-client', () => {
 			});
 
 			it('makes a GitHub API call', () => {
-				assert.calledOnce(instance.client.gitdata.getReference);
-				assert.calledWithExactly(instance.client.gitdata.getReference, {
+				assert.calledOnce(instance.client.gitdata.getRef);
+				assert.calledWithExactly(instance.client.gitdata.getRef, {
 					owner: 'mock-owner',
 					repo: 'mock-repo',
 					ref: 'tags/mock-tag'
@@ -107,8 +101,8 @@ describe('lib/github-client', () => {
 
 				beforeEach(async () => {
 					githubError = new Error('mock error');
-					githubError.code = 404;
-					instance.client.gitdata.getReference.rejects(githubError);
+					githubError.status = 404;
+					instance.client.gitdata.getRef.rejects(githubError);
 					returnValue = await instance.isValidRepoAndTag({
 						owner: 'mock-owner',
 						repo: 'mock-repo',
@@ -128,7 +122,7 @@ describe('lib/github-client', () => {
 
 				beforeEach(async () => {
 					githubError = new Error('mock error');
-					instance.client.gitdata.getReference.rejects(githubError);
+					instance.client.gitdata.getRef.rejects(githubError);
 					try {
 						await instance.isValidRepoAndTag({
 							owner: 'mock-owner',
@@ -174,7 +168,7 @@ describe('lib/github-client', () => {
 
 				beforeEach(async () => {
 					githubError = new Error('mock error');
-					githubError.code = 404;
+					githubError.status = 404;
 					instance.client.repos.getReadme.rejects(githubError);
 					returnValue = await instance.loadReadme('mock-options');
 				});
@@ -211,7 +205,7 @@ describe('lib/github-client', () => {
 			let returnValue;
 
 			beforeEach(async () => {
-				instance.client.repos.getContent.resolves({
+				instance.client.repos.getContents.resolves({
 					data: {
 						content: new Buffer('mock-file-content').toString('base64')
 					}
@@ -220,8 +214,8 @@ describe('lib/github-client', () => {
 			});
 
 			it('makes a GitHub API call', () => {
-				assert.calledOnce(instance.client.repos.getContent);
-				assert.calledWithExactly(instance.client.repos.getContent, 'mock-options');
+				assert.calledOnce(instance.client.repos.getContents);
+				assert.calledWithExactly(instance.client.repos.getContents, 'mock-options');
 			});
 
 			it('resolves with the decoded file contents', () => {
@@ -233,8 +227,8 @@ describe('lib/github-client', () => {
 
 				beforeEach(async () => {
 					githubError = new Error('mock error');
-					githubError.code = 404;
-					instance.client.repos.getContent.rejects(githubError);
+					githubError.status = 404;
+					instance.client.repos.getContents.rejects(githubError);
 					returnValue = await instance.loadFile('mock-options');
 				});
 
@@ -250,7 +244,7 @@ describe('lib/github-client', () => {
 
 				beforeEach(async () => {
 					githubError = new Error('mock error');
-					instance.client.repos.getContent.rejects(githubError);
+					instance.client.repos.getContents.rejects(githubError);
 					try {
 						await instance.loadFile('mock-options');
 					} catch (error) {
@@ -317,12 +311,14 @@ describe('lib/github-client', () => {
 		describe('when `githubAuthToken` is not defined', () => {
 
 			beforeEach(() => {
-				GitHubApiClient.mockGitHubApiClient.authenticate.resetHistory();
+				GitHubApiClient.resetHistory();
 				instance = new GitHubClient();
 			});
 
 			it('does not authenticate the API client', () => {
-				assert.notCalled(instance.client.authenticate);
+				assert.calledOnce(GitHubApiClient);
+				assert.calledWithNew(GitHubApiClient);
+				assert.calledWithExactly(GitHubApiClient, {});
 			});
 
 		});

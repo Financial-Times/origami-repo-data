@@ -584,7 +584,7 @@ function initModel(app) {
 				// Load the Origami manifest first
 				const origamiManifest = await app.github.loadJsonFile({
 					path: 'origami.json',
-					ref: encodedTag,
+					ref: tag,
 					owner,
 					repo
 				});
@@ -599,25 +599,25 @@ function initModel(app) {
 				const [aboutManifest, bowerManifest, imageSetManifest, packageManifest] = await Promise.all([
 					app.github.loadJsonFile({
 						path: 'about.json',
-						ref: encodedTag,
+						ref: tag,
 						owner,
 						repo
 					}),
 					app.github.loadJsonFile({
 						path: 'bower.json',
-						ref: encodedTag,
+						ref: tag,
 						owner,
 						repo
 					}),
 					app.github.loadJsonFile({
 						path: 'imageset.json',
-						ref: encodedTag,
+						ref: tag,
 						owner,
 						repo
 					}),
 					app.github.loadJsonFile({
 						path: 'package.json',
-						ref: encodedTag,
+						ref: tag,
 						owner,
 						repo
 					})
@@ -625,13 +625,13 @@ function initModel(app) {
 
 				// Load repo markdown
 				const readme = await app.github.loadReadme({
-					ref: encodedTag,
+					ref: tag,
 					owner,
 					repo
 				});
 				const designguidelines = await app.github.loadFile({
 					path: 'designguidelines.md',
-					ref: encodedTag,
+					ref: tag,
 					owner,
 					repo
 				});
