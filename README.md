@@ -22,7 +22,7 @@ Get information about Origami repositories. See [the production service][product
 
 ## Requirements
 
-Running Origami Repo Data requires [Node.js] 8.x and [npm]. A [PostgreSQL] database is also required.
+Running Origami Repo Data requires [Node.js] 10.x and [npm]. A [PostgreSQL] database is also required.
 
 If you're working on a Mac, the simplest way to install PostgreSQL is to use [Homebrew]. Run the following and pay attention to the instructions output after installing:
 

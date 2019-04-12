@@ -3,7 +3,7 @@ jobs:
   test:
     working_directory: ~/origami-repo-data
     docker:
-      - image: node:8
+      - image: node:10
       - image: postgres:9.6
         environment:
           - POSTGRES_USER=origami
