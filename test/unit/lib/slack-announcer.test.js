@@ -6,15 +6,15 @@ const sinon = require('sinon');
 
 describe('lib/slack-announcer', () => {
 	let log;
-	let SlackClient;
+	let slackWebApi;
 	let SlackAnnouncer;
 
 	beforeEach(() => {
 
 		log = require('../mock/log.mock');
 
-		SlackClient = require('../mock/slack-client.mock');
-		mockery.registerMock('@slack/client', SlackClient);
+		slackWebApi = require('../mock/slack-web-api.mock');
+		mockery.registerMock('@slack/web-api', slackWebApi);
 
 		SlackAnnouncer = require('../../../lib/slack-announcer');
 	});
@@ -38,10 +38,10 @@ describe('lib/slack-announcer', () => {
 		});
 
 		it('has a `client` property set to a new Slack Web API client authenticated with `options.authToken`', () => {
-			assert.calledOnce(SlackClient.WebClient);
-			assert.calledWithNew(SlackClient.WebClient);
-			assert.calledWithExactly(SlackClient.WebClient, 'mock-auth-token');
-			assert.strictEqual(instance.client, SlackClient.mockWebClient);
+			assert.calledOnce(slackWebApi.WebClient);
+			assert.calledWithNew(slackWebApi.WebClient);
+			assert.calledWithExactly(slackWebApi.WebClient, 'mock-auth-token');
+			assert.strictEqual(instance.client, slackWebApi.mockWebClient);
 		});
 
 		it('has a `channelId` property set to `options.channelId`', () => {
@@ -70,12 +70,11 @@ describe('lib/slack-announcer', () => {
 
 			it('posts an announcement to the Slack channel', () => {
 				assert.calledOnce(instance.client.chat.postMessage);
-				assert.calledWithExactly(
-					instance.client.chat.postMessage,
-					'mock-channel-id',
-					'New release: *<https://registry.origami.ft.com/components/mock-name@mock-version|mock-name @ mock-version>*',
-					{as_user: true}
-				);
+				assert.calledWithExactly(instance.client.chat.postMessage, {
+					channel: 'mock-channel-id',
+					text: 'New release: *<https://registry.origami.ft.com/components/mock-name@mock-version|mock-name @ mock-version>*',
+					as_user: true
+				});
 			});
 
 			it('returns nothing', () => {

@@ -2,9 +2,9 @@
 
 const sinon = require('sinon');
 
-const SlackClient = module.exports = {};
+const webApi = module.exports = {};
 
-const WebClient = SlackClient.WebClient = sinon.stub();
+const WebClient = webApi.WebClient = sinon.stub();
 
 const mockWebClient = module.exports.mockWebClient = {
 	chat: {
