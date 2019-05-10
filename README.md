@@ -235,4 +235,4 @@ The Financial Times has published this software under the [MIT license][license]
 [sentry-production]: https://sentry.io/nextftcom/repo-data-production
 [sentry-qa]: https://sentry.io/nextftcom/repo-data-qa
 [service-options]: https://github.com/Financial-Times/origami-service#options
-[splunk]: https://financialtimes.splunkcloud.com/en-US/app/search/search?q=app%3Dorigami-repo-data-*
+[splunk]: https://financialtimes.splunkcloud.com/en-US/app/search/search?q=search%20index%3Dheroku%20source%3D%2Fvar%2Flog%2Fapps%2Fheroku%2Forigami-repo-data-*
