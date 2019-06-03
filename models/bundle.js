@@ -61,7 +61,7 @@ function initModel(app) {
             },
 
             fetchByVersionId(versionId, type) {
-                return app.model.Bundle.collection().query(qb => {
+                return Bundle.collection().query(qb => {
                     qb.select('*');
                     qb.where('version_id', versionId);
                     qb.where('type', type);
@@ -69,54 +69,82 @@ function initModel(app) {
                 }).fetchOne();
             },
 
-            async create(version, type) {
-                try {
-                    const buildServiceUrl = `https://www.ft.com/__origami/service/build/v2/bundles/${type}?modules=${version.get('name')}@${version.get('version')}`;
+            fetchByRepoId(repoId, type) {
+                return Bundle.collection().query(qb => {
+                    qb.innerJoin('versions', 'version_id', '=', 'versions.id');
+                    qb.select('*');
+                    qb.where('bundles.type', type);
+                    qb.where('versions.repo_id', repoId);
+                    qb.orderBy('bundles.created_at', 'desc');
+                }).fetch();
+            },
 
-                    // Find size.
-                    const rawResponse = await fetch(buildServiceUrl, {
-                        method: 'HEAD',
-                        headers: {
-                            'Accept-Encoding': ''
-                        }
-                    });
-                    const rawLength = rawResponse.headers.get('content-length');
-
-                    // Find size with gzip.
-                    const gzipResponse = await fetch(buildServiceUrl, {
-                        method: 'HEAD',
-                        headers: {
-                            'Accept-Encoding': 'gzip'
-                        }
-                    });
-                    const gzipLength = gzipResponse.headers.get('content-length');
-
-
-                    // Create the new version
-                    const bundle = new Bundle({
-                        version_id: version.get('id'),
-                        type,
-                        url: buildServiceUrl,
-                        sizes: {
-                            raw: rawLength,
-                            gzip: gzipLength,
-                        }
-                    });
-                    await bundle.save();
-
-                    // Return the new bundle
-                    return bundle;
-
-                } catch (error) {
-                    // Assume errors are recoverable by default
-                    if (error.isRecoverable !== false) {
-                        error.isRecoverable = true;
-                    }
+            async createBundlesForVersion(version) {
+                if (!version) {
+                    const error = new Error(`Could not gather bundle information for a version of type "${typeof version}".`);
+                    error.isRecoverable = false;
                     throw error;
                 }
+                const bundleTypes = version.languages.filter(language => ['css', 'js'].includes(language));
+                const bundles = [];
+                for (const bundleType of bundleTypes) {
+                    try {
+                        const buildServiceUrl = `https://www.ft.com/__origami/service/build/v2/bundles/${bundleType}?modules=${version.get('name')}@${version.get('version')}`;
+                        const timeout = 500;
 
+                        // Find size.
+                        let rawLength;
+                        try {
+                            const rawResponse = await fetch(buildServiceUrl, {
+                                method: 'HEAD',
+                                headers: {
+                                    'Accept-Encoding': ''
+                                },
+                                timeout
+                            });
+                            rawLength = rawResponse.headers.get('content-length');
+                        } catch (error) {
+                            throw new Error(`Unable to load non-encoded bundle from ${buildServiceUrl} within 500ms.`);
+                        }
+
+                        // Find size with gzip.
+                        let gzipLength;
+                        try {
+                            const gzipResponse = await fetch(buildServiceUrl, {
+                                method: 'HEAD',
+                                headers: {
+                                    'Accept-Encoding': 'gzip'
+                                },
+                                timeout
+                            });
+                            gzipLength = gzipResponse.headers.get('content-length');
+                        } catch (error) {
+                            throw new Error(`Unable to load gzip encoded bundle from ${buildServiceUrl} within 500ms.`);
+                        }
+
+                        // Create and save the new version
+                        const bundle = new this.Bundle({
+                            version_id: version.get('id'),
+                            type: bundleType,
+                            url: buildServiceUrl,
+                            sizes: {
+                                raw: rawLength,
+                                gzip: gzipLength,
+                            }
+                        });
+                        await bundle.save();
+                        bundles.push(bundle);
+
+                    } catch (error) {
+                        // Assume errors are recoverable by default
+                        if (error.isRecoverable !== false) {
+                            error.isRecoverable = true;
+                        }
+                        throw error;
+                    }
+                    return bundles;
+                }
             }
-
         });
 
     // Add the model to the app
