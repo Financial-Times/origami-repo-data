@@ -659,9 +659,6 @@ function initModel(app) {
 				});
 				await version.save();
 
-				// Announce the new version on Slack
-				await app.slackAnnouncer.announce(version);
-
 				// Return the new version
 				return version;
 

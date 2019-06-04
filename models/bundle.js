@@ -69,6 +69,16 @@ function initModel(app) {
                 }).fetchOne();
             },
 
+            fetchByUrlAndTag(url, tag) {
+                return Bundle.collection().query(qb => {
+                    qb.innerJoin('versions', 'version_id', '=', 'versions.id');
+                    qb.select('*');
+                    qb.where('versions.url', url);
+                    qb.where('versions.tag', tag);
+                    qb.orderBy('bundles.created_at', 'desc');
+                }).fetch();
+            },
+
             fetchByRepoId(repoId, type) {
                 return Bundle.collection().query(qb => {
                     qb.innerJoin('versions', 'version_id', '=', 'versions.id');

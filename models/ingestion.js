@@ -78,7 +78,7 @@ function initModel(app) {
 					}
 
 					// Ensure that ingestion is unique
-					if (this.hasChanged('url') || this.hasChanged('tag')) {
+					if (this.hasChanged('url') || this.hasChanged('tag') || this.hasChanged('type')) {
 						if (await Ingestion.alreadyExists(this.attributes.url, this.attributes.tag, this.attributes.type)) {
 							error = new Error('Validation failed');
 							error.isConflict = true;
@@ -111,14 +111,21 @@ function initModel(app) {
 	// Model static methods
 	}, {
 
-		// Check whether an ingestion or version with the given
-		// URL and tag already exists
+		// Check whether an ingestion with the given
+		// URL and tag already exists or has completed
+		// (has created a version or bundle)
 		async alreadyExists(url, tag, type) {
 			const existingIngestion = await Ingestion.fetchOneByUrlTagAndType(url, tag, type);
 			if (existingIngestion) {
 				return true;
 			}
-			return Boolean(await app.model.Version.fetchOneByUrlAndTag(url, tag));
+			if (type === 'bundle') {
+				return Boolean(await app.model.Bundle.fetchByUrlAndTag(url, tag));
+			}
+			if (type === 'version') {
+				return Boolean(await app.model.Version.fetchOneByUrlAndTag(url, tag));
+			}
+			return false;
 		},
 
 		// Fetch all ingestions
@@ -141,7 +148,7 @@ function initModel(app) {
 				qb.select('*');
 				qb.where('url', url);
 				qb.where('tag', tag);
-				qb.where('tag', type);
+				qb.where('type', type);
 			}).fetchOne();
 		},
 
