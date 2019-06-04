@@ -10,6 +10,9 @@ function initModel(app) {
     // Model prototypal methods
     const Bundle = app.database.Model.extend({
         tableName: 'bundles',
+        version: function () {
+            return this.belongsTo(app.model.Version);
+        },
 
         // Model initialization
         initialize() {
@@ -43,6 +46,12 @@ function initModel(app) {
                 url: this.get('url'),
                 sizes: this.get('sizes')
             };
+        },
+
+        serializeWithVersionName() {
+            const bundle = this.serialize();
+            bundle.name = this.related('version').get('name');
+            return bundle;
         },
 
         // Validate the model before saving
@@ -82,11 +91,11 @@ function initModel(app) {
             fetchByRepoId(repoId, type) {
                 return Bundle.collection().query(qb => {
                     qb.innerJoin('versions', 'version_id', '=', 'versions.id');
-                    qb.select('*');
+                    qb.select('bundles.*');
                     qb.where('bundles.type', type);
                     qb.where('versions.repo_id', repoId);
                     qb.orderBy('bundles.created_at', 'desc');
-                }).fetch();
+                }).fetch({ withRelated: ['version'] });
             },
 
             async createBundlesForVersion(version) {
@@ -133,7 +142,7 @@ function initModel(app) {
                         }
 
                         // Create and save the new version
-                        const bundle = new this.Bundle({
+                        const bundle = new Bundle({
                             version_id: version.get('id'),
                             type: bundleType,
                             url: buildServiceUrl,

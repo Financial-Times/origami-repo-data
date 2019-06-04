@@ -120,7 +120,8 @@ function initModel(app) {
 				return true;
 			}
 			if (type === 'bundle') {
-				return Boolean(await app.model.Bundle.fetchByUrlAndTag(url, tag));
+				const bundles = await app.model.Bundle.fetchByUrlAndTag(url, tag);
+				return Boolean(bundles && bundles.length);
 			}
 			if (type === 'version') {
 				return Boolean(await app.model.Version.fetchOneByUrlAndTag(url, tag));
