@@ -1,11 +1,24 @@
 'use strict';
 
+const joi = require('joi').extend(require('joi-extension-semver'));
 const fetch = require('node-fetch');
 const uuid = require('uuid/v4');
 
 module.exports = initModel;
 
 function initModel(app) {
+
+    // Model validation schema
+    const schema = joi.object().keys({
+        version_id: joi.string().required(),
+        url: joi.string().uri({
+            scheme: 'https'
+        }).required(),
+        sizes: joi.object({
+            arg: joi.string().valid('raw', 'gzip', 'br'),
+            value: joi.string(),
+        }).required()
+    });
 
     // Model prototypal methods
     const Bundle = app.database.Model.extend({
@@ -55,10 +68,22 @@ function initModel(app) {
         },
 
         // Validate the model before saving
+        // Validate the model before saving
         validateSave() {
-            // TODO validate before save
-            return true;
-        }
+            return new Promise((resolve, reject) => {
+                // Validate against the schema
+                joi.validate(this.attributes, schema, {
+                    abortEarly: false,
+                    allowUnknown: true
+                }, async error => {
+                    if (error) {
+                        return reject(error);
+                    }
+
+                    resolve();
+                });
+            });
+        },
 
         // Model static methods
     }, {
@@ -100,7 +125,7 @@ function initModel(app) {
 
             async createBundlesForVersion(version) {
                 if (!version) {
-                    const error = new Error(`Could not gather bundle information for a version of type "${typeof version}".`);
+                    const error = new Error('Could not gather bundle information for a version which does not exist.');
                     error.isRecoverable = false;
                     throw error;
                 }
