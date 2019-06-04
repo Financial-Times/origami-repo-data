@@ -84,14 +84,14 @@ describe('lib/ingestion-queue-processor', () => {
 		describe('.start()', () => {
 
 			beforeEach(() => {
-				instance.processIngestions = sinon.spy();
+				instance.fetchNextIngestion = sinon.spy();
 				instance.collectGarbage = sinon.spy();
 				instance.start();
 			});
 
-			it('calls the `processIngestions` method', () => {
-				assert.calledOnce(instance.processIngestions);
-				assert.calledWithExactly(instance.processIngestions);
+			it('calls the `fetchNextIngestion` method', () => {
+				assert.calledOnce(instance.fetchNextIngestion);
+				assert.calledWithExactly(instance.fetchNextIngestion);
 			});
 
 			it('calls the `collectGarbage` method', () => {
@@ -101,8 +101,8 @@ describe('lib/ingestion-queue-processor', () => {
 
 		});
 
-		describe('.processIngestions()', () => {
-			let processIngestions;
+		describe('.fetchNextIngestion()', () => {
+			let fetchNextIngestion;
 
 			beforeEach(async () => {
 				sinon.stub(global, 'setTimeout');
@@ -115,10 +115,10 @@ describe('lib/ingestion-queue-processor', () => {
 
 				// We need to grab the function and then mock it because otherwise
 				// it will recurse infinitely
-				processIngestions = instance.processIngestions.bind(instance);
-				instance.processIngestions = sinon.spy();
+				fetchNextIngestion = instance.fetchNextIngestion.bind(instance);
+				instance.fetchNextIngestion = sinon.spy();
 
-				await processIngestions();
+				await fetchNextIngestion();
 			});
 
 			afterEach(() => {
@@ -163,8 +163,8 @@ describe('lib/ingestion-queue-processor', () => {
 				assert.isFunction(global.setTimeout.firstCall.args[0]);
 				assert.strictEqual(global.setTimeout.firstCall.args[1], 100);
 				global.setTimeout.firstCall.args[0]();
-				assert.calledOnce(instance.processIngestions);
-				assert.calledWithExactly(instance.processIngestions);
+				assert.calledOnce(instance.fetchNextIngestion);
+				assert.calledWithExactly(instance.fetchNextIngestion);
 			});
 
 			describe('when no ingestions are in the database', () => {
@@ -174,8 +174,8 @@ describe('lib/ingestion-queue-processor', () => {
 					instance.Ingestion.fetchLatestAndMarkAsRunning.resetHistory();
 					instance.Ingestion.fetchLatestAndMarkAsRunning.resolves(null);
 					instance.Version.createFromIngestion.resetHistory();
-					instance.processIngestions.resetHistory();
-					await processIngestions();
+					instance.fetchNextIngestion.resetHistory();
+					await fetchNextIngestion();
 				});
 
 				it('attempts to fetch the next ingestion from the database', () => {
@@ -188,7 +188,7 @@ describe('lib/ingestion-queue-processor', () => {
 				});
 
 				it('does not recurse immediately', () => {
-					assert.notCalled(instance.processIngestions);
+					assert.notCalled(instance.fetchNextIngestion);
 				});
 
 				it('sets a timeout to recurse later', () => {
@@ -196,8 +196,8 @@ describe('lib/ingestion-queue-processor', () => {
 					assert.isFunction(global.setTimeout.firstCall.args[0]);
 					assert.strictEqual(global.setTimeout.firstCall.args[1], 30000);
 					global.setTimeout.firstCall.args[0]();
-					assert.calledOnce(instance.processIngestions);
-					assert.calledWithExactly(instance.processIngestions);
+					assert.calledOnce(instance.fetchNextIngestion);
+					assert.calledWithExactly(instance.fetchNextIngestion);
 				});
 
 			});
@@ -210,9 +210,9 @@ describe('lib/ingestion-queue-processor', () => {
 					creationError = new Error('mock creation error');
 					instance.Version.createFromIngestion.resetHistory();
 					instance.Version.createFromIngestion.rejects(creationError);
-					instance.processIngestions.resetHistory();
+					instance.fetchNextIngestion.resetHistory();
 					mockIngestion.get.withArgs('ingestion_attempts').returns(1);
-					await processIngestions();
+					await fetchNextIngestion();
 				});
 
 				it('logs the failure', () => {
@@ -244,8 +244,8 @@ describe('lib/ingestion-queue-processor', () => {
 					assert.isFunction(global.setTimeout.firstCall.args[0]);
 					assert.strictEqual(global.setTimeout.firstCall.args[1], 100);
 					global.setTimeout.firstCall.args[0]();
-					assert.calledOnce(instance.processIngestions);
-					assert.calledWithExactly(instance.processIngestions);
+					assert.calledOnce(instance.fetchNextIngestion);
+					assert.calledWithExactly(instance.fetchNextIngestion);
 				});
 
 			});
@@ -258,7 +258,7 @@ describe('lib/ingestion-queue-processor', () => {
 					creationError.isRecoverable = true;
 					instance.Version.createFromIngestion.resetHistory();
 					instance.Version.createFromIngestion.rejects(creationError);
-					await processIngestions();
+					await fetchNextIngestion();
 				});
 
 				it('logs the failure', () => {
@@ -284,7 +284,7 @@ describe('lib/ingestion-queue-processor', () => {
 					instance.Version.createFromIngestion.rejects(creationError);
 					mockIngestion.set.resetHistory();
 					mockIngestion.destroy.resetHistory();
-					await processIngestions();
+					await fetchNextIngestion();
 				});
 
 				it('does not increment the ingestion attempts', () => {
@@ -321,7 +321,7 @@ describe('lib/ingestion-queue-processor', () => {
 					instance.Version.createFromIngestion.resetHistory();
 					instance.Version.createFromIngestion.rejects(rateLimitError);
 					global.setTimeout.resetHistory();
-					await processIngestions();
+					await fetchNextIngestion();
 				});
 
 				afterEach(() => {
@@ -341,8 +341,8 @@ describe('lib/ingestion-queue-processor', () => {
 					assert.isFunction(global.setTimeout.firstCall.args[0]);
 					assert.strictEqual(global.setTimeout.firstCall.args[1], expectedWaitTime);
 					global.setTimeout.firstCall.args[0]();
-					assert.calledOnce(instance.processIngestions);
-					assert.calledWithExactly(instance.processIngestions);
+					assert.calledOnce(instance.fetchNextIngestion);
+					assert.calledWithExactly(instance.fetchNextIngestion);
 				});
 
 			});
@@ -355,8 +355,8 @@ describe('lib/ingestion-queue-processor', () => {
 					fetchError = new Error('mock fetch error');
 					instance.Ingestion.fetchLatestAndMarkAsRunning.resetHistory();
 					instance.Ingestion.fetchLatestAndMarkAsRunning.rejects(fetchError);
-					instance.processIngestions.resetHistory();
-					await processIngestions();
+					instance.fetchNextIngestion.resetHistory();
+					await fetchNextIngestion();
 				});
 
 				it('logs the failure', () => {
@@ -372,8 +372,8 @@ describe('lib/ingestion-queue-processor', () => {
 					assert.isFunction(global.setTimeout.firstCall.args[0]);
 					assert.strictEqual(global.setTimeout.firstCall.args[1], 100);
 					global.setTimeout.firstCall.args[0]();
-					assert.calledOnce(instance.processIngestions);
-					assert.calledWithExactly(instance.processIngestions);
+					assert.calledOnce(instance.fetchNextIngestion);
+					assert.calledWithExactly(instance.fetchNextIngestion);
 				});
 
 			});
