@@ -12,8 +12,9 @@ exports.up = async database => {
 
         // Bundle information
         table.string('type').notNullable();
+        table.string('brand').nullable();
         table.string('url').notNullable();
-        table.json('sizes').notNullable();
+        table.jsonb('sizes').notNullable();
 
         // Add column Indexs
         table.index('type');
