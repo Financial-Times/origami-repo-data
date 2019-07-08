@@ -77,9 +77,18 @@ function initModel(app) {
 						return reject(error);
 					}
 
-					// Ensure that ingestion is unique
+					// Ensure that ingestion does not conflict with an existing
+					// ingestion or version.
 					if (this.hasChanged('url') || this.hasChanged('tag') || this.hasChanged('type')) {
-						if (await Ingestion.alreadyExists(this.attributes.url, this.attributes.tag, this.attributes.type)) {
+						const ingestionExists = await Ingestion.alreadyExists(this.attributes.url, this.attributes.tag, this.attributes.type);
+						let conflict = ingestionExists;
+
+						if (!conflict && this.attributes.type === 'version') {
+							const version = await app.model.Version.fetchOneByUrlAndTag(this.attributes.url, this.attributes.tag);
+							conflict = Boolean(version);
+						}
+
+						if (conflict) {
 							error = new Error('Validation failed');
 							error.isConflict = true;
 							error.name = 'ValidationError';
@@ -111,22 +120,10 @@ function initModel(app) {
 	// Model static methods
 	}, {
 
-		// Check whether an ingestion with the given
-		// URL and tag already exists or has completed
-		// (has created a version or bundle)
+		// Check whether an ingestion already exists
 		async alreadyExists(url, tag, type) {
 			const existingIngestion = await Ingestion.fetchOneByUrlTagAndType(url, tag, type);
-			if (existingIngestion) {
-				return true;
-			}
-			if (type === 'bundle') {
-				const bundles = await app.model.Bundle.fetchByUrlAndTag(url, tag);
-				return Boolean(bundles && bundles.length);
-			}
-			if (type === 'version') {
-				return Boolean(await app.model.Version.fetchOneByUrlAndTag(url, tag));
-			}
-			return false;
+			return Boolean(existingIngestion);
 		},
 
 		// Fetch all ingestions
