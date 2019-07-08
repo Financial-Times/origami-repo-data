@@ -3,6 +3,15 @@
 const assert = require('proclaim');
 const sinon = require('sinon');
 
+function getMockIngestion() {
+	return {
+		destroy: sinon.stub().resolves(),
+		get: sinon.stub(),
+		save: sinon.stub().resolves(),
+		set: sinon.stub()
+	};
+}
+
 describe('lib/ingestion-queue-processor', () => {
 	let app;
 	let IngestionQueueProcessor;
@@ -13,12 +22,7 @@ describe('lib/ingestion-queue-processor', () => {
 
 	beforeEach(() => {
 		app = require('../mock/origami-service.mock').mockApp;
-		mockIngestion = {
-			destroy: sinon.stub().resolves(),
-			get: sinon.stub(),
-			save: sinon.stub().resolves(),
-			set: sinon.stub()
-		};
+		mockIngestion = getMockIngestion();
 		mockIngestionOverAttempted = {
 			destroy: sinon.stub().resolves(),
 			get: sinon.stub()
@@ -36,7 +40,7 @@ describe('lib/ingestion-queue-processor', () => {
 		};
 		app.model = {
 			Ingestion: {
-				create: sinon.stub().resolves(mockIngestion),
+				create: sinon.stub().resolves(getMockIngestion()),
 				fetchLatestAndMarkAsRunning: sinon.stub().resolves(mockIngestion),
 				fetchOverAttempted: sinon.stub().resolves({
 					toArray: sinon.stub().returns([mockIngestionOverAttempted])
