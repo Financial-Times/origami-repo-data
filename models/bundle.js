@@ -3,6 +3,7 @@
 const joi = require('joi').extend(require('joi-extension-semver'));
 const fetch = require('node-fetch');
 const uuid = require('uuid/v4');
+const propertyFilter = require('../lib/model-property-filter');
 
 module.exports = initModel;
 
@@ -116,12 +117,16 @@ function initModel(app) {
                 }).fetch();
             },
 
-            fetchByRepoId(repoId, type, brand) {
+            fetchByRepoIdAndBrand(repoId, type, brand) {
+                const bundles = Bundle.fetchByRepoId(repoId, type);
+                return bundles.filter(propertyFilter('brand', brand));
+            },
+
+            fetchByRepoId(repoId, type) {
                 return Bundle.collection().query(qb => {
                     qb.innerJoin('versions', 'version_id', '=', 'versions.id');
                     qb.select('bundles.*');
                     qb.where('bundles.type', type);
-                    qb.where('bundles.brand', brand || null);
                     qb.where('versions.repo_id', repoId);
                     qb.orderBy('bundles.created_at', 'desc');
                 }).fetch({ withRelated: ['version'] });

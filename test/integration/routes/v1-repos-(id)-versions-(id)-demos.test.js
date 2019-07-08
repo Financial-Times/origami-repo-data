@@ -190,6 +190,22 @@ describe('GET /v1/repos/:repoId/versions/:versionId/demos', () => {
 
 	});
 
+	describe('when the `brand` query parameter is invalid (non-alphanumeric + dashes)', () => {
+		let request;
+
+		beforeEach(async () => {
+			await database.seed(app, 'basic');
+			request = agent
+				.get('/v1/repos/c990cb4b-c82b-5071-afb0-16149debc53d/versions/5bdc1cb5-19f1-4afe-883b-83c822fbbde0/demos?brand=no£special>chars')
+				.set('X-Api-Key', 'mock-read-key')
+				.set('X-Api-Secret', 'mock-read-secret');
+		});
+
+		it('responds with a 400 status', () => {
+			return request.expect(400);
+		});
+	});
+
 	describe('when :repoId is not a valid repo ID', () => {
 		let request;
 

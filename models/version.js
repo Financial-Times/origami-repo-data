@@ -8,6 +8,7 @@ const {removeStopwords} = require('stopword');
 const uuid = require('uuid/v4');
 const uuidv5 = require('uuid/v5');
 const union = require('lodash/union');
+const propertyFilter = require('../lib/model-property-filter');
 
 const origamiSupportEmail = 'origami.support@ft.com';
 
@@ -226,7 +227,7 @@ function initModel(app) {
 				return null;
 			},
 
-			// Get brands for the version, falling back to default (master) if none provided
+			// Get brands for the version.
 			brands() {
 				const manifests = this.get('manifests') || {};
 				const type = this.get('type');
@@ -439,9 +440,9 @@ function initModel(app) {
 			}
 
 			return (await this.fetchRepos())
-				.filter(createModelPropertyFilter('brands', filters.brand))
-				.filter(createModelPropertyFilter('type', filters.type))
-				.filter(createModelPropertyFilter('support_status', filters.status))
+				.filter(propertyFilter('brands', filters.brand))
+				.filter(propertyFilter('type', filters.type))
+				.filter(propertyFilter('support_status', filters.status))
 				.filter(repo => {
 					repo.searchScore = 0;
 					if (!search) {
@@ -799,40 +800,4 @@ function extractKeywords(manifest) {
 		return manifest.keywords;
 	}
 	return [];
-}
-
-// Create a property filter for use in repo filtering
-function createModelPropertyFilter(property, value) {
-	const values = (value && typeof value === 'string' ? value.split(',') : []);
-	return (repo) => {
-		const propertyValue = repo.get(property);
-
-		// If there's no filter, include the repo
-		if (!values.length) {
-			return true;
-		}
-
-		// If the filter contains the word "all" and the property is an array with at least one value,
-		// include the repo.
-		if (values.includes('all') && Array.isArray(propertyValue) && propertyValue.length > 0) {
-			return true;
-		}
-
-		// If the filter is just "none", "null", or "undefined", keep the repo if it has a falsy or empty value
-		if (values.length === 1 && (values[0] === 'none' || values[0] === 'null' || values[0] === 'undefined')) {
-			if (Array.isArray(propertyValue)) {
-				return (propertyValue.length === 0);
-			} else {
-				return (Boolean(propertyValue) === false);
-			}
-		}
-
-		// Keep the repo if the property is set to one of the filter values
-		if (Array.isArray(propertyValue)) {
-			return values.some(value => propertyValue.includes(value));
-		} else {
-			return values.includes(propertyValue);
-		}
-
-	};
 }
