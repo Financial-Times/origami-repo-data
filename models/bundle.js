@@ -50,7 +50,7 @@ function initModel(app) {
                 // - Conflict (409)
                 // - Bad Request (400)
                 // https://www.ft.com/__origami/service/build/v2/#api-reference
-                const buildServiceError = new Error(`Unable to load ${enconding || 'non-encoded'} bundle from ${buildServiceUrl.toString()}${error.status ? ` (status: ${error.status}).` : ' within 500ms.'}`);
+                const buildServiceError = new Error(`Unable to load ${enconding || 'non-encoded'} bundle from ${buildServiceUrl.toString()}${error.status ? ` (status: ${error.status}).` : ` within ${timeout}ms.`}`);
                 buildServiceError.isRecoverable = error.status && [400, 409, 560].includes(error.status) ? false : true;
                 throw buildServiceError;
             }
