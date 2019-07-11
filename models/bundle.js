@@ -10,6 +10,9 @@ module.exports = initModel;
 function initModel(app) {
 
     /**
+     * Update a bundle for a given version, type, and brand, or create one if
+     * non exist.
+     *
      * @param {Version} version - the Version to update a bundle for.
      * @param {string} type - the type of the bundle to update, e.g. 'css' or 'js'.
      * @param {string} brand [null] - the brand of the bundle to update, e.g. 'internal' (optional).
@@ -21,7 +24,7 @@ function initModel(app) {
         if (brand) {
             buildServiceUrl.searchParams.append('brand', brand);
         }
-        const timeout = 500;
+        const timeout = 750;
 
         // Find bundle sizes for differing "Accept-Encoding" values.
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Encoding
@@ -206,21 +209,17 @@ function initModel(app) {
                     error.isRecoverable = false;
                     throw error;
                 }
-
-                // Get version bundle types (js and or css).
-                const bundleTypes = [];
-                if (version.languages.includes('js')) {
-                    bundleTypes.push('js');
-                }
-                if (version.languages.includes('scss')) {
-                    bundleTypes.push('css');
-                }
-                // Get version brands.
+                // Get brands from Version.
                 const brands = version.brands.filter(brand => typeof brand === 'string');
+                // Get bundle types (js and or css) from Version.
+                const types = ['js', 'css'].filter(type => {
+                    type = type === 'css' ? 'scss' : type;
+                    return version.languages.includes(type);
+                });
                 // Get combinations of brands and languages to collect Bundle
                 // information for.
                 const combinations = [];
-                bundleTypes.forEach(type => {
+                types.forEach(type => {
                     if (type === 'css' && brands.length > 0) {
                         // Get the size of CSS bundles for all brands.
                         combinations.push(...brands.map(brand => {
