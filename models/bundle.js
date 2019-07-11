@@ -132,7 +132,9 @@ function initModel(app) {
                 brand: this.get('brand'),
                 id: this.get('id'),
                 url: this.get('url'),
-                sizes: this.get('sizes')
+                sizes: this.get('sizes'),
+                updated: this.get('updated_at'),
+                created: this.get('created_at')
             };
         },
 
