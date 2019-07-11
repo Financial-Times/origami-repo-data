@@ -9,6 +9,74 @@ module.exports = initModel;
 
 function initModel(app) {
 
+    /**
+     * @param {Version} version - the Version to update a bundle for.
+     * @param {string} type - the type of the bundle to update, e.g. 'css' or 'js'.
+     * @param {string} brand [null] - the brand of the bundle to update, e.g. 'internal' (optional).
+     * @return {Bundle} - bundle information for the given version, type, and brand
+     */
+    async function updateBundleForVersion(version, type, brand = null) {
+        const buildServiceUrl = new URL(`https://www.ft.com/__origami/service/build/v2/bundles/${type}`);
+        buildServiceUrl.searchParams.append('modules', `${version.get('name')}@${version.get('version')}`);
+        if (brand) {
+            buildServiceUrl.searchParams.append('brand', brand);
+        }
+        const timeout = 500;
+
+        // Find bundle sizes for differing "Accept-Encoding" values.
+        // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Encoding
+        const sizes = {};
+        for (const enconding of ['', 'gzip']) {
+            try {
+                const response = await fetch(buildServiceUrl.toString(), {
+                    method: 'HEAD',
+                    headers: {
+                        'Accept-Encoding': enconding
+                    },
+                    timeout
+                });
+                if (!response.ok) {
+                    const responseError = new Error('Could not get bundle from the Origami Build Service.');
+                    responseError.status = response.status;
+                    throw responseError;
+                }
+                sizes[enconding || 'raw'] = response.headers.get('content-length');
+            } catch (error) {
+                // Recoverable outside of:
+                // - Compilation Error (560)
+                // - Conflict (409)
+                // - Bad Request (400)
+                // https://www.ft.com/__origami/service/build/v2/#api-reference
+                const buildServiceError = new Error(`Unable to load ${enconding || 'non-encoded'} bundle from ${buildServiceUrl.toString()}${error.status ? ` (status: ${error.status}).` : ' within 500ms.'}`);
+                buildServiceError.isRecoverable = error.status && [400, 409, 560].includes(error.status) ? false : true;
+                throw buildServiceError;
+            }
+        }
+
+        // Update the bundle if one exists for the version,
+        // bundle type, and brand.
+        let bundle = await Bundle.fetchUnique(version.get('id'), type, brand);
+        if (bundle) {
+            bundle.set('url', buildServiceUrl.toString());
+            bundle.set('sizes', sizes);
+        }
+
+        // Or create a new bundle if one does not exist.
+        if (!bundle) {
+            bundle = new Bundle({
+                version_id: version.get('id'),
+                type,
+                brand,
+                sizes,
+                url: buildServiceUrl.toString(),
+            });
+        }
+
+        await bundle.save();
+
+        return bundle;
+    }
+
     // Model validation schema
     const schema = joi.object().keys({
         version_id: joi.string().required(),
@@ -138,6 +206,7 @@ function initModel(app) {
                     error.isRecoverable = false;
                     throw error;
                 }
+
                 // Get version bundle types (js and or css).
                 const bundleTypes = [];
                 if (version.languages.includes('js')) {
@@ -151,96 +220,41 @@ function initModel(app) {
                 // Get combinations of brands and languages to collect Bundle
                 // information for.
                 const combinations = [];
-                bundleTypes.forEach(bundleType => {
-                    if (bundleType === 'css') {
+                bundleTypes.forEach(type => {
+                    if (type === 'css' && brands.length > 0) {
                         // Get the size of CSS bundles for all brands.
                         combinations.push(...brands.map(brand => {
                             return {
-                                bundleType,
+                                type,
                                 brand
                             };
                         }));
                     } else {
-                        combinations.push({bundleType});
+                        combinations.push({type});
                     }
                 });
-                // Create Bundle for each combination of brand and language for
-                // the given Version.
-                const bundles = [];
-                for (const combination of combinations) {
+
+                // Update or create a Bundle for each combination of brand and
+                // language for the given Version.
+                const modifiedBundles = [];
+                const bundleUpdateErrors = [];
+                for (const {type, brand} of combinations) {
                     try {
-                        const buildServiceUrl = new URL(`https://www.ft.com/__origami/service/build/v2/bundles/${combination.bundleType}`);
-                        buildServiceUrl.searchParams.append('modules', `${version.get('name')}@${version.get('version')}`);
-                        if (combination.brand) {
-                            buildServiceUrl.searchParams.append('brand', combination.brand);
-                        }
-                        const timeout = 500;
-
-                        // Find size.
-                        let rawLength;
-                        try {
-                            const rawResponse = await fetch(buildServiceUrl.toString(), {
-                                method: 'HEAD',
-                                headers: {
-                                    'Accept-Encoding': ''
-                                },
-                                timeout
-                            });
-                            rawLength = rawResponse.headers.get('content-length');
-                        } catch (error) {
-                            throw new Error(`Unable to load non-encoded bundle from ${buildServiceUrl.toString()} within 500ms.`);
-                        }
-
-                        // Find size with gzip.
-                        let gzipLength;
-                        try {
-                            const gzipResponse = await fetch(buildServiceUrl.toString(), {
-                                method: 'HEAD',
-                                headers: {
-                                    'Accept-Encoding': 'gzip'
-                                },
-                                timeout
-                            });
-                            gzipLength = gzipResponse.headers.get('content-length');
-                        } catch (error) {
-                            throw new Error(`Unable to load gzip encoded bundle from ${buildServiceUrl.toString()} within 500ms.`);
-                        }
-
-                        // Update the bundle if one exists for the version,
-                        // bundle type, and brand.
-                        let bundle = await Bundle.fetchUnique(version.get('id'), combination.bundleType, combination.brand);
-                        if (bundle) {
-                            bundle.set('url', buildServiceUrl.toString());
-                            bundle.set('sizes', {
-                                raw: rawLength,
-                                gzip: gzipLength,
-                            });
-                        }
-                        // Or create a new bundle if one does not exist.
-                        if (!bundle) {
-                            bundle = new Bundle({
-                                version_id: version.get('id'),
-                                type: combination.bundleType,
-                                brand: combination.brand,
-                                url: buildServiceUrl.toString(),
-                                sizes: {
-                                    raw: rawLength,
-                                    gzip: gzipLength,
-                                }
-                            });
-                        }
-                        await bundle.save();
-                        bundles.push(bundle);
-
+                        const bundle = await updateBundleForVersion(version, type, brand);
+                        modifiedBundles.push(bundle);
                     } catch (error) {
-                        // Assume errors are recoverable by default
-                        if (error.isRecoverable !== false) {
-                            error.isRecoverable = true;
-                        }
-                        throw error;
+                        bundleUpdateErrors.push(error);
                     }
                 }
-                return bundles;
+
+                // Not all bundle sizes could be generated.
+                if (bundleUpdateErrors.length > 0) {
+                    const allBundlesError = new Error(`Not all bundle sizes could be found for ${version.get('name')}@${version.get('version')}. Bundles updated: ${modifiedBundles.map(b => b.id)}. Errors: ${bundleUpdateErrors.map(e => e.message).join(' ')}`);
+                    allBundlesError.isRecoverable = bundleUpdateErrors.some(e => e.isRecoverable);
+                    throw allBundlesError;
+                }
+
+                return modifiedBundles;
             }
         });
 
