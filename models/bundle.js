@@ -10,16 +10,16 @@ module.exports = initModel;
 function initModel(app) {
 
     /**
-     * Update a bundle for a given version, type, and brand, or create one if
+     * Update a bundle for a given version, language, and brand, or create one if
      * non exist.
      *
      * @param {Version} version - the Version to update a bundle for.
-     * @param {string} type - the type of the bundle to update, e.g. 'css' or 'js'.
+     * @param {string} language - the language of the bundle to update, e.g. 'css' or 'js'.
      * @param {string} brand [null] - the brand of the bundle to update, e.g. 'internal' (optional).
-     * @return {Bundle} - bundle information for the given version, type, and brand
+     * @return {Bundle} - bundle information for the given version, language, and brand
      */
-    async function updateBundleForVersion(version, type, brand = null) {
-        const buildServiceUrl = new URL(`https://www.ft.com/__origami/service/build/v2/bundles/${type}`);
+    async function updateBundleForVersion(version, language, brand = null) {
+        const buildServiceUrl = new URL(`https://www.ft.com/__origami/service/build/v2/bundles/${language}`);
         buildServiceUrl.searchParams.append('modules', `${version.get('name')}@${version.get('version')}`);
         if (brand) {
             buildServiceUrl.searchParams.append('brand', brand);
@@ -57,8 +57,8 @@ function initModel(app) {
         }
 
         // Update the bundle if one exists for the version,
-        // bundle type, and brand.
-        let bundle = await Bundle.fetchUnique(version.get('id'), type, brand);
+        // bundle language, and brand.
+        let bundle = await Bundle.fetchUnique(version.get('id'), language, brand);
         if (bundle) {
             bundle.set('url', buildServiceUrl.toString());
             bundle.set('sizes', sizes);
@@ -68,7 +68,7 @@ function initModel(app) {
         if (!bundle) {
             bundle = new Bundle({
                 version_id: version.get('id'),
-                type,
+                language,
                 brand,
                 sizes,
                 url: buildServiceUrl.toString(),
@@ -83,7 +83,7 @@ function initModel(app) {
     // Model validation schema
     const schema = joi.object().keys({
         version_id: joi.string().required(),
-        type: joi.string().valid('js', 'css').required(),
+        language: joi.string().valid('js', 'css').required(),
         brand: joi.string().optional().allow(null),
         url: joi.string().uri({
             scheme: 'https'
@@ -136,12 +136,6 @@ function initModel(app) {
             };
         },
 
-        serializeWithVersionName() {
-            const bundle = this.serialize();
-            bundle.name = this.related('version').get('name');
-            return bundle;
-        },
-
         // Validate the model before saving
         validateSave() {
             return new Promise((resolve, reject) => {
@@ -168,39 +162,29 @@ function initModel(app) {
                 }).fetch();
             },
 
-            fetchUnique(versionId, type, brand) {
+            fetchUnique(versionId, language, brand) {
                 return Bundle.collection().query(qb => {
                     qb.select('*');
                     qb.where('version_id', versionId);
-                    qb.where('type', type);
+                    qb.where('language', language);
                     qb.where('brand', brand || null);
                     qb.orderBy('created_at', 'desc');
                 }).fetchOne();
             },
 
-            fetchByUrlAndTag(url, tag) {
-                return Bundle.collection().query(qb => {
-                    qb.innerJoin('versions', 'version_id', '=', 'versions.id');
-                    qb.select('*');
-                    qb.where('versions.url', url);
-                    qb.where('versions.tag', tag);
-                    qb.orderBy('bundles.created_at', 'desc');
-                }).fetch();
-            },
-
-            fetchByRepoIdAndBrand(repoId, type, brand) {
-                const bundles = Bundle.fetchByRepoId(repoId, type);
+            fetchByVersionIdAndBrand(versionId, brand, language = null) {
+                const bundles = Bundle.fetchByVersionId(versionId, language);
                 return bundles.filter(propertyFilter('brand', brand));
             },
 
-            fetchByRepoId(repoId, type) {
+            fetchByVersionId(versionId, language = null) {
                 return Bundle.collection().query(qb => {
-                    qb.innerJoin('versions', 'version_id', '=', 'versions.id');
-                    qb.select('bundles.*');
-                    qb.where('bundles.type', type);
-                    qb.where('versions.repo_id', repoId);
-                    qb.orderBy('bundles.created_at', 'desc');
-                }).fetch({ withRelated: ['version'] });
+                    qb.where('version_id', versionId);
+                    if(language) {
+                        qb.where('language', language);
+                    }
+                    qb.orderBy('created_at', 'desc');
+                }).fetch();
             },
 
             async updateBundlesForVersion(version) {
@@ -211,25 +195,27 @@ function initModel(app) {
                 }
                 // Get brands from Version.
                 const brands = version.brands.filter(brand => typeof brand === 'string');
-                // Get bundle types (js and or css) from Version.
-                const types = ['js', 'css'].filter(type => {
-                    type = type === 'css' ? 'scss' : type;
-                    return version.languages.includes(type);
+                // Get bundle languages (js and or css) from Version.
+                const bundleLanguages = ['js', 'css'].filter(language => {
+                    // Include css bundles if the version has scss.
+                    language = language === 'css' ? 'scss' : language;
+                    return version.languages.includes(language);
                 });
+
                 // Get combinations of brands and languages to collect Bundle
                 // information for.
                 const combinations = [];
-                types.forEach(type => {
-                    if (type === 'css' && brands.length > 0) {
-                        // Get the size of CSS bundles for all brands.
+                bundleLanguages.forEach(language => {
+                    // Get the size of CSS bundles for all brands.
+                    if (language === 'css' && brands.length > 0) {
                         combinations.push(...brands.map(brand => {
                             return {
-                                type,
+                                language,
                                 brand
                             };
                         }));
                     } else {
-                        combinations.push({type});
+                        combinations.push({language});
                     }
                 });
 
@@ -237,9 +223,9 @@ function initModel(app) {
                 // language for the given Version.
                 const modifiedBundles = [];
                 const bundleUpdateErrors = [];
-                for (const {type, brand} of combinations) {
+                for (const {language, brand} of combinations) {
                     try {
-                        const bundle = await updateBundleForVersion(version, type, brand);
+                        const bundle = await updateBundleForVersion(version, language, brand);
                         modifiedBundles.push(bundle);
                     } catch (error) {
                         bundleUpdateErrors.push(error);
@@ -248,7 +234,7 @@ function initModel(app) {
 
                 // Not all bundle sizes could be generated.
                 if (bundleUpdateErrors.length > 0) {
-                    const allBundlesError = new Error(`Not all bundle sizes could be found for ${version.get('name')}@${version.get('version')}. Bundles updated: ${modifiedBundles.map(b => b.id)}. Errors: ${bundleUpdateErrors.map(e => e.message).join(' ')}`);
+                    const allBundlesError = new Error(`Not all bundle sizes could be found for ${version.get('name')}@${version.get('version')}.${modifiedBundles.length > 0 ? ` Bundles updated: ${modifiedBundles.map(b => b.id)}.` : ''} Errors: ${bundleUpdateErrors.map(e => e.message).join(' ')}`);
                     allBundlesError.isRecoverable = bundleUpdateErrors.some(e => e.isRecoverable);
                     throw allBundlesError;
                 }

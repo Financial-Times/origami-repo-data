@@ -11,13 +11,14 @@ exports.up = async database => {
         table.timestamp('updated_at').defaultTo(database.fn.now());
 
         // Bundle information
-        table.string('type').notNullable();
+        table.string('language').notNullable();
         table.string('brand').nullable();
         table.string('url').notNullable();
         table.jsonb('sizes').notNullable();
 
         // Add column Indexs
-        table.index('type');
+        table.index('language');
+        table.index('brand');
 
         // Add version relationship.
         table.foreign('version_id').references('versions.id');
