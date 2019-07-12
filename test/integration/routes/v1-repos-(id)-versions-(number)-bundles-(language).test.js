@@ -148,6 +148,7 @@ describe('GET /v1/repos/:repoId/versions/:versionNumber/bundles/:language', () =
         }),
     ];
 
+    // Valid request tests.
     tests.forEach(data => {
         const {
             version,
@@ -159,9 +160,8 @@ describe('GET /v1/repos/:repoId/versions/:versionNumber/bundles/:language', () =
             expectedDescription
         } = data;
 
-        const url = `/v1/repos/c990cb4b-c82b-5071-afb0-16149debc53d/versions/${version}/bundles/${language}${brand ? `?brand=${brand}` : ''}`;
-
         describe(`A request for ${language.toUpperCase()} bundles of a ${isBranded ? 'branded' : 'non-branded'} version${!hasBundles ? ', which has no bundle stats yet' : ''}${brand ? `, with the brand parameter set to "${brand}"` : ''}.`, () => {
+            const url = `/v1/repos/c990cb4b-c82b-5071-afb0-16149debc53d/versions/${version}/bundles/${language}${brand ? `?brand=${brand}` : ''}`;
             let request;
 
             before(async () => {
@@ -215,6 +215,23 @@ describe('GET /v1/repos/:repoId/versions/:versionNumber/bundles/:language', () =
             });
         });
 
+    });
+
+    // Invalid request tests.
+    describe('A request for an invalid brand "n$t-ok".', () => {
+        let request;
+
+        before(async () => {
+            await database.seed(app, 'basic');
+            request = agent
+                .get('/v1/repos/c990cb4b-c82b-5071-afb0-16149debc53d/versions/9e4e450d-3b70-4672-b459-f297d434add6/bundles/css?brand=n$t-ok')
+                .set('X-Api-Key', 'mock-read-key')
+                .set('X-Api-Secret', 'mock-read-secret');
+        });
+
+        it('responds with a 400 status', () => {
+            return request.expect(400);
+        });
     });
 
 });
