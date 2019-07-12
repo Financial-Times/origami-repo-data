@@ -19,6 +19,7 @@ describe('lib/ingestion-queue-processor', () => {
 	let mockIngestionOverAttempted;
 	let mockIngestionOverRunning;
 	let mockVersion;
+	let mockBundle;
 
 	beforeEach(() => {
 		app = require('../mock/origami-service.mock').mockApp;
@@ -33,6 +34,9 @@ describe('lib/ingestion-queue-processor', () => {
 			set: sinon.stub()
 		};
 		mockVersion = {
+			get: sinon.stub()
+		};
+		mockBundle = {
 			get: sinon.stub()
 		};
 		app.slackAnnouncer = {
@@ -50,7 +54,11 @@ describe('lib/ingestion-queue-processor', () => {
 				})
 			},
 			Version: {
-				createFromIngestion: sinon.stub().resolves(mockVersion)
+				createFromIngestion: sinon.stub().resolves(mockVersion),
+				fetchOneByUrlAndTag: sinon.stub().resolves(mockVersion)
+			},
+			Bundle: {
+				updateBundlesForVersion: sinon.stub().resolves([mockBundle])
 			}
 		};
 
@@ -121,54 +129,100 @@ describe('lib/ingestion-queue-processor', () => {
 				// it will recurse infinitely
 				fetchNextIngestion = instance.fetchNextIngestion.bind(instance);
 				instance.fetchNextIngestion = sinon.spy();
-
-				await fetchNextIngestion();
 			});
 
 			afterEach(() => {
 				global.setTimeout.restore();
 			});
 
-			it('fetches the next ingestion from the database', () => {
-				assert.calledOnce(instance.Ingestion.fetchLatestAndMarkAsRunning);
-				assert.calledWithExactly(instance.Ingestion.fetchLatestAndMarkAsRunning);
-			});
+			describe('when a version ingestions is in the database', () => {
 
-			it('logs an attempt', () => {
-				assert.calledWith(instance.log, {
-					type: 'attempt',
-					url: 'mock-ingestion-url',
-					tag: 'mock-ingestion-tag',
-					ingestionType: 'version'
+				beforeEach(async () => {
+					mockIngestion.get.withArgs('type').returns('version');
+					await fetchNextIngestion();
+				});
+
+				it('fetches the next ingestion from the database', () => {
+					assert.calledOnce(instance.Ingestion.fetchLatestAndMarkAsRunning);
+					assert.calledWithExactly(instance.Ingestion.fetchLatestAndMarkAsRunning);
+				});
+
+				it('logs an attempt', () => {
+					assert.calledWith(instance.log, {
+						type: 'attempt',
+						url: 'mock-ingestion-url',
+						tag: 'mock-ingestion-tag',
+						ingestionType: 'version'
+					});
+				});
+
+				it('creates a new version based on the ingestion', () => {
+					assert.calledOnce(instance.Version.createFromIngestion);
+					assert.calledWithExactly(instance.Version.createFromIngestion, mockIngestion);
+				});
+
+				it('logs the version creation', () => {
+					assert.calledWith(instance.log, {
+						type: 'success',
+						url: 'mock-ingestion-url',
+						tag: 'mock-ingestion-tag',
+						ingestionType: 'version',
+						version: 'mock-version-id',
+					});
+				});
+
+				it('destroys the successful ingestion', () => {
+					assert.calledOnce(mockIngestion.destroy);
+				});
+
+				it('creates a bundle ingestion for the new the version', () => {
+					assert.calledWithExactly(
+						app.model.Ingestion.create,
+						'mock-ingestion-url',
+						'mock-ingestion-tag',
+						'bundle'
+					);
+				});
+
+				it('sets a timeout to recurse', () => {
+					assert.calledOnce(global.setTimeout);
+					assert.isFunction(global.setTimeout.firstCall.args[0]);
+					assert.strictEqual(global.setTimeout.firstCall.args[1], 100);
+					global.setTimeout.firstCall.args[0]();
+					assert.calledOnce(instance.fetchNextIngestion);
+					assert.calledWithExactly(instance.fetchNextIngestion);
 				});
 			});
 
-			it('creates a new version based on the ingestion', () => {
-				assert.calledOnce(instance.Version.createFromIngestion);
-				assert.calledWithExactly(instance.Version.createFromIngestion, mockIngestion);
-			});
-
-			it('logs the version creation', () => {
-				assert.calledWith(instance.log, {
-					type: 'success',
-					url: 'mock-ingestion-url',
-					tag: 'mock-ingestion-tag',
-					ingestionType: 'version',
-					version: 'mock-version-id',
+			describe('when a bundle ingestion is in the database', () => {
+				beforeEach(async () => {
+					mockIngestion.get.withArgs('type').returns('bundle');
+					mockBundle.get.withArgs('id').returns('mock-bundle-id');
+					await fetchNextIngestion();
 				});
-			});
 
-			it('destroys the successful ingestion', () => {
-				assert.calledOnce(mockIngestion.destroy);
-			});
+				it('logs an attempt', () => {
+					assert.calledWith(instance.log, {
+						type: 'attempt',
+						url: 'mock-ingestion-url',
+						tag: 'mock-ingestion-tag',
+						ingestionType: 'bundle'
+					});
+				});
 
-			it('sets a timeout to recurse', () => {
-				assert.calledOnce(global.setTimeout);
-				assert.isFunction(global.setTimeout.firstCall.args[0]);
-				assert.strictEqual(global.setTimeout.firstCall.args[1], 100);
-				global.setTimeout.firstCall.args[0]();
-				assert.calledOnce(instance.fetchNextIngestion);
-				assert.calledWithExactly(instance.fetchNextIngestion);
+				it('logs the creation of bundles', () => {
+					assert.calledWith(instance.log, {
+						type: 'success',
+						url: 'mock-ingestion-url',
+						tag: 'mock-ingestion-tag',
+						ingestionType: 'bundle',
+						bundles: ['mock-bundle-id'],
+					});
+				});
+
+				it('destroys the successful ingestion', () => {
+					assert.calledOnce(mockIngestion.destroy);
+				});
 			});
 
 			describe('when no ingestions are in the database', () => {
@@ -199,6 +253,54 @@ describe('lib/ingestion-queue-processor', () => {
 					assert.calledOnce(global.setTimeout);
 					assert.isFunction(global.setTimeout.firstCall.args[0]);
 					assert.strictEqual(global.setTimeout.firstCall.args[1], 30000);
+					global.setTimeout.firstCall.args[0]();
+					assert.calledOnce(instance.fetchNextIngestion);
+					assert.calledWithExactly(instance.fetchNextIngestion);
+				});
+
+			});
+
+			describe('when the version creation fails', () => {
+				let creationError;
+
+				beforeEach(async () => {
+					global.setTimeout.resetHistory();
+					creationError = new Error('mock creation error');
+					instance.Version.createFromIngestion.resetHistory();
+					instance.Version.createFromIngestion.rejects(creationError);
+					instance.fetchNextIngestion.resetHistory();
+					mockIngestion.get.withArgs('ingestion_attempts').returns(1);
+					await fetchNextIngestion();
+				});
+
+				it('logs the failure', () => {
+					assert.calledWith(instance.log, {
+						type: 'error',
+						message: 'mock creation error',
+						url: 'mock-ingestion-url',
+						tag: 'mock-ingestion-tag',
+						ingestionType: 'version',
+						recoverable: false
+					});
+				});
+
+				it('increments the ingestion attempts', () => {
+					assert.calledWithExactly(mockIngestion.set, 'ingestion_attempts', 2);
+				});
+
+				it('nullifies the ingestion start date', () => {
+					assert.calledWithExactly(mockIngestion.set, 'ingestion_started_at', null);
+				});
+
+				it('saves the ingestion', () => {
+					assert.calledOnce(mockIngestion.save);
+					assert.calledWithExactly(mockIngestion.save);
+				});
+
+				it('sets a timeout to recurse', () => {
+					assert.calledOnce(global.setTimeout);
+					assert.isFunction(global.setTimeout.firstCall.args[0]);
+					assert.strictEqual(global.setTimeout.firstCall.args[1], 100);
 					global.setTimeout.firstCall.args[0]();
 					assert.calledOnce(instance.fetchNextIngestion);
 					assert.calledWithExactly(instance.fetchNextIngestion);
@@ -286,6 +388,60 @@ describe('lib/ingestion-queue-processor', () => {
 					creationError.isRecoverable = false;
 					instance.Version.createFromIngestion.resetHistory();
 					instance.Version.createFromIngestion.rejects(creationError);
+					mockIngestion.set.resetHistory();
+					mockIngestion.destroy.resetHistory();
+					await fetchNextIngestion();
+				});
+
+				it('does not increment the ingestion attempts', () => {
+					assert.neverCalledWith(mockIngestion.set, 'ingestion_attempts', 2);
+				});
+
+				it('does not nullify the ingestion start date', () => {
+					assert.neverCalledWith(mockIngestion.set, 'ingestion_started_at', null);
+				});
+
+				it('destroys the ingestion', () => {
+					assert.calledOnce(mockIngestion.destroy);
+					assert.calledWithExactly(mockIngestion.destroy);
+				});
+
+			});
+
+			describe('when the bundle creation fails but is recoverable', () => {
+				let creationError;
+
+				beforeEach(async () => {
+					mockIngestion.get.withArgs('type').returns('bundle');
+					creationError = new Error('mock creation error');
+					creationError.isRecoverable = true;
+					instance.Bundle.updateBundlesForVersion.resetHistory();
+					instance.Bundle.updateBundlesForVersion.rejects(creationError);
+					await fetchNextIngestion();
+				});
+
+				it('logs the failure', () => {
+					assert.calledWith(instance.log, {
+						type: 'error',
+						message: 'mock creation error',
+						url: 'mock-ingestion-url',
+						tag: 'mock-ingestion-tag',
+						ingestionType: 'bundle',
+						recoverable: true
+					});
+				});
+
+			});
+
+			describe('when the bundle creation fails and it is explicitly not recoverable', () => {
+				let creationError;
+
+				beforeEach(async () => {
+					mockIngestion.get.withArgs('type').returns('bundle');
+					creationError = new Error('mock creation error');
+					creationError.isRecoverable = false;
+					instance.Bundle.updateBundlesForVersion.resetHistory();
+					instance.Bundle.updateBundlesForVersion.rejects(creationError);
 					mockIngestion.set.resetHistory();
 					mockIngestion.destroy.resetHistory();
 					await fetchNextIngestion();
