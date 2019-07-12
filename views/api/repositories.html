@@ -211,6 +211,40 @@
 	"isOptional": false
 }</code></pre>
 
+<h3 id="entity-bundle">Bundle Entity</h3>
+
+<p>
+	Bundle entities represent CSS and JS bundles of a <a href="#entity-version">Version</a>.
+	As JSON they look like this:
+</p>
+
+<pre><code class="o-syntax-highlight--json">{
+	// The unique id of this bundle
+	"id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+
+	// The version id this bundle belongs to
+	"versionId": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+
+	// The brand this bundle is for
+	// The brand may be `null`
+	"brand": "master",
+
+	// The Origami Build Service url for this bundle.
+	"url": "https://www.ft.com/__origami/service/build/v2/bundles/css?modules=x-xxx",
+
+	// The size of this bundle in bytes; wth no compression "raw", and "gzip" compression
+	"sizes": {
+		"raw": 18000,
+		"gzip": 1500,
+	},
+
+	// When this bundle was updated
+	"updated": "2017-11-06T09:56:45.991Z",
+
+	// When this bundle was created
+	"created": "2017-11-06T09:56:45.991Z",
+}</code></pre>
+
 
 <h2 id="get-v1-repos">Get all repositories</h2>
 
@@ -969,13 +1003,13 @@ repository is an image set. This endpoint responds with an array of
 	https://origami-repo-data.ft.com/v1/repos/XXXXXX/versions/XXXXXX/images?sourceParam=curl</code></pre>
 
 
-			<h2 id="get-v1-repos-(id)-versions-(id)-dependencies">Get dependencies for a version</h2>
+<h2 id="get-v1-repos-(id)-versions-(id)-dependencies">Get dependencies for a version</h2>
 
-			<p>
-				Get a list of all dependencies for an Origami repository and version. This endpoint
-				responds with an array of <a href="#entity-dependency">Dependency entities</a>. This
-				endpoint requires the <code>READ</code> permission.
-			</p>
+<p>
+	Get a list of all dependencies for an Origami repository and version. This endpoint
+	responds with an array of <a href="#entity-dependency">Dependency entities</a>. This
+	endpoint requires the <code>READ</code> permission.
+</p>
 
 <h3>Request</h3>
 
@@ -1041,6 +1075,108 @@ repository is an image set. This endpoint responds with an array of
 		<th scope="row">Body</th>
 		<td>
 			Array of <a href="#entity-dependency">Dependency entities</a>
+		</td>
+	</tr>
+</table>
+
+<h3>Example <code>curl</code> command:</h3>
+
+<pre><code class="o-syntax-highlight--bash">curl \
+	-H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
+	https://origami-repo-data.ft.com/v1/repos/XXXXXX/versions/XXXXXX/dependencies</code></pre>
+
+<h2 id="get-v1-repos-(id)-versions-(id)-bundles-(language)">Get bundles for a version</h2>
+
+<p>
+	Get a list of bundles by language, for an Origami repository and version.
+	This endpoint responds with an array of <a href="#entity-bundle">Bundle
+	entities</a>. This endpoint requires the <code>READ</code> permission.
+</p>
+
+<h3>Request</h3>
+
+
+<table class="o-table o-table--row-headings o-layout__main__single-span" data-o-component="o-table">
+	<tr>
+		<th scope="row">Method</th>
+		<td>
+			<code>GET</code>
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">
+			Path
+		</th>
+		<td>
+			<code>/v1/repos/<var>:repo-id</var>/versions/<var>:version-id</var>/bundles/<var>:language</var></code><br/>
+			(where <var>:repo-id</var> is the unique identifier for a
+			<a href="#entity-repo">Repository</a>, <var>:version-id</var> is the
+			unique identifier for a <a href="#entity-version">Version</a> of it, and
+			<var>:language</var> is one of "css" or "js".
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Headers</th>
+		<td>
+			<dl>
+				<dt>X-Api-Key</dt>
+				<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+				<dt>X-Api-Secret</dt>
+				<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
+			</dl>
+		</td>
+	</tr>
+</table>
+
+<h3>Response</h3>
+
+
+<table class="o-table o-table--row-headings o-layout__main__single-span" data-o-component="o-table">
+	<tr>
+		<th scope="row">Status</th>
+		<td>
+			<code>200</code> on success<br/>
+			<code>400</code> if the <var>:language</var> or <var>:brand</var> is
+			invalid<br/>
+			<code>401</code> if authentication failed<br/>
+			<code>403</code> if authorization failed<br/>
+			<code>404</code> if the <var>:repo-id</var> and
+			<var>:version-id</var> were not found
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Querystring</th>
+		<td>
+			<dl>
+				<dt>brand</dt>
+				<dd>
+					Specify a brand (or a comma-delimited list of brands) to filter bundles by.
+					E.g: <code>master</code>, <code>internal</code>, <code>whitelabel</code>.
+					Any bundle which <em>isn't</em> for this brand will not be output.
+					If this parameter is set to <code>all</code> then all bundles which are for a brand will
+					be output.
+					If this parameter is set to <code>none</code>, <code>null</code>,
+					or <code>undefined</code> then only bundles for non-branded versions will be output.
+				</dd>
+			</dl>
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Headers</th>
+		<td>
+			<dl>
+				<dt>Content-Type</dt>
+				<dd>
+					<code>application/json</code> on success<br/>
+					<code>text/html</code> on error
+				</dd>
+			</dl>
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Body</th>
+		<td>
+			Array of <a href="#entity-bundle">Bundle entities</a>
 		</td>
 	</tr>
 </table>
