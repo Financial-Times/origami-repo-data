@@ -175,7 +175,7 @@ describe('lib/ingestion-queue-processor', () => {
 					assert.calledOnce(mockIngestion.destroy);
 				});
 
-				it('creates a bundle ingestion for the new the version', () => {
+				it('creates a bundle ingestion for the new version', () => {
 					assert.calledWithExactly(
 						app.model.Ingestion.create,
 						'mock-ingestion-url',
