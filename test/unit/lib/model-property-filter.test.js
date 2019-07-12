@@ -4,7 +4,7 @@ const assert = require('proclaim');
 const sinon = require('sinon');
 const propertyFilter = require('../../../lib/model-property-filter');
 
-describe.only('lib/model-property-filter', () => {
+describe('lib/model-property-filter', () => {
 
     const item1 = {name: 'item1', get: sinon.stub()};
     item1.get.withArgs('a').returns(['1', '2', '3']);
