@@ -25,8 +25,8 @@ exports.seed = async database => {
 		// Regular bundle ingestion
 		{
 			id: '6a070eb9-42f8-4512-8080-c4842d642ec5',
-			created_at: new Date('2017-01-02T00:00:00Z'),
-			updated_at: new Date('2017-01-02T00:00:00Z'),
+			created_at: new Date('2017-01-03T00:00:00Z'),
+			updated_at: new Date('2017-01-03T00:00:00Z'),
 			url: 'https://github.com/Financial-Times/o-mock-component',
 			tag: 'v1.0.0',
 			type: 'bundle'
