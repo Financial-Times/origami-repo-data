@@ -4,29 +4,42 @@
 exports.seed = async database => {
 	await database('ingestion_queue').insert([
 
-		// Regular ingestions
+		// Regular version ingestions
 		{
 			id: '5a070ea9-44f8-4312-8080-c4882d642ec4',
 			created_at: new Date('2017-01-02T00:00:00Z'),
 			updated_at: new Date('2017-01-02T00:00:00Z'),
 			url: 'https://github.com/Financial-Times/o-mock-component',
-			tag: 'v2.1.0'
+			tag: 'v2.1.0',
+			type: 'version'
 		},
 		{
 			id: '988451cb-6d71-4a68-b435-3d5cf30b9614',
 			created_at: new Date('2017-01-02T01:00:00Z'),
 			updated_at: new Date('2017-01-02T01:00:00Z'),
 			url: 'https://github.com/Financial-Times/mock-service',
-			tag: 'v3.0.0'
+			tag: 'v3.0.0',
+			type: 'version'
 		},
 
-		// Ingestions with lots of attempts
+		// Regular bundle ingestion
+		{
+			id: '6a070eb9-42f8-4512-8080-c4842d642ec5',
+			created_at: new Date('2017-01-02T00:00:00Z'),
+			updated_at: new Date('2017-01-02T00:00:00Z'),
+			url: 'https://github.com/Financial-Times/o-mock-component',
+			tag: 'v1.0.0',
+			type: 'bundle'
+		},
+
+		// Version ingestions with lots of attempts
 		{
 			id: '49460ab4-11a0-4bb1-be4e-be85f4217b8d',
 			created_at: new Date('2017-01-02T02:00:00Z'),
 			updated_at: new Date('2017-01-02T02:00:00Z'),
 			url: 'https://github.com/Financial-Times/mock-multiple-attempts',
 			tag: 'v1.0.0',
+			type: 'version',
 			ingestion_attempts: 5
 		},
 		{
@@ -35,16 +48,18 @@ exports.seed = async database => {
 			updated_at: new Date('2017-01-02T02:00:00Z'),
 			url: 'https://github.com/Financial-Times/mock-multiple-attempts',
 			tag: 'v1.1.0',
+			type: 'version',
 			ingestion_attempts: 10
 		},
 
-		// Ingestions with long run times
+		// Version ingestions with long run times
 		{
 			id: '506427b7-9dfa-4424-ba3a-bb325f5b7d7c',
 			created_at: new Date('2017-01-02T02:00:00Z'),
 			updated_at: new Date('2017-01-02T02:00:00Z'),
 			url: 'https://github.com/Financial-Times/mock-long-time',
 			tag: 'v1.0.0',
+			type: 'version',
 			ingestion_started_at: new Date('2017-01-02T02:00:00Z')
 		}
 	]);

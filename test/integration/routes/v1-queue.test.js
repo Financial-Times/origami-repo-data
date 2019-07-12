@@ -32,7 +32,7 @@ describe('GET /v1/queue', () => {
 
 		it('is an array of each ingestion in the database', () => {
 			assert.isArray(response);
-			assert.lengthEquals(response, 5);
+			assert.lengthEquals(response, 6);
 
 			const ingestion1 = response[0];
 			assert.isObject(ingestion1);
@@ -133,7 +133,7 @@ describe('POST /v1/queue', () => {
 			});
 	});
 
-	it('creates a new ingestion in the database, saving only safe properties', async () => {
+	it('creates a new version ingestion in the database, saving only safe properties', async () => {
 		await request.then();
 		const ingestions = await app.database.knex.select('*').from('ingestion_queue').where({
 			tag: 'v5.6.7'
@@ -143,6 +143,7 @@ describe('POST /v1/queue', () => {
 		assert.notStrictEqual(ingestions[0].id, 'extra-property-id');
 		assert.strictEqual(ingestions[0].url, 'https://github.com/Financial-Times/o-mock-component');
 		assert.strictEqual(ingestions[0].tag, 'v5.6.7');
+		assert.strictEqual(ingestions[0].type, 'version');
 		assert.strictEqual(ingestions[0].ingestion_attempts, 0);
 		assert.isNull(ingestions[0].ingestion_started_at);
 	});
@@ -369,6 +370,100 @@ describe('POST /v1/queue', () => {
 
 	});
 
+	describe('when the ingestion type "bundle" is given', () => {
+		beforeEach(async () => {
+			await database.seed(app, 'basic');
+			request = agent
+				.post('/v1/queue')
+				.set('X-Api-Key', 'mock-write-key')
+				.set('X-Api-Secret', 'mock-write-secret')
+				.send({
+					url: 'https://github.com/Financial-Times/o-mock-component',
+					tag: 'v5.6.7',
+					type: 'bundle',
+					id: 'extra-property-id'
+				});
+		});
+
+		it('creates a new bundle ingestion in the database, saving only safe properties', async () => {
+			await request.then();
+			const ingestions = await app.database.knex.select('*').from('ingestion_queue').where({
+				tag: 'v5.6.7'
+			});
+			assert.lengthEquals(ingestions, 1);
+			assert.isString(ingestions[0].id);
+			assert.notStrictEqual(ingestions[0].id, 'extra-property-id');
+			assert.strictEqual(ingestions[0].url, 'https://github.com/Financial-Times/o-mock-component');
+			assert.strictEqual(ingestions[0].tag, 'v5.6.7');
+			assert.strictEqual(ingestions[0].type, 'bundle');
+			assert.strictEqual(ingestions[0].ingestion_attempts, 0);
+			assert.isNull(ingestions[0].ingestion_started_at);
+		});
+
+		describe('when an ingestion with the given url and tag already exists', () => {
+			let request;
+
+			beforeEach(async () => {
+				await database.seed(app, 'basic');
+				request = agent
+					.post('/v1/queue')
+					.set('X-Api-Key', 'mock-write-key')
+					.set('X-Api-Secret', 'mock-write-secret')
+					.send({
+						url: 'https://github.com/Financial-Times/o-mock-component',
+						tag: 'v1.0.0',
+						type: 'bundle'
+					});
+			});
+
+			it('responds with a 409 status', () => {
+				return request.expect(409);
+			});
+
+			it('responds with JSON', () => {
+				return request.expect('Content-Type', /application\/json/);
+			});
+
+			describe('JSON response', () => {
+				let response;
+
+				beforeEach(async () => {
+					response = (await request.then()).body;
+				});
+
+				it('contains the error details', () => {
+					assert.isObject(response);
+					assert.strictEqual(response.message, 'Validation failed');
+					assert.deepEqual(response.validation, [
+						'An ingestion or version with the given URL and tag already exists'
+					]);
+					assert.strictEqual(response.status, 409);
+				});
+
+			});
+
+		});
+	});
+
+	describe('when an invalid ingestion type "nonsense" is given', () => {
+		beforeEach(async () => {
+			await database.seed(app, 'basic');
+			request = agent
+				.post('/v1/queue')
+				.set('X-Api-Key', 'mock-write-key')
+				.set('X-Api-Secret', 'mock-write-secret')
+				.send({
+					url: 'https://github.com/Financial-Times/o-mock-component',
+					tag: 'v5.6.7',
+					type: 'nonsense',
+					id: 'extra-property-id'
+				});
+		});
+
+		it('responds with a 400 status', () => {
+			return request.expect(400);
+		});
+	});
 });
 
 describe('POST /v1/queue (accepting a GitHub webhook)', () => {
@@ -397,6 +492,7 @@ describe('POST /v1/queue (accepting a GitHub webhook)', () => {
 		assert.isString(ingestions[0].id);
 		assert.strictEqual(ingestions[0].url, 'https://github.com/Financial-Times/o-mock-component');
 		assert.strictEqual(ingestions[0].tag, 'v5.6.7');
+		assert.strictEqual(ingestions[0].type, 'version');
 		assert.strictEqual(ingestions[0].ingestion_attempts, 0);
 		assert.isNull(ingestions[0].ingestion_started_at);
 	});
