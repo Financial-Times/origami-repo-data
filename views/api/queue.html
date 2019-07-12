@@ -10,8 +10,9 @@
 <h3 id="entity-ingestion">Ingestion Entity</h3>
 
 <p>
-	Ingestion entities represent individual repositories in the queue, which are waiting
-	to be ingested or are currently being ingested. As JSON they look like this:
+	Ingestion entities represent individual repositories or repository bundles
+	in the queue, which are waiting to be ingested or are currently being
+	ingested. As JSON they look like this:
 </p>
 
 <pre><code class="o-syntax-highlight--json">{
@@ -24,6 +25,10 @@
 		"url": "https://github.com/Financial-Times/example",
 		"tag": "v1.0.0"
 	},
+
+	// The type of ingestion.
+	// "version" or "bundle".
+	"type": "version"
 
 	// The progress that has been made so far in ingesting this
 	// repository and tag
@@ -253,6 +258,10 @@ There's a section on this <a href="#post-v1-queue-github-webhook">below the stan
 
 	// The GitHub repository tag to ingest (required)
 	"tag": "v1.0.0"
+
+	// The type of ingestion (optional)
+	// "version" (default) or "bundle"
+	"type": "version"
 }</code></pre>
 		</td>
 	</tr>
@@ -269,6 +278,7 @@ There's a section on this <a href="#post-v1-queue-github-webhook">below the stan
 			<code>400</code> if the request data is invalid or malformed<br/>
 			<code>401</code> if authentication failed<br/>
 			<code>403</code> if authorization failed
+			<code>409</code> if the ingestion aready exists
 		</td>
 	</tr>
 	<tr>
