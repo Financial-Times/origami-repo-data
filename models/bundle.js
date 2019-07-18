@@ -34,7 +34,7 @@ function initModel(app) {
                 const response = await fetch(buildServiceUrl.toString(), {
                     method: 'HEAD',
                     headers: {
-                        'Accept-Encoding': enconding
+                        'Accept-Encoding': encoding
                     },
                     timeout
                 });
