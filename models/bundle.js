@@ -43,7 +43,7 @@ function initModel(app) {
                     responseError.status = response.status;
                     throw responseError;
                 }
-                sizes[enconding || 'raw'] = response.headers.get('content-length');
+                sizes[encoding || 'raw'] = response.headers.get('content-length');
             } catch (error) {
                 // Recoverable outside of:
                 // - Compilation Error (560)
