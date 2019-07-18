@@ -29,7 +29,7 @@ function initModel(app) {
         // Find bundle sizes for differing "Accept-Encoding" values.
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Encoding
         const sizes = {};
-        for (const enconding of ['', 'gzip']) {
+        for (const encoding of ['', 'gzip']) {
             try {
                 const response = await fetch(buildServiceUrl.toString(), {
                     method: 'HEAD',
