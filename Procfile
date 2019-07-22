@@ -1,2 +1,2 @@
 web: make run
-release: make release release-db
+release: ./change-log && make release-db
