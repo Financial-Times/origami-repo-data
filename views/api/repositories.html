@@ -1116,6 +1116,23 @@ repository is an image set. This endpoint responds with an array of
 		</td>
 	</tr>
 	<tr>
+		<th scope="row">Querystring</th>
+		<td>
+			<dl>
+				<dt>brand</dt>
+				<dd>
+					Specify a brand (or a comma-delimited list of brands) to filter bundles by.
+					E.g: <code>master</code>, <code>internal</code>, <code>whitelabel</code>.
+					Any bundle which <em>isn't</em> for this brand will not be output.
+					If this parameter is set to <code>all</code> then all bundles which are for a brand will
+					be output.
+					If this parameter is set to <code>none</code>, <code>null</code>,
+					or <code>undefined</code> then only bundles for non-branded versions will be output.
+				</dd>
+			</dl>
+		</td>
+	</tr>
+	<tr>
 		<th scope="row">Headers</th>
 		<td>
 			<dl>
@@ -1142,23 +1159,6 @@ repository is an image set. This endpoint responds with an array of
 			<code>403</code> if authorization failed<br/>
 			<code>404</code> if the <var>:repo-id</var> and
 			<var>:version-id</var> were not found
-		</td>
-	</tr>
-	<tr>
-		<th scope="row">Querystring</th>
-		<td>
-			<dl>
-				<dt>brand</dt>
-				<dd>
-					Specify a brand (or a comma-delimited list of brands) to filter bundles by.
-					E.g: <code>master</code>, <code>internal</code>, <code>whitelabel</code>.
-					Any bundle which <em>isn't</em> for this brand will not be output.
-					If this parameter is set to <code>all</code> then all bundles which are for a brand will
-					be output.
-					If this parameter is set to <code>none</code>, <code>null</code>,
-					or <code>undefined</code> then only bundles for non-branded versions will be output.
-				</dd>
-			</dl>
 		</td>
 	</tr>
 	<tr>
