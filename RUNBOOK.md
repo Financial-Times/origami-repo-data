@@ -2,10 +2,6 @@
 
 Origami Repo Data is an API which can be used to get information about repositories which contain an origami.json file. These could be components, services, image sets, and Node.js modules.
 
-## Code
-
-origami-repo-data
-
 ## Service Tier
 
 Silver
@@ -51,6 +47,8 @@ origami-team
 ## Dependencies
 
 * github
+* heroku
+* slack-financialtimes
 
 ## Healthchecks
 
@@ -154,4 +152,3 @@ The application is deployed to QA whenever a new commit is pushed to the `master
 ## Key Management Details
 
 The keys are managed [via the API here](https://origami-repo-data.ft.com/v1/docs/api/keys). As the system doesn't deal with any sensitive data, keys are only really used by us to track usage of the system by other systems.
-
