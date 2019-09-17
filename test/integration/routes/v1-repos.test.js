@@ -164,7 +164,7 @@ describe('GET /v1/repos with query:', () => {
 
 			it('contains only actively supported repos', () => {
 				assert.isArray(response);
-				assert.lengthEquals(response, 4);
+				assert.lengthEquals(response, 5);
 				for (const repo of response) {
 					assert.strictEqual(repo.support.status, 'active');
 				}
@@ -272,9 +272,117 @@ describe('GET /v1/repos with query:', () => {
 
 			it('contains only module components', () => {
 				assert.isArray(response);
-				assert.lengthEquals(response, 6);
+				assert.lengthEquals(response, 7);
 				for (const repo of response) {
 					assert.strictEqual(repo.type, 'module');
+				}
+			});
+
+		});
+
+	});
+
+	describe('supportEmail=origami.support@ft.com', () => {
+
+		beforeEach(async () => {
+			request = agent
+				.get('/v1/repos?supportEmail=origami.support@ft.com')
+				.set('X-Api-Key', 'mock-read-key')
+				.set('X-Api-Secret', 'mock-read-secret');
+		});
+
+		it('responds with a 200 status', () => {
+			return request.expect(200);
+		});
+
+		it('responds with JSON', () => {
+			return request.expect('Content-Type', /application\/json/);
+		});
+
+		describe('JSON response', () => {
+			let response;
+
+			beforeEach(async () => {
+				response = (await request.then()).body;
+			});
+
+			it('contains only components with the expected support email', () => {
+				assert.isArray(response);
+				assert.lengthEquals(response, 9);
+				for (const repo of response) {
+					assert.strictEqual(repo.support.email, 'origami.support@ft.com');
+				}
+			});
+
+		});
+
+	});
+
+	describe('supportEmail=next.developers@ft.com', () => {
+
+		beforeEach(async () => {
+			request = agent
+				.get('/v1/repos?supportEmail=next.developers@ft.com')
+				.set('X-Api-Key', 'mock-read-key')
+				.set('X-Api-Secret', 'mock-read-secret');
+		});
+
+		it('responds with a 200 status', () => {
+			return request.expect(200);
+		});
+
+		it('responds with JSON', () => {
+			return request.expect('Content-Type', /application\/json/);
+		});
+
+		describe('JSON response', () => {
+			let response;
+
+			beforeEach(async () => {
+				response = (await request.then()).body;
+			});
+
+			it('contains only components with the expected support email', () => {
+				assert.isArray(response);
+				assert.lengthEquals(response, 1);
+				for (const repo of response) {
+					assert.strictEqual(repo.support.email, 'next.developers@ft.com');
+				}
+			});
+
+		});
+
+	});
+
+	describe('supportEmail=origami.support@ft.com,next.developers@ft.com', () => {
+
+		beforeEach(async () => {
+			request = agent
+				.get('/v1/repos?supportEmail=origami.support@ft.com,next.developers@ft.com')
+				.set('X-Api-Key', 'mock-read-key')
+				.set('X-Api-Secret', 'mock-read-secret');
+		});
+
+		it('responds with a 200 status', () => {
+			return request.expect(200);
+		});
+
+		it('responds with JSON', () => {
+			return request.expect('Content-Type', /application\/json/);
+		});
+
+		describe('JSON response', () => {
+			let response;
+
+			beforeEach(async () => {
+				response = (await request.then()).body;
+			});
+
+			it('contains components with either support email', () => {
+				assert.isArray(response);
+				assert.lengthEquals(response, 10);
+				for (const repo of response) {
+					assert.include(['origami.support@ft.com', 'next.developers@ft.com'], repo.support.email);
 				}
 			});
 
@@ -344,7 +452,7 @@ describe('GET /v1/repos with query:', () => {
 
 			it('contains both module and service components', () => {
 				assert.isArray(response);
-				assert.lengthEquals(response, 7);
+				assert.lengthEquals(response, 8);
 				for (const repo of response) {
 					assert.include(['module', 'service'], repo.type);
 				}
@@ -452,7 +560,7 @@ describe('GET /v1/repos with query:', () => {
 
 			it('contains only components which have not been branded', () => {
 				assert.isArray(response);
-				assert.lengthEquals(response, 5);
+				assert.lengthEquals(response, 6);
 				for (const repo of response) {
 					if (repo.type === 'module') {
 						assert.deepEqual(repo.brands, []);
