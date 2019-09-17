@@ -442,6 +442,7 @@ function initModel(app) {
 			return (await this.fetchRepos())
 				.filter(propertyFilter('brands', filters.brand))
 				.filter(propertyFilter('type', filters.type))
+				.filter(propertyFilter('support_email', filters.supportEmail))
 				.filter(propertyFilter('support_status', filters.status))
 				.filter(repo => {
 					repo.searchScore = 0;

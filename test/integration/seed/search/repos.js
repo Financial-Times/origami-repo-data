@@ -13,8 +13,8 @@ exports.seed = async database => {
 			created_at: new Date('2018-01-01T00:00:00Z'),
 			updated_at: new Date('2018-01-01T00:00:00Z'),
 			url: `https://github.com/Financial-Times/${data.name}`,
-			support_email: 'origami.support@ft.com',
-			support_channel: '#ft-origami',
+			support_email: data.support_email || 'origami.support@ft.com',
+			support_channel: data.support_channel || '#ft-origami',
 			tag: 'v1.0.0',
 			version: '1.0.0',
 			version_major: 1,
@@ -139,6 +139,14 @@ exports.seed = async database => {
 			name: 'kumquat',
 			type: 'imageset',
 			support_status: 'maintained'
+		}),
+
+		version({
+			name: 'next-module',
+			type: 'module',
+			support_status: 'active',
+			support_email: 'next.developers@ft.com',
+			support_channel: '#ft-next-dev'
 		}),
 
 	]);
