@@ -8,10 +8,7 @@ describe('GET /v1/repos/:repoName', () => {
 
 	beforeEach(async () => {
 		await database.seed(app, 'basic');
-		request = agent
-			.get('/v1/repos/o-mock-component/versions')
-			.set('X-Api-Key', 'mock-read-key')
-			.set('X-Api-Secret', 'mock-read-secret');
+		request = agent.get('/v1/repos/o-mock-component/versions');
 	});
 
 	it('responds with a 307 status', () => {

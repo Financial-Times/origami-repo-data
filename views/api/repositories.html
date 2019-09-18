@@ -251,7 +251,6 @@
 <p>
 	Get a list of all available Origami repositories as an array, with optional filtering.
 	This endpoint responds with an array of <a href="#entity-repo">Repository entities</a>.
-	This endpoint requires the <code>READ</code> permission.
 </p>
 
 <h3>Request</h3>
@@ -314,17 +313,6 @@
 			</dl>
 		</td>
 	</tr>
-	<tr>
-		<th scope="row">Headers</th>
-		<td>
-			<dl>
-				<dt>X-Api-Key</dt>
-				<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-				<dt>X-Api-Secret</dt>
-				<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-			</dl>
-		</td>
-	</tr>
 </table>
 
 <h3>Response</h3>
@@ -334,9 +322,7 @@
 	<tr>
 		<th scope="row">Status</th>
 		<td>
-			<code>200</code> on success<br/>
-			<code>401</code> if authentication failed<br/>
-			<code>403</code> if authorization failed
+			<code>200</code> on success
 		</td>
 	</tr>
 	<tr>
@@ -370,8 +356,7 @@
 
 <p>
 	Get a single Origami repository by ID. This endpoint responds with a
-	<a href="#entity-repo">Repository entity</a>. This endpoint requires the
-	<code>READ</code> permission.
+	<a href="#entity-repo">Repository entity</a>.
 </p>
 
 <h3>Request</h3>
@@ -394,17 +379,6 @@
 			(where <var>:repo-id</var> is the unique identifier for a <a href="#entity-repo">Repository</a>)
 		</td>
 	</tr>
-	<tr>
-		<th scope="row">Headers</th>
-		<td>
-			<dl>
-				<dt>X-Api-Key</dt>
-				<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-				<dt>X-Api-Secret</dt>
-				<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-			</dl>
-		</td>
-	</tr>
 </table>
 
 <h3>Response</h3>
@@ -415,8 +389,6 @@
 		<th scope="row">Status</th>
 		<td>
 			<code>200</code> on success<br/>
-			<code>401</code> if authentication failed<br/>
-			<code>403</code> if authorization failed<br/>
 			<code>404</code> if a repo matching <var>:repo-id</var> does not exist
 		</td>
 	</tr>
@@ -470,8 +442,7 @@
 
 <p>
 	Get a list of all versions for an Origami repository as an array. This endpoint responds
-	with an array of <a href="#entity-version">Version entities</a>. This
-	endpoint requires the <code>READ</code> permission.
+	with an array of <a href="#entity-version">Version entities</a>.
 </p>
 
 <h3>Request</h3>
@@ -491,17 +462,6 @@
 			(where <var>:repo-id</var> is the unique identifier for a <a href="#entity-repo">Repository</a>)
 		</td>
 	</tr>
-	<tr>
-		<th scope="row">Headers</th>
-		<td>
-			<dl>
-				<dt>X-Api-Key</dt>
-				<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-				<dt>X-Api-Secret</dt>
-				<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-			</dl>
-		</td>
-	</tr>
 </table>
 
 <h3>Response</h3>
@@ -512,8 +472,6 @@
 		<th scope="row">Status</th>
 		<td>
 			<code>200</code> on success<br/>
-			<code>401</code> if authentication failed<br/>
-			<code>403</code> if authorization failed<br/>
 			<code>404</code> if a repo matching <var>:repo-id</var> does not exist
 		</td>
 	</tr>
@@ -548,8 +506,7 @@
 
 <p>
 Get a single version for an Origami repository by ID. This endpoint responds with a
-<a href="#entity-version">Version entity</a>. This endpoint requires the
-<code>READ</code> permission.
+<a href="#entity-version">Version entity</a>.
 </p>
 
 <h3>Request</h3>
@@ -574,17 +531,6 @@ Get a single version for an Origami repository by ID. This endpoint responds wit
 			unique identifier for a <a href="#entity-version">Version</a> of it)
 		</td>
 	</tr>
-	<tr>
-		<th scope="row">Headers</th>
-		<td>
-			<dl>
-				<dt>X-Api-Key</dt>
-				<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-				<dt>X-Api-Secret</dt>
-				<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-			</dl>
-		</td>
-	</tr>
 </table>
 
 <h3>Response</h3>
@@ -595,8 +541,6 @@ Get a single version for an Origami repository by ID. This endpoint responds wit
 		<th scope="row">Status</th>
 		<td>
 			<code>200</code> on success<br/>
-			<code>401</code> if authentication failed<br/>
-			<code>403</code> if authorization failed<br/>
 			<code>404</code> if a repo and version matching <var>:repo-id</var> and <var>:version-id</var> does not exist
 		</td>
 	</tr>
@@ -824,8 +768,7 @@ the <code>READ</code> permission.
 
 <p>
 Get a list of all demos for an Origami repository and version. This endpoint responds
-with an array of <a href="#entity-demo">Demo entities</a>. This endpoint requires the
-<code>READ</code> permission.
+with an array of <a href="#entity-demo">Demo entities</a>.
 </p>
 
 <h3>Request</h3>
@@ -862,17 +805,6 @@ with an array of <a href="#entity-demo">Demo entities</a>. This endpoint require
 			</dl>
 		</td>
 	</tr>
-	<tr>
-		<th scope="row">Headers</th>
-		<td>
-			<dl>
-				<dt>X-Api-Key</dt>
-				<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-				<dt>X-Api-Secret</dt>
-				<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-			</dl>
-		</td>
-	</tr>
 </table>
 
 <h3>Response</h3>
@@ -883,8 +815,6 @@ with an array of <a href="#entity-demo">Demo entities</a>. This endpoint require
 		<th scope="row">Status</th>
 		<td>
 			<code>200</code> on success<br/>
-			<code>401</code> if authentication failed<br/>
-			<code>403</code> if authorization failed<br/>
 			<code>404</code> if there are no non-hidden demos for the
 			<var>:repo-id</var> and <var>:version-id</var>
 		</td>
@@ -921,8 +851,7 @@ with an array of <a href="#entity-demo">Demo entities</a>. This endpoint require
 <p>
 Get a list of all images for an Origami repository and version, assuming that the
 repository is an image set. This endpoint responds with an array of
-<a href="#entity-image">Image entities</a>. This endpoint requires the
-<code>READ</code> permission.
+<a href="#entity-image">Image entities</a>.
 </p>
 
 <h3>Request</h3>
@@ -955,17 +884,6 @@ repository is an image set. This endpoint responds with an array of
 			</dl>
 		</td>
 	</tr>
-	<tr>
-		<th scope="row">Headers</th>
-		<td>
-			<dl>
-				<dt>X-Api-Key</dt>
-				<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-				<dt>X-Api-Secret</dt>
-				<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-			</dl>
-		</td>
-	</tr>
 </table>
 
 <h3>Response</h3>
@@ -976,8 +894,6 @@ repository is an image set. This endpoint responds with an array of
 		<th scope="row">Status</th>
 		<td>
 			<code>200</code> on success<br/>
-			<code>401</code> if authentication failed<br/>
-			<code>403</code> if authorization failed<br/>
 			<code>404</code> if there are no images for the
 			<var>:repo-id</var> and <var>:version-id</var>, or the repository
 			is not an image set
@@ -1097,7 +1013,7 @@ repository is an image set. This endpoint responds with an array of
 <p>
 	Get a list of bundles by language, for an Origami repository and version.
 	This endpoint responds with an array of <a href="#entity-bundle">Bundle
-	entities</a>. This endpoint requires the <code>READ</code> permission.
+	entities</a>.
 </p>
 
 <h3>Request</h3>
@@ -1139,17 +1055,6 @@ repository is an image set. This endpoint responds with an array of
 			</dl>
 		</td>
 	</tr>
-	<tr>
-		<th scope="row">Headers</th>
-		<td>
-			<dl>
-				<dt>X-Api-Key</dt>
-				<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-				<dt>X-Api-Secret</dt>
-				<dd>See <a href="{{basePath}}v1/docs/api/authentication">authentication docs</a></dd>
-			</dl>
-		</td>
-	</tr>
 </table>
 
 <h3>Response</h3>
@@ -1162,8 +1067,6 @@ repository is an image set. This endpoint responds with an array of
 			<code>200</code> on success<br/>
 			<code>400</code> if the <var>:language</var> or <var>:brand</var> is
 			invalid<br/>
-			<code>401</code> if authentication failed<br/>
-			<code>403</code> if authorization failed<br/>
 			<code>404</code> if the <var>:repo-id</var> and
 			<var>:version-id</var> were not found
 		</td>

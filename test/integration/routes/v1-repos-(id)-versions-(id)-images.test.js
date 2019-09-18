@@ -9,10 +9,7 @@ describe('GET /v1/repos/:repoId/versions/:versionId/images', () => {
 
 	beforeEach(async () => {
 		await database.seed(app, 'basic');
-		request = agent
-			.get('/v1/repos/833bf423-4952-53e7-8fc0-e9e8554caf77/versions/ecd0f3c7-dac8-4354-95e0-cb9c0cd686ea/images')
-			.set('X-Api-Key', 'mock-read-key')
-			.set('X-Api-Secret', 'mock-read-secret');
+		request = agent.get('/v1/repos/833bf423-4952-53e7-8fc0-e9e8554caf77/versions/ecd0f3c7-dac8-4354-95e0-cb9c0cd686ea/images');
 	});
 
 	it('responds with a 200 status', () => {
@@ -234,75 +231,6 @@ describe('GET /v1/repos/:repoId/versions/:versionId/images', () => {
 				assert.isObject(response);
 				assert.strictEqual(response.message, 'Not Found');
 				assert.strictEqual(response.status, 404);
-			});
-
-		});
-
-	});
-
-	describe('when no API credentials are provided', () => {
-		let request;
-
-		beforeEach(async () => {
-			await database.seed(app, 'basic');
-			request = agent.get('/v1/repos/833bf423-4952-53e7-8fc0-e9e8554caf77/versions/ecd0f3c7-dac8-4354-95e0-cb9c0cd686ea/images');
-		});
-
-		it('responds with a 401 status', () => {
-			return request.expect(401);
-		});
-
-		it('responds with JSON', () => {
-			return request.expect('Content-Type', /application\/json/);
-		});
-
-		describe('JSON response', () => {
-			let response;
-
-			beforeEach(async () => {
-				response = (await request.then()).body;
-			});
-
-			it('contains the error details', () => {
-				assert.isObject(response);
-				assert.match(response.message, /api key\/secret .* required/i);
-				assert.strictEqual(response.status, 401);
-			});
-
-		});
-
-	});
-
-	describe('when the provided API key does not have the required permissions', () => {
-		let request;
-
-		beforeEach(async () => {
-			await database.seed(app, 'basic');
-			request = agent
-				.get('/v1/repos/833bf423-4952-53e7-8fc0-e9e8554caf77/versions/ecd0f3c7-dac8-4354-95e0-cb9c0cd686ea/images')
-				.set('X-Api-Key', 'mock-no-key')
-				.set('X-Api-Secret', 'mock-no-secret');
-		});
-
-		it('responds with a 403 status', () => {
-			return request.expect(403);
-		});
-
-		it('responds with JSON', () => {
-			return request.expect('Content-Type', /application\/json/);
-		});
-
-		describe('JSON response', () => {
-			let response;
-
-			beforeEach(async () => {
-				response = (await request.then()).body;
-			});
-
-			it('contains the error details', () => {
-				assert.isObject(response);
-				assert.match(response.message, /not authorized/i);
-				assert.strictEqual(response.status, 403);
 			});
 
 		});

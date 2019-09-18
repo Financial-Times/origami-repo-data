@@ -9,10 +9,7 @@ describe('GET /v1/repos', () => {
 
 	beforeEach(async () => {
 		await database.seed(app, 'basic');
-		request = agent
-			.get('/v1/repos')
-			.set('X-Api-Key', 'mock-read-key')
-			.set('X-Api-Secret', 'mock-read-secret');
+		request = agent.get('/v1/repos');
 	});
 
 	it('responds with a 200 status', () => {
@@ -55,75 +52,6 @@ describe('GET /v1/repos', () => {
 			assert.strictEqual(repo3.name, 'mock-service');
 			assert.strictEqual(repo3.version, '2.1.0');
 			assert.strictEqual(repo3.brands, null);
-
-		});
-
-	});
-
-	describe('when no API credentials are provided', () => {
-		let request;
-
-		beforeEach(async () => {
-			await database.seed(app, 'basic');
-			request = agent.get('/v1/repos');
-		});
-
-		it('responds with a 401 status', () => {
-			return request.expect(401);
-		});
-
-		it('responds with JSON', () => {
-			return request.expect('Content-Type', /application\/json/);
-		});
-
-		describe('JSON response', () => {
-			let response;
-
-			beforeEach(async () => {
-				response = (await request.then()).body;
-			});
-
-			it('contains the error details', () => {
-				assert.isObject(response);
-				assert.match(response.message, /api key\/secret .* required/i);
-				assert.strictEqual(response.status, 401);
-			});
-
-		});
-
-	});
-
-	describe('when the provided API key does not have the required permissions', () => {
-		let request;
-
-		beforeEach(async () => {
-			await database.seed(app, 'basic');
-			request = agent
-				.get('/v1/repos')
-				.set('X-Api-Key', 'mock-no-key')
-				.set('X-Api-Secret', 'mock-no-secret');
-		});
-
-		it('responds with a 403 status', () => {
-			return request.expect(403);
-		});
-
-		it('responds with JSON', () => {
-			return request.expect('Content-Type', /application\/json/);
-		});
-
-		describe('JSON response', () => {
-			let response;
-
-			beforeEach(async () => {
-				response = (await request.then()).body;
-			});
-
-			it('contains the error details', () => {
-				assert.isObject(response);
-				assert.match(response.message, /not authorized/i);
-				assert.strictEqual(response.status, 403);
-			});
 
 		});
 

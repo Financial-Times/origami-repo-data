@@ -8,10 +8,7 @@ describe('GET /v1/repos/:repoId/versions/:versionNumber', () => {
 
 	beforeEach(async () => {
 		await database.seed(app, 'basic');
-		request = agent
-			.get('/v1/repos/c990cb4b-c82b-5071-afb0-16149debc53d/versions/v1.0.0')
-			.set('X-Api-Key', 'mock-read-key')
-			.set('X-Api-Secret', 'mock-read-secret');
+		request = agent.get('/v1/repos/c990cb4b-c82b-5071-afb0-16149debc53d/versions/v1.0.0');
 	});
 
 	it('responds with a 307 status', () => {
