@@ -231,7 +231,7 @@ The Financial Times has published this software under the [MIT license][license]
 [pingdom-us]: https://my.pingdom.com/newchecks/checks#check=3766267
 [postgresql]: https://www.postgresql.org/
 [production-url]: https://origami-repo-data.ft.com/
-[runbook]: https://dewey.ft.com/origami-repo-data.html
+[runbook]: https://runbooks.in.ft.com/origami-repo-data
 [sentry-production]: https://sentry.io/nextftcom/repo-data-production
 [sentry-qa]: https://sentry.io/nextftcom/repo-data-qa
 [service-options]: https://github.com/Financial-Times/origami-service#options
