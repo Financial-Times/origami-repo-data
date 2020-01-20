@@ -637,6 +637,12 @@ function initModel(app) {
 					owner,
 					repo
 				});
+				const migration = await app.github.loadFile({
+					path: 'migration.md',
+					ref: tag,
+					owner,
+					repo
+				});
 
 				// Create the new version
 				const version = new Version({
@@ -656,7 +662,8 @@ function initModel(app) {
 					},
 					markdown: {
 						readme,
-						designguidelines
+						designguidelines,
+						migration
 					}
 				});
 				await version.save();
