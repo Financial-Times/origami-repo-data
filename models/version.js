@@ -711,7 +711,7 @@ function initModel(app) {
 				normalisedManifest.supportContact.email = origamiSupportEmail;
 			}
 			if (!normalisedManifest.supportContact.slack && normalisedManifest.supportContact.email === origamiSupportEmail) {
-				normalisedManifest.supportContact.slack = 'financialtimes/ft-origami';
+				normalisedManifest.supportContact.slack = 'financialtimes/origami-support';
 			}
 
 			return normalisedManifest;

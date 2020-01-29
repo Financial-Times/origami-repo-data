@@ -36,7 +36,7 @@ exports.seed = async database => {
 			type: 'imageset',
 			url: 'https://github.com/Financial-Times/o-mock-imageset',
 			support_email: 'origami.support@ft.com',
-			support_channel: '#ft-origami',
+			support_channel: '#origami-support',
 			tag: 'v1.0.0',
 			version: '1.0.0',
 			version_major: 1,
