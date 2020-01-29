@@ -93,7 +93,7 @@ This is an application with several moving parts, mostly centred around a Node.j
 
   - A PostgreSQL [database hosted by Heroku](https://dashboard.heroku.com/apps/origami-repo-data-eu/resources) on the EU application
   - An [organisation-wide Webhook](https://github.com/organizations/Financial-Times/settings/hooks) on the Financial-Times GitHub
-  - A Slack integration, for posting in the #origami Slack channel
+  - A Slack integration, for posting in the #origami-support Slack channel
 
 ### Fetching repo data
 
@@ -101,7 +101,7 @@ When a user fetches repo data via the API, the process for getting that data is 
 
 ### Adding repositories
 
-When a repository is changed on GitHub, the org-wide webhook adds an item to a queue within the Node.js application (backed by PostgreSQL). The Node.js application checks this queue periodically, ingesting data via the GitHub API if the repository is a valid Origami repository. Once the repository is ingested, a Slack message is sent to the #origami channel.
+When a repository is changed on GitHub, the org-wide webhook adds an item to a queue within the Node.js application (backed by PostgreSQL). The Node.js application checks this queue periodically, ingesting data via the GitHub API if the repository is a valid Origami repository. Once the repository is ingested, a Slack message is sent to the #origami-support channel.
 
 ## First Line Troubleshooting
 
