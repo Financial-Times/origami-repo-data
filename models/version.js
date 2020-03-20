@@ -692,6 +692,11 @@ function initModel(app) {
 				normalisedManifest.origamiType = null;
 			}
 
+			// Convert the "component" origamiType to "module" in the database
+			if (normalisedManifest.origamiType === 'component') {
+				normalisedManifest.origamiType = 'module';
+			}
+
 			// Ensure that support status is a string or null
 			if (typeof normalisedManifest.support !== 'string') {
 				normalisedManifest.support = null;
