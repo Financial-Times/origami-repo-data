@@ -8,6 +8,7 @@ jobs:
         environment:
           - POSTGRES_USER=origami
           - POSTGRES_DB=origami-repo-data-test
+          - POSTGRES_HOST_AUTH_METHOD=trust
     environment:
       TEST_DATABASE: "postgres://origami@localhost:5432/origami-repo-data-test"
     steps:
