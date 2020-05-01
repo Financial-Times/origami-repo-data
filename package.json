@@ -22,7 +22,9 @@
   "main": "./lib/service.js",
   "scripts": {
     "start": "heroku-node-settings index.js",
-    "heroku-postbuild": "make auto-version"
+    "heroku-postbuild": "make auto-version",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "dependencies": {
     "@financial-times/health-check": "^1.9.0",
@@ -40,14 +42,15 @@
     "joi": "^14.3.1",
     "joi-extension-semver": "^2.0.0",
     "knex": "^0.19.5",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.12",
     "node-fetch": "^2.6.0",
     "pg": "^7.9.0",
     "require-all": "^3.0.0",
     "semver": "^6.0.0",
     "stopword": "^0.2.4",
     "throng": "^4.0.0",
-    "uuid": "^3.3.2"
+    "uuid": "^3.3.2",
+    "snyk": "^1.316.2"
   },
   "devDependencies": {
     "@financial-times/grafana-tools": "^1.0.1",
@@ -59,5 +62,6 @@
     "proclaim": "^3.6.0",
     "sinon": "^7.3.1",
     "supertest": "^4.0.2"
-  }
+  },
+  "snyk": true
 }
