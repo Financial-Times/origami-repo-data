@@ -11,17 +11,17 @@
 <div class="o-layout__main o-layout-typography">
 
 	{{#if origami.options.enableSetupStep}}
-		<div class="o-message o-message--notice-inner o-message--warning-light" data-o-message-close=false data-o-component="o-message" style="margin-bottom:20px;">
+		<div class="o-message o-message--notice o-message--inner o-message--warning-light" data-close="false" data-o-component="o-message" style="margin-bottom:20px;">
 			<div class="o-message__container">
 				<div class="o-message__content">
-					<p class="o-message__content-highlight">Service Set Up</p>
 					<p class="o-message__content-main">
+						<span class="o-message__content-highlight">Service Set Up</span>
 						{{#if setupCredentials}}
 							The API key and secret below will only ever be output once. Do not
 							refresh this page or navigate away until you've saved the credentials
 							somewhere secure, such as Vault.
-	<pre><code class="nohighlight"><b>API Key:</b> {{setupCredentials.id}}
-			<b>API Secret:</b> {{setupCredentials.secret}}</code></pre>
+							<pre><code class="nohighlight"><b>API Key:</b> {{setupCredentials.id}}
+<b>API Secret:</b> {{setupCredentials.secret}}</code></pre>
 						{{else}}
 							Please remove the <code>ENABLE_SETUP_STEP</code> environment
 							variable from the service configuration.
