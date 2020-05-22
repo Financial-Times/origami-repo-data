@@ -4,7 +4,7 @@ Origami Repo Data is an API which can be used to get information about repositor
 
 ## Service Tier
 
-Silver
+Bronze
 
 ## Lifecycle Stage
 
