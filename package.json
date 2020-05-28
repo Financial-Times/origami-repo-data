@@ -49,7 +49,7 @@
     "stopword": "^0.2.4",
     "throng": "^4.0.0",
     "uuid": "^3.3.2",
-    "snyk": "^1.330.2"
+    "snyk": "^1.330.3"
   },
   "devDependencies": {
     "@financial-times/grafana-tools": "^1.0.1",
