@@ -45,7 +45,7 @@
     "node-fetch": "^2.6.0",
     "pg": "^8.2.1",
     "require-all": "^3.0.0",
-    "semver": "^6.0.0",
+    "semver": "^7.3.2",
     "stopword": "^0.2.4",
     "throng": "^4.0.0",
     "uuid": "^3.3.2",
