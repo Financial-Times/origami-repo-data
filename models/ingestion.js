@@ -1,7 +1,7 @@
 'use strict';
 
 const joi = require('joi').extend(require('joi-extension-semver'));
-const uuid = require('uuid/v4');
+const { v4: uuid } = require('uuid');
 
 module.exports = initModel;
 

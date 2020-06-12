@@ -1,7 +1,7 @@
 'use strict';
 
 const defaults = require('lodash/defaultsDeep');
-const uuid = require('uuid').v4;
+const { v4: uuid } = require('uuid');
 
 // Create versions for a mock component
 exports.seed = async database => {

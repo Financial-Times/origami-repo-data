@@ -2,7 +2,7 @@
 
 const joi = require('joi').extend(require('joi-extension-semver'));
 const fetch = require('node-fetch');
-const uuid = require('uuid/v4');
+const { v4: uuid } = require('uuid');
 const propertyFilter = require('../lib/model-property-filter');
 
 module.exports = initModel;

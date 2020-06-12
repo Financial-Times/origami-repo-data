@@ -3,7 +3,7 @@
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const joi = require('joi');
-const uuid = require('uuid/v4');
+const { v4: uuid } = require('uuid');
 
 module.exports = initModel;
 

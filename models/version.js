@@ -5,8 +5,7 @@ const isPlainObject = require('lodash/isPlainObject');
 const path = require('path');
 const semver = require('semver');
 const {removeStopwords} = require('stopword');
-const uuid = require('uuid/v4');
-const uuidv5 = require('uuid/v5');
+const { v4: uuid, v5: uuidv5 } = require('uuid');
 const union = require('lodash/union');
 const propertyFilter = require('../lib/model-property-filter');
 
