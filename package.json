@@ -52,7 +52,7 @@
     "snyk": "^1.336.0"
   },
   "devDependencies": {
-    "@financial-times/grafana-tools": "^1.0.1",
+    "@financial-times/grafana-tools": "^2.0.0",
     "eslint": "^7.2.0",
     "mocha": "^7.2.0",
     "mockery": "^2.1.0",
