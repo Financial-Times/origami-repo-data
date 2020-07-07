@@ -83,10 +83,6 @@ PartiallyAutomated
 
 Manual
 
-## Architecture Diagram
-
-<p><a href="https://docs.google.com/a/ft.com/drawings/d/1qKROLQvR-D5LzxxTTkJgzcr5IlLLkaRh3bEtF0AAYeA/edit?usp=sharing">Google Drawing</a></p>
-
 ## Architecture
 
 This is an application with several moving parts, mostly centred around a Node.js application but with the following external components:
@@ -94,6 +90,10 @@ This is an application with several moving parts, mostly centred around a Node.j
   - A PostgreSQL [database hosted by Heroku](https://dashboard.heroku.com/apps/origami-repo-data-eu/resources) on the EU application
   - An [organisation-wide Webhook](https://github.com/organizations/Financial-Times/settings/hooks) on the Financial-Times GitHub
   - A Slack integration, for posting in the #origami-support Slack channel
+
+### Architecture Diagram
+
+<p><a href="https://docs.google.com/a/ft.com/drawings/d/1qKROLQvR-D5LzxxTTkJgzcr5IlLLkaRh3bEtF0AAYeA/edit?usp=sharing">Google Drawing</a></p>
 
 ### Fetching repo data
 
