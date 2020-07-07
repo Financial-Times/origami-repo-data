@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "@financial-times/health-check": "^2.1.1",
-    "@financial-times/origami-service": "^4.1.0",
+    "@financial-times/origami-service": "^5.0.0",
     "@financial-times/origami-service-makefile": "^7.0.0",
     "@octokit/rest": "^16.23.4",
     "@slack/web-api": "^5.10.0",
