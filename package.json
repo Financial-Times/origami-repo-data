@@ -35,7 +35,7 @@
     "body-parser": "^1.18.3",
     "bookshelf": "^0.14.2",
     "dotenv": "^8.2.0",
-    "guestlist": "^2.1.0",
+    "guestlist": "^2.3.0",
     "heroku-node-settings": "^1.1.0",
     "http-errors": "^1.8.0",
     "joi": "^14.3.1",
