@@ -48,7 +48,7 @@
     "semver": "^7.3.2",
     "stopword": "^1.0.1",
     "throng": "^4.0.0",
-    "uuid": "^8.2.0",
+    "uuid": "^8.3.0",
     "snyk": "^1.336.0"
   },
   "devDependencies": {
