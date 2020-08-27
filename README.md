@@ -3,7 +3,6 @@
 
 Get information about Origami repositories. See [the production service][production-url] for API information.
 
-[![Build status](https://circleci.com/gh/Financial-Times/origami-repo-data.svg?style=shield)](https://circleci.com/gh/Financial-Times/origami-repo-data)
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)][license]
 
 
@@ -159,12 +158,12 @@ To run the integration tests, you'll need a local PostgreSQL database named `ori
 make db-create-test
 ```
 
-We run the tests and linter on CI, you can view [results on CircleCI][ci]. `make test` and `make lint` must pass before we merge a pull request.
+We run the tests and linter on CI, you can view [results on CI][ci]. `make test` and `make lint` must pass before we merge a pull request.
 
 
 ## Deployment
 
-The production ([EU][heroku-production-eu]/[US][heroku-production-us]) and [QA][heroku-qa] applications run on [Heroku]. We deploy continuously to QA via [CircleCI][ci], you should never need to deploy to QA manually. We use a [Heroku pipeline][heroku-pipeline] to promote QA deployments to production.
+The production ([EU][heroku-production-eu]/[US][heroku-production-us]) and [QA][heroku-qa] applications run on [Heroku]. We deploy continuously to QA via [CI][ci], you should never need to deploy to QA manually. We use a [Heroku pipeline][heroku-pipeline] to promote QA deployments to production.
 
 You can promote either through the Heroku interface, or by running the following command locally:
 
@@ -212,8 +211,6 @@ make deploy
 The Financial Times has published this software under the [MIT license][license].
 
 
-
-[ci]: https://circleci.com/gh/Financial-Times/origami-repo-data
 [grafana]: http://grafana.ft.com/dashboard/db/origami-repo-data
 [healthcheck-eu]: https://endpointmanager.in.ft.com/manage/origami-repo-data-eu.herokuapp.com
 [healthcheck-us]: https://endpointmanager.in.ft.com/manage/origami-repo-data-us.herokuapp.com

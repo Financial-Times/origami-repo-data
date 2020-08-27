@@ -1,0 +1,33 @@
+name: Test
+on:
+  pull_request:
+  push:
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+    - name: Get yarn cache
+    - uses: actions/setup-node@v1.1.0
+      with:
+        node-version: '10.x'
+    - run: npm ci
+    - name: Setup PostgreSQL
+      uses: harmon758/postgresql-action@v1.0.0
+      with:
+        postgresql version: 9.6
+        postgresql db: origami-repo-data-test
+        postgresql user: origami
+    - name: Run linters
+      run: make verify
+    - name: Run unit tests
+      run: make test-unit-coverage
+      env:
+        TEST_DATABASE: "postgres://origami@localhost:5432/origami-repo-data-test"
+    - name: Run integration tests
+      run: make test-integration
+      env:
+        TEST_DATABASE: "postgres://origami@localhost:5432/origami-repo-data-test"
