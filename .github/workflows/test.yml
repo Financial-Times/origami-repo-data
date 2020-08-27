@@ -18,13 +18,14 @@ jobs:
         postgresql version: 9.6
         postgresql db: origami-repo-data-test
         postgresql user: origami
+        postgresql password: password
     - name: Run linters
       run: make verify
     - name: Run unit tests
       run: make test-unit-coverage
       env:
-        TEST_DATABASE: "postgres://origami@localhost:5432/origami-repo-data-test"
+        TEST_DATABASE: "postgres://origami:password@localhost:5432/origami-repo-data-test"
     - name: Run integration tests
       run: make test-integration
       env:
-        TEST_DATABASE: "postgres://origami@localhost:5432/origami-repo-data-test"
+        TEST_DATABASE: "postgres://origami:password@localhost:5432/origami-repo-data-test"
