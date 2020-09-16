@@ -12,6 +12,9 @@ updates:
       - "dependencies"
     ignore:
       - dependency-name: "snyk"
+      - dependency-name: "@octokit/rest"
+      - dependency-name: "joi"
+      - dependency-name: "bookshelf"
   # Maintain dependencies for GitHub Actions
   - package-ecosystem: "github-actions"
     directory: "/"
