@@ -433,8 +433,12 @@ function initModel(app) {
 			// Create a regular expression for the search
 			let search;
 			if (filters.search && typeof filters.search === 'string') {
-				const regExpSafeQuery = filters.search.trim().replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
-				const searchRegExp = new RegExp(`${regExpSafeQuery}`, 'i');
+				const regExpQuery = filters.search.trim()
+				  // backslash escape special regular expression characters 
+				  .replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&')
+				  // replace spaces with dot-star, for fuzzy searching
+				  .replace(/\s+/g, '.*');
+				const searchRegExp = new RegExp(`${regExpQuery}`, 'i');
 				search = searchRegExp.test.bind(searchRegExp);
 			}
 
