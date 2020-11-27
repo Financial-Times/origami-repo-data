@@ -310,8 +310,17 @@ describe('lib/service', () => {
 		it('creates a Knex instance', () => {
 			assert.calledOnce(knex);
 			assert.calledWith(knex, {
-				client: 'pg',
-				connection: options.database
+				'client':'pg',
+				'connection': {
+					'user':'',
+					'password':'',
+					'port':null,
+					'host':null,
+					'database':'mock-database-url',
+					'ssl': {
+						'rejectUnauthorized':false
+					}
+				}
 			});
 		});
 
