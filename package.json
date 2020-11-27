@@ -44,12 +44,13 @@
     "lodash": "^4.17.20",
     "node-fetch": "^2.6.0",
     "pg": "^8.3.2",
+    "pg-connection-string": "^2.4.0",
     "require-all": "^3.0.0",
     "semver": "^7.3.2",
+    "snyk": "^1.425.4",
     "stopword": "^1.0.1",
     "throng": "^4.0.0",
-    "uuid": "^8.3.0",
-    "snyk": "^1.425.4"
+    "uuid": "^8.3.0"
   },
   "devDependencies": {
     "@financial-times/grafana-tools": "^2.0.1",
