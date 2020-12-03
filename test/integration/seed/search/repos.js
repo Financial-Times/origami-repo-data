@@ -17,6 +17,7 @@ exports.seed = async database => {
 			support_channel: data.support_channel || '#origami-support',
 			tag: 'v1.0.0',
 			version: '1.0.0',
+			origami_version: '1',
 			version_major: 1,
 			version_minor: 0,
 			version_patch: 0,

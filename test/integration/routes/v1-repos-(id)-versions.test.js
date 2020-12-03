@@ -36,18 +36,24 @@ describe('GET /v1/repos/:repoId/versions', () => {
 			assert.strictEqual(version1.id, 'dbd71199-c1ab-4482-9988-eee350b3bdca');
 			assert.strictEqual(version1.name, 'o-mock-component');
 			assert.strictEqual(version1.version, '3.0.0-beta.1');
+			assert.strictEqual(version1.versionTag, 'v3.0.0-beta.1');
+			assert.strictEqual(version1.origamiVersion, '1');
 
 			const version2 = response[1];
 			assert.isObject(version2);
 			assert.strictEqual(version2.id, '9e4e450d-3b70-4672-b459-f297d434add6');
 			assert.strictEqual(version2.name, 'o-mock-component');
 			assert.strictEqual(version2.version, '2.0.0');
+			assert.strictEqual(version2.versionTag, 'v2.0.0');
+			assert.strictEqual(version2.origamiVersion, '1');
 
 			const version3 = response[2];
 			assert.isObject(version3);
 			assert.strictEqual(version3.id, 'b2bdfae1-cc6f-4433-9a2f-8a4b762cda71');
 			assert.strictEqual(version3.name, 'o-mock-component');
 			assert.strictEqual(version3.version, '1.1.0');
+			assert.strictEqual(version3.versionTag, 'v1.1.0');
+			assert.strictEqual(version3.origamiVersion, '1');
 
 			const version4 = response[3];
 			assert.isObject(version4);
@@ -55,6 +61,7 @@ describe('GET /v1/repos/:repoId/versions', () => {
 			assert.strictEqual(version4.name, 'o-mock-component');
 			assert.strictEqual(version4.version, '1.0.0');
 			assert.strictEqual(version4.versionTag, 'v1.0.0');
+			assert.strictEqual(version4.origamiVersion, '1');
 
 			const version5 = response[4];
 			assert.isObject(version5);
@@ -62,6 +69,7 @@ describe('GET /v1/repos/:repoId/versions', () => {
 			assert.strictEqual(version5.name, 'o-mock-component');
 			assert.strictEqual(version5.version, '1.0.0');
 			assert.strictEqual(version5.versionTag, '1.0.0');
+			assert.strictEqual(version5.origamiVersion, '1');
 
 		});
 
