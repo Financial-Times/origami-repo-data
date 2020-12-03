@@ -110,7 +110,7 @@ describe('GET /v1/repos/:repoId/versions/:versionId/dependencies', () => {
 
 			it('is the version dependencies', () => {
 				assert.isArray(response);
-				assert.lengthEquals(response, 7);
+				assert.lengthEquals(response, 8);
 
 				const dependency1 = response[0];
 				assert.isObject(dependency1);
@@ -196,8 +196,8 @@ describe('GET /v1/repos/:repoId/versions/:versionId/dependencies', () => {
 					version: '^7.2.3',
 					source: 'npm',
 					isDev: false,
-					isOptional: true,
-					isPeer: false
+					isOptional: false,
+					isPeer: true
 				});
 
 			});

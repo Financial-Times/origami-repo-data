@@ -4,7 +4,7 @@
 const database = require('../helpers/database');
 const assert = require('proclaim');
 
-describe.only('GET /v1/repos/:repoId/versions/:versionId', () => {
+describe('GET /v1/repos/:repoId/versions/:versionId', () => {
 	let request;
 
 	beforeEach(async () => {
