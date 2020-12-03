@@ -140,7 +140,7 @@ function initModel(app) {
 						data: manifests[name]
 					};
 				});
-			const dependencyKeys = ['dependencies', 'devDependencies', 'optionalDependencies'];
+			const dependencyKeys = ['dependencies', 'devDependencies', 'optionalDependencies', 'peerDependencies'];
 			const dependencies = [];
 
 			// If the repo has either a bower or package manifest...
@@ -154,6 +154,7 @@ function initModel(app) {
 									version,
 									source: (manifest.name === 'bower' ? 'bower' : 'npm'),
 									isDev: (dependencyKey === 'devDependencies'),
+									isPeer: (dependencyKey === 'peerDependencies'),
 									isOptional: (dependencyKey === 'optionalDependencies')
 								});
 							}
@@ -434,7 +435,7 @@ function initModel(app) {
 			let search;
 			if (filters.search && typeof filters.search === 'string') {
 				const regExpQuery = filters.search.trim()
-				  // backslash escape special regular expression characters 
+				  // backslash escape special regular expression characters
 				  .replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&')
 				  // replace spaces with dot-star, for fuzzy searching
 				  .replace(/\s+/g, '.*');

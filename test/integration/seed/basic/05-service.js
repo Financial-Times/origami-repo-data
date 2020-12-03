@@ -16,6 +16,9 @@ exports.seed = async database => {
 			},
 			optionalDependencies: {
 				'mock-npm-dependency-5': '^1.2.3'
+			},
+			peerDependencies: {
+				'mock-npm-dependency-6': '^7.2.3'
 			}
 		},
 		bower: {
