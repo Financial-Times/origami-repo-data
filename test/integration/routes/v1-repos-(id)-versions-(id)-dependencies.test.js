@@ -110,7 +110,7 @@ describe('GET /v1/repos/:repoId/versions/:versionId/dependencies', () => {
 
 			it('is the version dependencies', () => {
 				assert.isArray(response);
-				assert.lengthEquals(response, 7);
+				assert.lengthEquals(response, 8);
 
 				const dependency1 = response[0];
 				assert.isObject(dependency1);
