@@ -59,6 +59,7 @@ function initModel(app) {
 				subType: this.get('sub_type'),
 				version: this.get('version'),
 				versionTag: this.get('tag'),
+				origamiVersion: this.get('origami_version'),
 				imageSetScheme: this.get('imageset_scheme'),
 				description: this.get('description'),
 				brands: this.get('brands'),
@@ -233,6 +234,13 @@ function initModel(app) {
 				const type = this.get('type');
 				const brands = (manifests.origami && manifests.origami.brands ? manifests.origami.brands : []);
 				return Version.normaliseOrigamiBrandsArray(type, brands);
+			},
+
+			// Get the component's Origami Specification version
+			origami_version() {
+				const manifests = this.get('manifests') || {};
+				const hasOrigamiVersion = manifests.origami && manifests.origami.origamiVersion;
+				return hasOrigamiVersion ? `${manifests.origami.origamiVersion}` : '';
 			},
 
 			// Get keywords for the version, falling back through different manifests
