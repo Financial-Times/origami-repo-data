@@ -38,7 +38,13 @@ Before we can run the application, we'll need to install dependencies:
 npm install
 ```
 
-Create a local PostgreSQL database, you may need to provide credentials for the following command depending on your local setup:
+Run PostgreSQL locally. If you used brew to install PostgreSQL on a Mac run:
+
+```sh
+brew services start postgresql
+```
+
+Then create a local PostgreSQL database, you may need to provide credentials for the following command depending on your local setup:
 
 ```sh
 make db-create
