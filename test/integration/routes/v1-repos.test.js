@@ -92,7 +92,7 @@ describe('GET /v1/repos with query:', () => {
 
 			it('contains only actively supported repos', () => {
 				assert.isArray(response);
-				assert.lengthEquals(response, 5);
+				assert.lengthEquals(response, 6);
 				for (const repo of response) {
 					assert.strictEqual(repo.support.status, 'active');
 				}
@@ -200,7 +200,7 @@ describe('GET /v1/repos with query:', () => {
 
 			it('contains only module components', () => {
 				assert.isArray(response);
-				assert.lengthEquals(response, 7);
+				assert.lengthEquals(response, 8);
 				for (const repo of response) {
 					assert.strictEqual(repo.type, 'module');
 				}
@@ -236,7 +236,7 @@ describe('GET /v1/repos with query:', () => {
 
 			it('contains only components with the expected support email', () => {
 				assert.isArray(response);
-				assert.lengthEquals(response, 9);
+				assert.lengthEquals(response, 10);
 				for (const repo of response) {
 					assert.strictEqual(repo.support.email, 'origami.support@ft.com');
 				}
@@ -308,7 +308,7 @@ describe('GET /v1/repos with query:', () => {
 
 			it('contains components with either support email', () => {
 				assert.isArray(response);
-				assert.lengthEquals(response, 10);
+				assert.lengthEquals(response, 11);
 				for (const repo of response) {
 					assert.include(['origami.support@ft.com', 'next.developers@ft.com'], repo.support.email);
 				}
@@ -380,7 +380,7 @@ describe('GET /v1/repos with query:', () => {
 
 			it('contains both module and service components', () => {
 				assert.isArray(response);
-				assert.lengthEquals(response, 8);
+				assert.lengthEquals(response, 9);
 				for (const repo of response) {
 					assert.include(['module', 'service'], repo.type);
 				}
@@ -488,7 +488,7 @@ describe('GET /v1/repos with query:', () => {
 
 			it('contains only components which have not been branded', () => {
 				assert.isArray(response);
-				assert.lengthEquals(response, 6);
+				assert.lengthEquals(response, 7);
 				for (const repo of response) {
 					if (repo.type === 'module') {
 						assert.deepEqual(repo.brands, []);
@@ -682,6 +682,113 @@ describe('GET /v1/repos with query:', () => {
 				assert.isArray(response);
 				assert.lengthEquals(response, 1);
 				assert.strictEqual(response[0].name, 'new-module (banana)');
+			});
+
+		});
+
+	});
+
+	describe('origamiVersion=1', () => {
+
+		beforeEach(async () => {
+			request = agent
+				.get('/v1/repos?origamiVersion=1')
+				.set('X-Api-Key', 'mock-read-key')
+				.set('X-Api-Secret', 'mock-read-secret');
+		});
+
+		it('responds with a 200 status', () => {
+			return request.expect(200);
+		});
+
+		it('responds with JSON', () => {
+			return request.expect('Content-Type', /application\/json/);
+		});
+
+		describe('JSON response', () => {
+			let response;
+
+			beforeEach(async () => {
+				response = (await request.then()).body;
+			});
+
+			it('contains components which match all criteria', () => {
+				assert.isArray(response);
+				assert.greaterThan(response.length, 0, 'No components returned.');
+				response.forEach(component => {
+					assert.strictEqual(component.origamiVersion, '1', `Returned "${component.name}" with Origami version "${component.origamiVersion}".`);
+				});
+			});
+
+		});
+
+	});
+
+	describe('origamiVersion=2.0', () => {
+
+		beforeEach(async () => {
+			request = agent
+				.get('/v1/repos?origamiVersion=2.0')
+				.set('X-Api-Key', 'mock-read-key')
+				.set('X-Api-Secret', 'mock-read-secret');
+		});
+
+		it('responds with a 200 status', () => {
+			return request.expect(200);
+		});
+
+		it('responds with JSON', () => {
+			return request.expect('Content-Type', /application\/json/);
+		});
+
+		describe('JSON response', () => {
+			let response;
+
+			beforeEach(async () => {
+				response = (await request.then()).body;
+			});
+
+			it('contains components which match all criteria', () => {
+				assert.isArray(response);
+				assert.greaterThan(response.length, 0, 'No components returned.');
+				response.forEach(component => {
+					assert.strictEqual(component.origamiVersion, '2.0', `Returned "${component.name}" with Origami version "${component.origamiVersion}".`);
+				});
+			});
+
+		});
+
+	});
+
+	describe('origamiVersion=1,2.0', () => {
+
+		beforeEach(async () => {
+			request = agent
+				.get('/v1/repos?origamiVersion=1,2.0')
+				.set('X-Api-Key', 'mock-read-key')
+				.set('X-Api-Secret', 'mock-read-secret');
+		});
+
+		it('responds with a 200 status', () => {
+			return request.expect(200);
+		});
+
+		it('responds with JSON', () => {
+			return request.expect('Content-Type', /application\/json/);
+		});
+
+		describe('JSON response', () => {
+			let response;
+
+			beforeEach(async () => {
+				response = (await request.then()).body;
+			});
+
+			it('contains components which match all criteria', () => {
+				assert.isArray(response);
+				assert.greaterThan(response.length, 0, 'No components returned.');
+				assert.ok(response.find(c => c.origamiVersion === '1'), 'Expected to find a v1 component');
+				assert.ok(response.find(c => c.origamiVersion === '2.0'), 'Expected to find a v2.0 component');
 			});
 
 		});
