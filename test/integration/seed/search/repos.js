@@ -29,7 +29,8 @@ exports.seed = async database => {
 				origami: {
 					brands: [],
 					keywords: [],
-					demos: []
+					demos: [],
+					origamiVersion: '1',
 				}
 			}
 		});
@@ -52,6 +53,21 @@ exports.seed = async database => {
 						'master',
 						'internal'
 					]
+				}
+			}
+		}),
+
+		version({
+			name: 'active-module-v2',
+			type: 'module',
+			support_status: 'active',
+			origami_version: '2.0',
+			manifests: {
+				origami: {
+					description: 'this follows the 2.0 origami specification',
+					keywords: [],
+					origamiVersion: '2.0',
+					brands: []
 				}
 			}
 		}),

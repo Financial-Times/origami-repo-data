@@ -7,6 +7,7 @@ exports.seed = async database => {
 		origami: {
 			name: 'o-mock-imageset',
 			origamiType: 'imageset',
+			origamiVersion: '1',
 			isMockManifest: true
 		},
 		imageSet: {

@@ -456,6 +456,7 @@ function initModel(app) {
 				.filter(propertyFilter('type', filters.type))
 				.filter(propertyFilter('support_email', filters.supportEmail))
 				.filter(propertyFilter('support_status', filters.status))
+				.filter(propertyFilter('origami_version', filters.origamiVersion))
 				.filter(repo => {
 					repo.searchScore = 0;
 					if (!search) {

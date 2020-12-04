@@ -4,6 +4,9 @@
 exports.seed = async database => {
 
 	const manifests = {
+		origami: {
+			origamiVersion: '1',
+		},
 		package: {
 			name: 'o-mock-component',
 			dependencies: {
