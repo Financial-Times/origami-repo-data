@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "@financial-times/health-check": "^2.1.6",
-    "@financial-times/origami-service": "^5.0.0",
+    "@financial-times/origami-service": "^5.0.1",
     "@financial-times/origami-service-makefile": "^7.0.0",
     "@octokit/rest": "^16.23.4",
     "@slack/web-api": "^5.15.0",
@@ -40,17 +40,17 @@
     "http-errors": "^1.8.0",
     "joi": "^14.3.1",
     "joi-extension-semver": "^2.0.0",
-    "knex": "^0.21.5",
+    "knex": "^0.21.17",
     "lodash": "^4.17.20",
     "node-fetch": "^2.6.0",
-    "pg": "^8.3.2",
+    "pg": "^8.5.1",
     "pg-connection-string": "^2.4.0",
     "require-all": "^3.0.0",
-    "semver": "^7.3.2",
-    "snyk": "^1.425.4",
-    "stopword": "^1.0.1",
+    "semver": "^7.3.4",
+    "snyk": "^1.455.0",
+    "stopword": "^1.0.6",
     "throng": "^4.0.0",
-    "uuid": "^8.3.0"
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@financial-times/grafana-tools": "^2.0.1",
