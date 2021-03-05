@@ -15,15 +15,30 @@ function initModel(app) {
      *
      * @param {Version} version - the Version to update a bundle for.
      * @param {string} language - the language of the bundle to update, e.g. 'css' or 'js'.
-     * @param {string} brand [null] - the brand of the bundle to update, e.g. 'internal' (optional).
+     * @param {string} brand - the brand of the bundle to update, e.g. 'internal'.
      * @return {Bundle} - bundle information for the given version, language, and brand
      */
     async function updateBundleForVersion(version, language, brand = null) {
-        const buildServiceUrl = new URL(`https://www.ft.com/__origami/service/build/v2/bundles/${language}`);
-        buildServiceUrl.searchParams.append('modules', `${version.get('name')}@${version.get('version')}`);
-        if (brand) {
+        const origamiVersion = version.get('origami_version');
+        let buildServiceUrl;
+        if (!origamiVersion || origamiVersion === '1') {
+            buildServiceUrl = new URL(`https://www.ft.com/__origami/service/build/v2/bundles/${language}`);
+            buildServiceUrl.searchParams.append('modules', `${version.get('name')}@${version.get('version')}`);
+        } else {
+            const packageName = version.get('package_name');
+            if (!packageName) {
+                throw new Error(
+                    `Could not find package name for ${version.get('name')}@${version.get('version')} to update ` +
+                    'bundle stats.');
+            }
+            buildServiceUrl = new URL(`https://www.ft.com/__origami/service/build/v3/bundles/${language}`);
+            buildServiceUrl.searchParams.append('components', `${packageName}@${version.get('version')}`);
+            buildServiceUrl.searchParams.append('system_code', 'origami-repo-data');
+        }
+        if (brand && language === 'css') {
             buildServiceUrl.searchParams.append('brand', brand);
         }
+
         const timeout = 750;
 
         // Find bundle sizes for differing "Accept-Encoding" values.
@@ -196,7 +211,7 @@ function initModel(app) {
                     throw error;
                 }
                 // Get brands from Version.
-                const brands = version.brands.filter(brand => typeof brand === 'string');
+                const brands = (version.brands || []).filter(brand => typeof brand === 'string');
                 // Get bundle languages (js and or css) from Version.
                 const bundleLanguages = ['js', 'css'].filter(language => {
                     // Include css bundles if the version has scss.

@@ -724,11 +724,11 @@ describe('GET /v1/repos with query:', () => {
 
 	});
 
-	describe('origamiVersion=2.0', () => {
+	describe('origamiVersion=2', () => {
 
 		beforeEach(async () => {
 			request = agent
-				.get('/v1/repos?origamiVersion=2.0')
+				.get('/v1/repos?origamiVersion=2')
 				.set('X-Api-Key', 'mock-read-key')
 				.set('X-Api-Secret', 'mock-read-secret');
 		});
@@ -752,7 +752,7 @@ describe('GET /v1/repos with query:', () => {
 				assert.isArray(response);
 				assert.greaterThan(response.length, 0, 'No components returned.');
 				response.forEach(component => {
-					assert.strictEqual(component.origamiVersion, '2.0', `Returned "${component.name}" with Origami version "${component.origamiVersion}".`);
+					assert.strictEqual(component.origamiVersion, '2', `Returned "${component.name}" with Origami version "${component.origamiVersion}".`);
 				});
 			});
 
@@ -760,11 +760,11 @@ describe('GET /v1/repos with query:', () => {
 
 	});
 
-	describe('origamiVersion=1,2.0', () => {
+	describe('origamiVersion=1,2', () => {
 
 		beforeEach(async () => {
 			request = agent
-				.get('/v1/repos?origamiVersion=1,2.0')
+				.get('/v1/repos?origamiVersion=1,2')
 				.set('X-Api-Key', 'mock-read-key')
 				.set('X-Api-Secret', 'mock-read-secret');
 		});
@@ -788,7 +788,7 @@ describe('GET /v1/repos with query:', () => {
 				assert.isArray(response);
 				assert.greaterThan(response.length, 0, 'No components returned.');
 				assert.ok(response.find(c => c.origamiVersion === '1'), 'Expected to find a v1 component');
-				assert.ok(response.find(c => c.origamiVersion === '2.0'), 'Expected to find a v2.0 component');
+				assert.ok(response.find(c => c.origamiVersion === '2'), 'Expected to find a v2 component');
 			});
 
 		});
