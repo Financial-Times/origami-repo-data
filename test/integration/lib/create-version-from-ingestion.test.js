@@ -24,6 +24,8 @@ describe('createVersionFromIngestion', () => {
             const version = await app.model.Version.fetchOneByUrlAndTag(url, tag);
 
             proclaim.ok(version, 'No Version could be found for the Ingestion.');
+            proclaim.include(version.languages, 'js', 'Expected the Version to include "js" in the "languages" property.');
+            proclaim.include(version.languages, 'scss', 'Expected the Version to include "scss" in the "languages" property.');
         });
     });
 
@@ -40,6 +42,8 @@ describe('createVersionFromIngestion', () => {
             const version = await app.model.Version.fetchOneByUrlAndTag(url, tag);
 
             proclaim.ok(version, 'No Version could be found for the Ingestion.');
+            proclaim.include(version.get('languages'), 'js', 'Expected the Version to include "js" in the "languages" property.');
+            proclaim.include(version.get('languages'), 'scss', 'Expected the Version to include "scss" in the "languages" property.');
         });
     });
 });
