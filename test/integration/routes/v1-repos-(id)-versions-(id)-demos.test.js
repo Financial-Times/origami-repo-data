@@ -3,9 +3,8 @@
 
 const database = require('../helpers/database');
 const assert = require('proclaim');
-const { urlencoded } = require('body-parser');
 
-describe.only('GET /v1/repos/:repoId/versions/:versionId/demos', () => {
+describe('GET /v1/repos/:repoId/versions/:versionId/demos', () => {
 
 	describe('for a spec v1 component version', () => {
 		let request;

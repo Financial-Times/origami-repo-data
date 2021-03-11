@@ -18,7 +18,7 @@ function initModel(app) {
      * @param {string} brand - the brand of the bundle to update, e.g. 'internal'.
      * @return {Bundle} - bundle information for the given version, language, and brand
      */
-    async function updateBundleForVersion(version, language, brand = null) {
+    async function updateBundleForVersion(version, language, brand) {
         const origamiVersion = version.get('origami_version');
         let buildServiceUrl;
         if (!origamiVersion || origamiVersion === '1') {
