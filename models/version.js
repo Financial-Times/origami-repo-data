@@ -208,6 +208,15 @@ function initModel(app) {
 				return this.get('name').toLowerCase().replace(/^[a-z]\-/, '');
 			},
 
+
+			// Get the npm package name
+			package_name() {
+				const manifests = this.get('manifests') || {};
+				const packageManifest = manifests.package || {};
+				const packageName = packageManifest.name;
+				return packageName || null;
+			},
+
 			// Get a description of the version, falling back through different manifests
 			description() {
 				const manifests = this.get('manifests') || {};
@@ -766,12 +775,30 @@ function initModel(app) {
 			}
 
 			// Calculate the live demo URL (including brand if necessary)
-			let liveDemoUrl = `https://www.ft.com/__origami/service/build/v2/demos/${version.get('name')}@${version.get('version')}/${demo.name}`;
-			let htmlDemoUrl = `${liveDemoUrl}/html`;
-			if (filter && filter.brand) {
-				liveDemoUrl = `${liveDemoUrl}?brand=${filter.brand}`;
-				htmlDemoUrl = `${htmlDemoUrl}?brand=${filter.brand}`;
+			const origamiVersion = version.get('origami_version');
+			let liveDemoUrl;
+			let htmlDemoUrl;
+			if (!origamiVersion || origamiVersion === '1') {
+				liveDemoUrl = new URL(`https://www.ft.com/__origami/service/build/v2/demos/${version.get('name')}@${version.get('version')}/${demo.name}`);
+				htmlDemoUrl = new URL(`${liveDemoUrl.toString()}/html`);
+			} else {
+				liveDemoUrl = new URL('https://www.ft.com/__origami/service/build/v3/demo');
+				liveDemoUrl.searchParams.append('component', `${version.get('package_name')}@${version.get('version')}`);
+				liveDemoUrl.searchParams.append('demo', demo.name);
+				liveDemoUrl.searchParams.append('system_code', 'origami-repo-data');
+
+				htmlDemoUrl = new URL('https://www.ft.com/__origami/service/build/v3/demo/html');
+				htmlDemoUrl.searchParams.append('component', `${version.get('package_name')}@${version.get('version')}`);
+				htmlDemoUrl.searchParams.append('demo', demo.name);
+				htmlDemoUrl.searchParams.append('system_code', 'origami-repo-data');
 			}
+
+			// @breaking require a brand filter in a future version of
+			// repo-data rather than default to the master brand, as the build
+			// service url returned requires a brand parameter since v3
+			const demoBrand = filter && filter.brand ? filter.brand : 'master';
+			liveDemoUrl.searchParams.append('brand', demoBrand);
+			htmlDemoUrl.searchParams.append('brand', demoBrand);
 
 			return {
 				id: demo.name,
