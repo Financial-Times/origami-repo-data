@@ -297,6 +297,10 @@ function initModel(app) {
 
 			// Get languages for the version, falling back through different manifests
 			languages() {
+				if (this.get('determined_languages')) {
+					return this.get('determined_languages');
+				}
+
 				const manifests = this.get('manifests') || {};
 				let mainPaths = [];
 
