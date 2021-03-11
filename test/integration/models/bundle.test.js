@@ -56,7 +56,7 @@ describe('Bundle', () => {
 					{
 						'Content-Length': result.contentLength
 					}
-				]
+				];
 			});
 	});
 
@@ -72,7 +72,7 @@ describe('Bundle', () => {
 				v1SpecRelease
 			);
 			const Bundle = app.model.Bundle;
-			await Bundle.updateBundlesForVersion(v1Version)
+			await Bundle.updateBundlesForVersion(v1Version);
 
 			for (const { brand, lang, contentLength, v2Path } of mockData) {
 				const bundle = await Bundle.fetchUnique(
@@ -92,7 +92,7 @@ describe('Bundle', () => {
 				v2SpecRelease
 			);
 			const Bundle = app.model.Bundle;
-			await Bundle.updateBundlesForVersion(v2Version)
+			await Bundle.updateBundlesForVersion(v2Version);
 
 			for (const { brand, lang, contentLength, v3Path } of mockData) {
 				const bundle = await Bundle.fetchUnique(
