@@ -1,7 +1,6 @@
 'use strict';
 
 const isPlainObject = require('lodash/isPlainObject');
-const path = require('path');
 const semver = require('semver');
 const {removeStopwords} = require('stopword');
 const { v4: uuid, v5: uuidv5 } = require('uuid');
@@ -293,34 +292,6 @@ function initModel(app) {
 					.filter(word => (word && word.length >= 3 && !definedKeywords.includes(word)));
 				const dedupedWords = Array.from(new Set(words));
 				return removeStopwords(dedupedWords).sort();
-			},
-
-			// Get languages for the version, falling back through different manifests
-			languages() {
-				if (this.get('determined_languages')) {
-					return this.get('determined_languages');
-				}
-
-				const manifests = this.get('manifests') || {};
-				let mainPaths = [];
-
-				// Order: bower, package
-				if (manifests.bower) {
-					if (typeof manifests.bower.main === 'string') {
-						mainPaths.push(manifests.bower.main);
-					} else if (Array.isArray(manifests.bower.main)) {
-						mainPaths = manifests.bower.main.filter(main => typeof main === 'string');
-					}
-				} else if (manifests.package && typeof manifests.package.main === 'string') {
-					mainPaths.push(manifests.package.main);
-				}
-
-				const languages = mainPaths
-					.map(mainPath => path.extname(mainPath).slice(1).toLowerCase())
-					.filter(mainPath => mainPath)
-					.sort();
-
-				return Array.from(new Set(languages));
 			},
 
 			// Get the Origami sub-type (category) for the version

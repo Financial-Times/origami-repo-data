@@ -45,10 +45,6 @@ exports.seed = async database => {
             version_prerelease: null,
             manifests: JSON.stringify({
                 about: null,
-                bower: {
-                    name: 'o-example-component-v2',
-                    dependencies: {}
-                },
                 imageSet: null,
                 origami: {
                     description: 'An example Origami component, which follows v2 of the Origami specification',
@@ -66,9 +62,11 @@ exports.seed = async database => {
                 },
                 package: {
                     name: '@financial-times/o-example-component-v2',
-                    version: '1.0.0'
+                    version: '1.0.0',
+                    browser: './main.js'
                 }
             }),
+            languages: ['js'],
             markdown: JSON.stringify({
                 designGuidelines: 'TODO add mock design guidelines',
                 migrationGuide: null,
@@ -93,10 +91,6 @@ exports.seed = async database => {
             version_prerelease: null,
             manifests: JSON.stringify({
                 about: null,
-                bower: {
-                    name: 'o-example-component-v2',
-                    dependencies: {}
-                },
                 imageSet: null,
                 origami: {
                     description: 'An example Origami component, which follows v2 of the Origami specification',
@@ -110,9 +104,11 @@ exports.seed = async database => {
                 },
                 package: {
                     name: '@financial-times/o-example-component-v2',
-                    version: '1.1.0'
+                    version: '1.1.0',
+                    browser: './main.js'
                 }
             }),
+            languages: ['js'],
             markdown: JSON.stringify({
                 designGuidelines: 'TODO add mock design guidelines',
                 migrationGuide: null,
@@ -137,10 +133,6 @@ exports.seed = async database => {
             version_prerelease: null,
             manifests: JSON.stringify({
                 about: null,
-                bower: {
-                    name: 'o-example-component-v2',
-                    dependencies: {}
-                },
                 imageSet: null,
                 origami: {
                     description: 'An example Origami component, which follows v2 of the Origami specification',
@@ -155,11 +147,13 @@ exports.seed = async database => {
                 package: {
                     name: '@financial-times/o-example-component-v2',
                     version: '2.0.0',
+                    browser: './main.js',
                     peerDependencies: {
                         'mathsass': '^0.11.0'
                     }
-                }
+                },
             }),
+            languages: ['js'],
             markdown: JSON.stringify({
                 designGuidelines: 'TODO add mock design guidelines',
                 migrationGuide: null,

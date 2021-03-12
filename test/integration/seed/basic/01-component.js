@@ -86,6 +86,7 @@ exports.seed = async database => {
 			version_minor: 0,
 			version_patch: 0,
 			version_prerelease: null,
+			languages: JSON.stringify(['js', 'scss']),
 			manifests: JSON.stringify(manifestsV1),
 			markdown: JSON.stringify(markdown)
 		},
@@ -105,6 +106,7 @@ exports.seed = async database => {
 			version_minor: 0,
 			version_patch: 0,
 			version_prerelease: null,
+			languages: JSON.stringify(['js', 'scss']),
 			manifests: JSON.stringify(manifestsV1),
 			markdown: JSON.stringify(markdown)
 		},
@@ -124,6 +126,7 @@ exports.seed = async database => {
 			version_minor: 1,
 			version_patch: 0,
 			version_prerelease: null,
+			languages: JSON.stringify(['js', 'scss']),
 			manifests: JSON.stringify(manifestsV1),
 			markdown: JSON.stringify(markdown)
 		},
@@ -143,6 +146,7 @@ exports.seed = async database => {
 			version_minor: 0,
 			version_patch: 0,
 			version_prerelease: null,
+			languages: JSON.stringify(['js', 'scss']),
 			manifests: JSON.stringify(manifestsV1),
 			markdown: JSON.stringify(markdown)
 		},
@@ -162,6 +166,7 @@ exports.seed = async database => {
 			version_minor: 0,
 			version_patch: 0,
 			version_prerelease: 'beta.1',
+			languages: JSON.stringify(['js', 'scss']),
 			manifests: JSON.stringify(manifestsV1),
 			markdown: JSON.stringify(markdown)
 		},
@@ -181,6 +186,7 @@ exports.seed = async database => {
 			version_minor: 0,
 			version_patch: 0,
 			version_prerelease: 0,
+			languages: JSON.stringify(['js', 'scss']),
 			manifests: JSON.stringify(Object.assign({}, manifestsV1, {
 				origami: Object.assign({}, manifestsV1.origami, {
 					origamiVersion: 2

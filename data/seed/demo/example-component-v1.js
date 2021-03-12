@@ -46,7 +46,8 @@ exports.seed = async database => {
 				about: null,
 				bower: {
 					name: 'o-example-component',
-					dependencies: {}
+					dependencies: {},
+					main: './main.js'
 				},
 				imageSet: null,
 				origami: {
@@ -65,6 +66,7 @@ exports.seed = async database => {
 				},
 				package: null
 			}),
+			languages: ['js'],
 			markdown: JSON.stringify({
 				designGuidelines: 'TODO add mock design guidelines',
 				migrationGuide: null,
@@ -91,7 +93,8 @@ exports.seed = async database => {
 				about: null,
 				bower: {
 					name: 'o-example-component',
-					dependencies: {}
+					dependencies: {},
+					main: ['./main.js', './main.scss']
 				},
 				imageSet: null,
 				origami: {
@@ -106,6 +109,7 @@ exports.seed = async database => {
 				},
 				package: null
 			}),
+			languages: ['js', 'scss'],
 			markdown: JSON.stringify({
 				designGuidelines: 'TODO add mock design guidelines',
 				migrationGuide: null,
@@ -132,7 +136,8 @@ exports.seed = async database => {
 				about: null,
 				bower: {
 					name: 'o-example-component',
-					dependencies: {}
+					dependencies: {},
+					main: ['./main.js', './main.scss']
 				},
 				imageSet: null,
 				origami: {
@@ -147,6 +152,7 @@ exports.seed = async database => {
 				},
 				package: null
 			}),
+			languages: ['js', 'scss'],
 			markdown: JSON.stringify({
 				designGuidelines: 'TODO add mock design guidelines',
 				migrationGuide: null,
