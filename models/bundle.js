@@ -216,7 +216,7 @@ function initModel(app) {
                 const bundleLanguages = ['js', 'css'].filter(language => {
                     // Include css bundles if the version has scss.
                     language = language === 'css' ? 'scss' : language;
-                    return version.languages.includes(language);
+                    return version.get('languages').includes(language);
                 });
 
                 // Get combinations of brands and languages to collect Bundle
