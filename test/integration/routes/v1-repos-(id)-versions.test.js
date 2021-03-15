@@ -45,7 +45,7 @@ describe('GET /v1/repos/:repoId/versions', () => {
 			assert.strictEqual(version2.name, 'o-mock-component');
 			assert.strictEqual(version2.version, '3.0.0');
 			assert.strictEqual(version2.versionTag, 'v3.0.0');
-			assert.strictEqual(version2.origamiVersion, '2');
+			assert.strictEqual(version2.origamiVersion, '2.0');
 
 			const version3 = response[2];
 			assert.isObject(version3);

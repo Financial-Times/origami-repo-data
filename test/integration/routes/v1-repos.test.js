@@ -724,7 +724,42 @@ describe('GET /v1/repos with query:', () => {
 
 	});
 
-	describe('origamiVersion=2', () => {
+		describe('origamiVersion=2.0', () => {
+
+		beforeEach(async () => {
+			request = agent
+				.get('/v1/repos?origamiVersion=2.0')
+				.set('X-Api-Key', 'mock-read-key')
+				.set('X-Api-Secret', 'mock-read-secret');
+		});
+
+		it('responds with a 200 status', () => {
+			return request.expect(200);
+		});
+
+		it('responds with JSON', () => {
+			return request.expect('Content-Type', /application\/json/);
+		});
+
+		describe('JSON response', () => {
+			let response;
+
+			beforeEach(async () => {
+				response = (await request.then()).body;
+			});
+
+			it('contains components which match all criteria', () => {
+				assert.isArray(response);
+				assert.greaterThan(response.length, 0, 'No components returned.');
+				response.forEach(component => {
+					assert.strictEqual(component.origamiVersion, '2.0', `Returned "${component.name}" with Origami version "${component.origamiVersion}".`);
+				});
+			});
+
+		});
+
+	});
+
 
 		beforeEach(async () => {
 			request = agent
@@ -760,11 +795,11 @@ describe('GET /v1/repos with query:', () => {
 
 	});
 
-	describe('origamiVersion=1,2', () => {
+	describe('origamiVersion=1,2.0', () => {
 
 		beforeEach(async () => {
 			request = agent
-				.get('/v1/repos?origamiVersion=1,2')
+				.get('/v1/repos?origamiVersion=1,2.0')
 				.set('X-Api-Key', 'mock-read-key')
 				.set('X-Api-Secret', 'mock-read-secret');
 		});
@@ -788,7 +823,7 @@ describe('GET /v1/repos with query:', () => {
 				assert.isArray(response);
 				assert.greaterThan(response.length, 0, 'No components returned.');
 				assert.ok(response.find(c => c.origamiVersion === '1'), 'Expected to find a v1 component');
-				assert.ok(response.find(c => c.origamiVersion === '2'), 'Expected to find a v2 component');
+				assert.ok(response.find(c => c.origamiVersion === '2.0'), 'Expected to find a v2 component');
 			});
 
 		});

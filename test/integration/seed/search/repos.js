@@ -61,12 +61,16 @@ exports.seed = async database => {
 			name: 'active-module-v2',
 			type: 'module',
 			support_status: 'active',
-			origami_version: '2',
+			origami_version: '2.0',
 			manifests: {
 				origami: {
 					description: 'this follows the v2 origami specification',
 					keywords: [],
-					origamiVersion: 2,
+					origamiVersion: '2.0',
+					brands: []
+				}
+			}
+		}),
 					brands: []
 				}
 			}
