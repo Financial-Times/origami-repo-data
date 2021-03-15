@@ -42,8 +42,8 @@ describe('GET /v1/repos/:repoId', () => {
 				'no-html'
 			]);
 			assert.deepEqual(response.languages, [
-				'mock1',
-				'mock2'
+				'js',
+				'scss'
 			]);
 			assert.deepEqual(response.brands, [
 				'master',

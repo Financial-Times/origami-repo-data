@@ -3,11 +3,11 @@
 // Create versions for a mock component
 exports.seed = async database => {
 
-	const manifests = {
+	const manifestsV1 = {
 		origami: {
 			name: 'o-mock-component',
 			origamiType: 'module',
-			origamiVersion: '1',
+			origamiVersion: 1,
 			brands: [
 				'master',
 				'internal'
@@ -51,9 +51,8 @@ exports.seed = async database => {
 		},
 		bower: {
 			main: [
-				'example.mock1',
-				'example2.mock1',
-				'example3.MOCK2'
+				'mock.js',
+				'mock.scss'
 			],
 			dependencies: {
 				'mock-bower-dependency-1': '^1.2.3',
@@ -87,7 +86,8 @@ exports.seed = async database => {
 			version_minor: 0,
 			version_patch: 0,
 			version_prerelease: null,
-			manifests: JSON.stringify(manifests),
+			languages: JSON.stringify(['js', 'scss']),
+			manifests: JSON.stringify(manifestsV1),
 			markdown: JSON.stringify(markdown)
 		},
 		{
@@ -106,7 +106,8 @@ exports.seed = async database => {
 			version_minor: 0,
 			version_patch: 0,
 			version_prerelease: null,
-			manifests: JSON.stringify(manifests),
+			languages: JSON.stringify(['js', 'scss']),
+			manifests: JSON.stringify(manifestsV1),
 			markdown: JSON.stringify(markdown)
 		},
 		{
@@ -125,7 +126,8 @@ exports.seed = async database => {
 			version_minor: 1,
 			version_patch: 0,
 			version_prerelease: null,
-			manifests: JSON.stringify(manifests),
+			languages: JSON.stringify(['js', 'scss']),
+			manifests: JSON.stringify(manifestsV1),
 			markdown: JSON.stringify(markdown)
 		},
 		{
@@ -144,7 +146,8 @@ exports.seed = async database => {
 			version_minor: 0,
 			version_patch: 0,
 			version_prerelease: null,
-			manifests: JSON.stringify(manifests),
+			languages: JSON.stringify(['js', 'scss']),
+			manifests: JSON.stringify(manifestsV1),
 			markdown: JSON.stringify(markdown)
 		},
 		{
@@ -163,7 +166,36 @@ exports.seed = async database => {
 			version_minor: 0,
 			version_patch: 0,
 			version_prerelease: 'beta.1',
-			manifests: JSON.stringify(manifests),
+			languages: JSON.stringify(['js', 'scss']),
+			manifests: JSON.stringify(manifestsV1),
+			markdown: JSON.stringify(markdown)
+		},
+		{
+			id: '68d9d7dd-fb52-4b27-bb5c-ff303b2da50c',
+			repo_id: 'c990cb4b-c82b-5071-afb0-16149debc53d',
+			created_at: new Date('2021-04-10T00:00:00Z'),
+			updated_at: new Date('2021-04-10T00:00:00Z'),
+			name: 'o-mock-component',
+			type: 'module',
+			url: 'https://github.com/Financial-Times/o-mock-component',
+			support_email: 'origami.support@ft.com',
+			support_channel: '#origami-support',
+			tag: 'v3.0.0',
+			version: '3.0.0',
+			version_major: 3,
+			version_minor: 0,
+			version_patch: 0,
+			version_prerelease: 0,
+			languages: JSON.stringify(['js', 'scss']),
+			manifests: JSON.stringify(Object.assign({}, manifestsV1, {
+				origami: Object.assign({}, manifestsV1.origami, {
+					origamiVersion: 2
+				}),
+				package: {
+					'name': `@financial-times/${manifestsV1.origami.name}`,
+					'version': '3.0.0'
+				}
+			})),
 			markdown: JSON.stringify(markdown)
 		}
 	]);

@@ -35,9 +35,11 @@ exports.seed = async database => {
 					name: '@financial-times/example-module',
 					description: 'An example Node.js module',
 					keywords: ['node', 'example'],
+					main: './lib/main.js',
 					dependencies: {}
 				}
 			}),
+			languages: ['js'],
 			markdown: JSON.stringify({
 				designGuidelines: null,
 				migrationGuide: null,
@@ -69,9 +71,11 @@ exports.seed = async database => {
 					name: '@financial-times/example-module',
 					description: 'An example Node.js module',
 					keywords: ['node', 'example'],
+					main: './lib/main.js',
 					dependencies: {}
 				}
 			}),
+			languages: ['js'],
 			markdown: JSON.stringify({
 				designGuidelines: null,
 				migrationGuide: null,
