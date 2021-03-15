@@ -440,7 +440,26 @@ function initModel(app) {
 				.filter(propertyFilter('type', filters.type))
 				.filter(propertyFilter('support_email', filters.supportEmail))
 				.filter(propertyFilter('support_status', filters.status))
-				.filter(propertyFilter('origami_version', filters.origamiVersion))
+				.filter(repo => {
+					const standardMatch = propertyFilter('origami_version', filters.origamiVersion);
+					
+					if (standardMatch(repo)) {
+						return true;
+					}
+					
+					if (filters.origamiVersion.match(/\d+/)) {
+						const repoOrigamiVersion = repo.get('origami_version');
+						if (!repoOrigamiVersion) {
+							return false;
+						}
+						const major = repoOrigamiVersion.split('.')[0];
+						if (major === filters.origamiVersion) {
+							return true;
+						}
+					}
+					
+					return false;
+				})
 				.filter(repo => {
 					repo.searchScore = 0;
 					if (!search) {
