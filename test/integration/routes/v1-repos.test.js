@@ -724,7 +724,7 @@ describe('GET /v1/repos with query:', () => {
 
 	});
 
-		describe('origamiVersion=2.0', () => {
+	describe('origamiVersion=2.0', () => {
 
 		beforeEach(async () => {
 			request = agent
@@ -760,6 +760,7 @@ describe('GET /v1/repos with query:', () => {
 
 	});
 
+	describe.only('origamiVersion=2', () => {
 
 		beforeEach(async () => {
 			request = agent
@@ -786,8 +787,10 @@ describe('GET /v1/repos with query:', () => {
 			it('contains components which match all criteria', () => {
 				assert.isArray(response);
 				assert.greaterThan(response.length, 0, 'No components returned.');
+				assert.ok(response.find(c => c.origamiVersion === '2.0'), 'Expected to find a v2.0 component');
+				assert.ok(response.find(c => c.origamiVersion === '2.1'), 'Expected to find a v2.1 component');
 				response.forEach(component => {
-					assert.strictEqual(component.origamiVersion, '2', `Returned "${component.name}" with Origami version "${component.origamiVersion}".`);
+					assert(component.origamiVersion.startsWith('2.'), `Returned "${component.name}" with Origami version "${component.origamiVersion}".`);
 				});
 			});
 

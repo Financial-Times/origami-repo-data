@@ -71,6 +71,17 @@ exports.seed = async database => {
 				}
 			}
 		}),
+
+		version({
+			name: 'active-module-v2.1',
+			type: 'module',
+			support_status: 'active',
+			origami_version: '2.1',
+			manifests: {
+				origami: {
+					description: 'this follows the v2.1 origami specification',
+					keywords: [],
+					origamiVersion: '2.1',
 					brands: []
 				}
 			}
