@@ -92,7 +92,7 @@ describe('GET /v1/repos with query:', () => {
 
 			it('contains only actively supported repos', () => {
 				assert.isArray(response);
-				assert.lengthEquals(response, 6);
+				assert.lengthEquals(response, 7);
 				for (const repo of response) {
 					assert.strictEqual(repo.support.status, 'active');
 				}
@@ -200,7 +200,7 @@ describe('GET /v1/repos with query:', () => {
 
 			it('contains only module components', () => {
 				assert.isArray(response);
-				assert.lengthEquals(response, 8);
+				assert.lengthEquals(response, 9);
 				for (const repo of response) {
 					assert.strictEqual(repo.type, 'module');
 				}
@@ -236,7 +236,7 @@ describe('GET /v1/repos with query:', () => {
 
 			it('contains only components with the expected support email', () => {
 				assert.isArray(response);
-				assert.lengthEquals(response, 10);
+				assert.lengthEquals(response, 11);
 				for (const repo of response) {
 					assert.strictEqual(repo.support.email, 'origami.support@ft.com');
 				}
@@ -308,7 +308,7 @@ describe('GET /v1/repos with query:', () => {
 
 			it('contains components with either support email', () => {
 				assert.isArray(response);
-				assert.lengthEquals(response, 11);
+				assert.lengthEquals(response, 12);
 				for (const repo of response) {
 					assert.include(['origami.support@ft.com', 'next.developers@ft.com'], repo.support.email);
 				}
@@ -380,7 +380,7 @@ describe('GET /v1/repos with query:', () => {
 
 			it('contains both module and service components', () => {
 				assert.isArray(response);
-				assert.lengthEquals(response, 9);
+				assert.lengthEquals(response, 10);
 				for (const repo of response) {
 					assert.include(['module', 'service'], repo.type);
 				}
@@ -488,7 +488,7 @@ describe('GET /v1/repos with query:', () => {
 
 			it('contains only components which have not been branded', () => {
 				assert.isArray(response);
-				assert.lengthEquals(response, 7);
+				assert.lengthEquals(response, 8);
 				for (const repo of response) {
 					if (repo.type === 'module') {
 						assert.deepEqual(repo.brands, []);
