@@ -1,4 +1,3 @@
-
 # Origami Repo Data
 
 Get information about Origami repositories. See [the production service][production-url] for API information.
