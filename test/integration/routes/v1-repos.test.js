@@ -760,7 +760,7 @@ describe('GET /v1/repos with query:', () => {
 
 	});
 
-	describe.only('origamiVersion=2', () => {
+	describe('origamiVersion=2', () => {
 
 		beforeEach(async () => {
 			request = agent
