@@ -55,7 +55,7 @@ exports.seed = async database => {
                         'internal'
                     ],
                     keywords: 'example, mock',
-                    origamiVersion: 2,
+                    origamiVersion: "2.0",
                     support: 'https://github.com/Financial-Times/o-example-component-v2/issues',
                     supportStatus: 'active',
                     demos: demos
@@ -97,7 +97,7 @@ exports.seed = async database => {
                     origamiType: 'module',
                     origamiCategory: 'components',
                     keywords: 'example, mock',
-                    origamiVersion: 2,
+                    origamiVersion: "2.0",
                     support: 'https://github.com/Financial-Times/o-example-component-v2/issues',
                     supportStatus: 'active',
                     demos: demos
@@ -139,7 +139,7 @@ exports.seed = async database => {
                     origamiType: 'module',
                     origamiCategory: 'components',
                     keywords: 'example, mock',
-                    origamiVersion: 2,
+                    origamiVersion: "2.0",
                     support: 'https://github.com/Financial-Times/o-example-component-v2/issues',
                     supportStatus: 'active',
                     demos: demos

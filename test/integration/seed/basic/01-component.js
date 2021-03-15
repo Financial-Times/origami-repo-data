@@ -189,7 +189,7 @@ exports.seed = async database => {
 			languages: JSON.stringify(['js', 'scss']),
 			manifests: JSON.stringify(Object.assign({}, manifestsV1, {
 				origami: Object.assign({}, manifestsV1.origami, {
-					origamiVersion: 2
+					origamiVersion: '2.0'
 				}),
 				package: {
 					'name': `@financial-times/${manifestsV1.origami.name}`,
