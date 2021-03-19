@@ -1,10 +1,18 @@
+<!--
+    Written in the format prescribed by https://github.com/Financial-Times/runbook.md.
+    Any future edits should abide by this format.
+-->
 # Origami Repo Data
 
 Origami Repo Data is an API which can be used to get information about repositories which contain an origami.json file. These could be components, services, image sets, and Node.js modules.
 
+## Code
+
+origami-repo-data
+
 ## Service Tier
 
-Bronze
+Silver
 
 ## Lifecycle Stage
 
@@ -14,46 +22,25 @@ Production
 
 https://origami-repo-data.ft.com
 
-## Replaces
-
-* origami-registry
-
 ## Host Platform
 
 Heroku
 
 ## Contains Personal Data
 
-no
+No
 
 ## Contains Sensitive Data
 
-no
+No
 
-## Delivered By
+## Can Download Personal Data
 
-origami-team
+No
 
-## Supported By
+## Can Contact Individuals
 
-origami-team
-
-## Known About By
-
-* lee.moody
-* jake.champion
-* rowan.manning
-
-## Dependencies
-
-* github
-* heroku
-* slack-financialtimes
-
-## Healthchecks
-
-* origami-repo-data-us.herokuapp.com-https
-* origami-repo-data-eu.herokuapp.com-https
+No
 
 ## Failover Architecture Type
 
@@ -87,13 +74,9 @@ Manual
 
 This is an application with several moving parts, mostly centred around a Node.js application but with the following external components:
 
-  - A PostgreSQL [database hosted by Heroku](https://dashboard.heroku.com/apps/origami-repo-data-eu/resources) on the EU application
-  - An [organisation-wide Webhook](https://github.com/organizations/Financial-Times/settings/hooks) on the Financial-Times GitHub
-  - A Slack integration, for posting in the #origami-support Slack channel
-
-### Architecture Diagram
-
-<p><a href="https://docs.google.com/a/ft.com/drawings/d/1qKROLQvR-D5LzxxTTkJgzcr5IlLLkaRh3bEtF0AAYeA/edit?usp=sharing">Google Drawing</a></p>
+*   A PostgreSQL [database hosted by Heroku](https://dashboard.heroku.com/apps/origami-repo-data-eu/resources) on the EU application
+*   An [organisation-wide Webhook](https://github.com/organizations/Financial-Times/settings/hooks) on the Financial-Times GitHub
+*   A Slack integration, for posting in the #ft-origami Slack channel
 
 ### Fetching repo data
 
@@ -101,7 +84,19 @@ When a user fetches repo data via the API, the process for getting that data is 
 
 ### Adding repositories
 
-When a repository is changed on GitHub, the org-wide webhook adds an item to a queue within the Node.js application (backed by PostgreSQL). The Node.js application checks this queue periodically, ingesting data via the GitHub API if the repository is a valid Origami repository. Once the repository is ingested, a Slack message is sent to the #origami-support channel.
+When a repository is changed on GitHub, the org-wide webhook adds an item to a queue within the Node.js application (backed by PostgreSQL). The Node.js application checks this queue periodically, ingesting data via the GitHub API if the repository is a valid Origami repository. Once the repository is ingested, a Slack message is sent to the #ft-origami channel.
+
+<!-- Placeholder - remove HTML comment markers to activate
+## More Information
+Enter descriptive text satisfying the following:
+Any additional information about this system.
+
+...or delete this placeholder if not applicable to this system
+-->
+
+## Heroku Pipeline Name
+
+e707ccd0-dd5b-44b2-8361-c13ca892a492
 
 ## First Line Troubleshooting
 
@@ -109,26 +104,25 @@ This application is not critical outside of office hours, please contact the Ori
 
 If no member of the Origami team is available, this is still required to be running by a lot of engineers at the Financial Times. There are a few things you can try:
 
-1. Restart all of the dynos across the production EU and US Heroku apps ([pipeline here](https://dashboard.heroku.com/pipelines/e707ccd0-dd5b-44b2-8361-c13ca892a492))
-2. Check that the database is running ([click "Heroku Postgres" here](https://dashboard.heroku.com/apps/origami-repo-data-eu/resources))
-
+1.  Restart all of the dynos across the production EU and US Heroku apps ([pipeline here](https://dashboard.heroku.com/pipelines/e707ccd0-dd5b-44b2-8361-c13ca892a492))
+2.  Check that the database is running ([click "Heroku Postgres" here](https://dashboard.heroku.com/apps/origami-repo-data-eu/resources))
 
 ## Second Line Troubleshooting
 
 If the application is failing entirely, you'll need to check a couple of things:
 
-1. Did a deployment just happen? If so, roll it back to bring the service back up (hopefully)
-2. Check the Heroku metrics page for both EU and US apps, to see what CPU and memory usage is like ([pipeline here](https://dashboard.heroku.com/pipelines/e707ccd0-dd5b-44b2-8361-c13ca892a492))
-2. Check the Splunk logs (see the monitoring section of this runbook for the link)
+1.  Did a deployment just happen? If so, roll it back to bring the service back up (hopefully)
+2.  Check the Heroku metrics page for both EU and US apps, to see what CPU and memory usage is like ([pipeline here](https://dashboard.heroku.com/pipelines/e707ccd0-dd5b-44b2-8361-c13ca892a492))
+3.  Check the Splunk logs (see the monitoring section of this runbook for the link)
 
 If only a few things aren't working, the Splunk logs (see monitoring) are the best place to start debugging. Always roll back a deploy if one happened just before the thing stopped working – this gives you the chance to debug in the relative calm of QA.
 
 ## Monitoring
 
-- [Pingdom (EU)](https://my.pingdom.com/newchecks/checks#check=3766255)
-- [Pingdom (US)](https://my.pingdom.com/newchecks/checks#check=3766267)
-- [Grafana Dashboard](http://grafana.ft.com/dashboard/db/origami-repo-data)
-- [Splunk](https://financialtimes.splunkcloud.com/en-US/app/search/search?q=search%20index%3Dheroku%20source%3D%2Fvar%2Flog%2Fapps%2Fheroku%2Forigami-repo-data-*)
+*   [Pingdom (EU)](https://my.pingdom.com/newchecks/checks#check=3766255)
+*   [Pingdom (US)](https://my.pingdom.com/newchecks/checks#check=3766267)
+*   [Grafana Dashboard](http://grafana.ft.com/dashboard/db/origami-repo-data)
+*   [Splunk](https://financialtimes.splunkcloud.com/en-US/app/search/search?q=search%20index%3Dheroku%20source%3D%2Fvar%2Flog%2Fapps%2Fheroku%2Forigami-repo-data-*)
 
 ## Failover Details
 
@@ -138,12 +132,11 @@ Our Fastly config automatically routes requests between the production EU and US
 
 The database is backed up automatically by Heroku, but restoring the data is a manual process:
 
-1. Go to the [resources page for the EU Heroku application](https://dashboard.heroku.com/apps/origami-repo-data-eu/resources)
-2. Click the "Heroku Postgres" resource
-3. In the new window that opens, click the "Duriability" tab
-4. Click the "Rollback Database" button
-5. Enter a date and time to roll back to
-
+1.  Go to the [resources page for the EU Heroku application](https://dashboard.heroku.com/apps/origami-repo-data-eu/resources)
+2.  Click the "Heroku Postgres" resource
+3.  In the new window that opens, click the "Duriability" tab
+4.  Click the "Rollback Database" button
+5.  Enter a date and time to roll back to
 
 ## Release Details
 
