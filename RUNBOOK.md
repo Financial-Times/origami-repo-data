@@ -86,14 +86,6 @@ When a user fetches repo data via the API, the process for getting that data is 
 
 When a repository is changed on GitHub, the org-wide webhook adds an item to a queue within the Node.js application (backed by PostgreSQL). The Node.js application checks this queue periodically, ingesting data via the GitHub API if the repository is a valid Origami repository. Once the repository is ingested, a Slack message is sent to the #ft-origami channel.
 
-<!-- Placeholder - remove HTML comment markers to activate
-## More Information
-Enter descriptive text satisfying the following:
-Any additional information about this system.
-
-...or delete this placeholder if not applicable to this system
--->
-
 ## Heroku Pipeline Name
 
 e707ccd0-dd5b-44b2-8361-c13ca892a492
