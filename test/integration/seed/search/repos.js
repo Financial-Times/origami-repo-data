@@ -28,7 +28,6 @@ exports.seed = async database => {
 			manifests: {
 				origami: {
 					brands: [],
-					keywords: [],
 					demos: [],
 					origamiVersion: 1,
 				}
@@ -48,11 +47,13 @@ exports.seed = async database => {
 			manifests: {
 				origami: {
 					description: 'banana apple pear',
-					keywords: ['kiwi', 'pineapple', 'kumquat'],
 					brands: [
 						'master',
 						'internal'
 					]
+				},
+				package: {
+					keywords: ['kiwi', 'pineapple', 'kumquat'],
 				}
 			}
 		}),
@@ -65,9 +66,11 @@ exports.seed = async database => {
 			manifests: {
 				origami: {
 					description: 'this follows the v2 origami specification',
-					keywords: [],
 					origamiVersion: '2.0',
 					brands: []
+				},
+				package: {
+					keywords: []
 				}
 			}
 		}),
@@ -80,9 +83,11 @@ exports.seed = async database => {
 			manifests: {
 				origami: {
 					description: 'this follows the v2.1 origami specification',
-					keywords: [],
 					origamiVersion: '2.1',
 					brands: []
+				},
+				package: {
+					keywords: []
 				}
 			}
 		}),
@@ -104,7 +109,9 @@ exports.seed = async database => {
 			support_status: 'active',
 			manifests: {
 				origami: {
-					keywords: 'banana, apple'
+				},
+				package: {
+					keywords: ['banana', 'apple']
 				}
 			}
 		}),

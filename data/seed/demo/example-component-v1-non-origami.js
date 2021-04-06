@@ -57,13 +57,14 @@ exports.seed = async database => {
 						'master',
 						'internal'
 					],
-					keywords: 'example, mock',
 					origamiVersion: 1,
 					support: 'https://github.com/Financial-Times/o-example-component-non-origami/issues',
 					supportStatus: 'active',
 					demos: demos
 				},
-				package: null
+				package: {
+					keywords: ['example', 'mock']
+				}
 			}),
 			markdown: JSON.stringify({
 				designGuidelines: 'TODO add mock design guidelines',
@@ -98,13 +99,14 @@ exports.seed = async database => {
 					description: 'An example Origami component not supported by the team',
 					origamiType: 'module',
 					origamiCategory: 'components',
-					keywords: 'example, mock',
 					origamiVersion: 1,
 					support: 'https://github.com/Financial-Times/o-example-component-non-origami/issues',
 					supportStatus: 'active',
 					demos: demos
 				},
-				package: null
+				package: {
+					keywords: ['example', 'mock']
+				}
 			}),
 			markdown: JSON.stringify({
 				designGuidelines: 'TODO add mock design guidelines',
@@ -139,13 +141,14 @@ exports.seed = async database => {
 					description: 'An example Origami component not supported by the team',
 					origamiType: 'module',
 					origamiCategory: 'components',
-					keywords: 'example, mock',
 					origamiVersion: 1,
 					support: 'https://github.com/Financial-Times/o-example-component-non-origami/issues',
 					supportStatus: 'active',
 					demos: demos
 				},
-				package: null
+				package: {
+					keywords: ['example', 'mock']
+				}
 			}),
 			markdown: JSON.stringify({
 				designGuidelines: 'TODO add mock design guidelines',

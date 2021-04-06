@@ -54,7 +54,6 @@ exports.seed = async database => {
                         'master',
                         'internal'
                     ],
-                    keywords: 'example, mock',
                     origamiVersion: '2.0',
                     support: 'https://github.com/Financial-Times/o-example-component-v2/issues',
                     supportStatus: 'active',
@@ -62,6 +61,7 @@ exports.seed = async database => {
                 },
                 package: {
                     name: '@financial-times/o-example-component-v2',
+                    keywords: ['example', 'mock'],
                     version: '1.0.0',
                     browser: './main.js'
                 }
@@ -96,7 +96,6 @@ exports.seed = async database => {
                     description: 'An example Origami component, which follows v2 of the Origami specification',
                     origamiType: 'module',
                     origamiCategory: 'components',
-                    keywords: 'example, mock',
                     origamiVersion: '2.0',
                     support: 'https://github.com/Financial-Times/o-example-component-v2/issues',
                     supportStatus: 'active',
@@ -104,6 +103,7 @@ exports.seed = async database => {
                 },
                 package: {
                     name: '@financial-times/o-example-component-v2',
+                    keywords: ['example', 'mock'],
                     version: '1.1.0',
                     browser: './main.js'
                 }
@@ -138,7 +138,6 @@ exports.seed = async database => {
                     description: 'An example Origami component, which follows v2 of the Origami specification',
                     origamiType: 'module',
                     origamiCategory: 'components',
-                    keywords: 'example, mock',
                     origamiVersion: '2.0',
                     support: 'https://github.com/Financial-Times/o-example-component-v2/issues',
                     supportStatus: 'active',
@@ -146,6 +145,7 @@ exports.seed = async database => {
                 },
                 package: {
                     name: '@financial-times/o-example-component-v2',
+                    keywords: ['example', 'mock'],
                     version: '2.0.0',
                     browser: './main.js',
                     peerDependencies: {

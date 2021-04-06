@@ -12,7 +12,6 @@ exports.seed = async database => {
 				'master',
 				'internal'
 			],
-			keywords: 'keyword1, keyword2',
 			isMockManifest: true,
 			demos: [
 				{
@@ -62,6 +61,9 @@ exports.seed = async database => {
 				'mock-bower-dependency-3': '^1.2.3',
 				'mock-bower-dependency-4': '^4.5.6'
 			}
+		},
+		package: {
+			keywords: ['keyword1', 'keyword2']
 		}
 	};
 

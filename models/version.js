@@ -251,20 +251,13 @@ function initModel(app) {
 				return hasOrigamiVersion ? `${manifests.origami.origamiVersion}` : '';
 			},
 
-			// Get keywords for the version, falling back through different manifests
+			// Get keywords for the version
 			keywords() {
 				const manifests = this.get('manifests') || {};
 				let keywords = [];
 
-				// Order: origami, package, bower
-				if (manifests.origami) {
-					keywords = union(keywords, extractKeywords(manifests.origami));
-				}
 				if (manifests.package) {
 					keywords = union(keywords, extractKeywords(manifests.package));
-				}
-				if (manifests.bower) {
-					keywords = union(keywords, extractKeywords(manifests.bower));
 				}
 
 				return keywords
@@ -442,11 +435,11 @@ function initModel(app) {
 				.filter(propertyFilter('support_status', filters.status))
 				.filter(repo => {
 					const standardMatch = propertyFilter('origami_version', filters.origamiVersion);
-					
+
 					if (standardMatch(repo)) {
 						return true;
 					}
-					
+
 					if (filters.origamiVersion.match(/\d+/)) {
 						const repoOrigamiVersion = repo.get('origami_version');
 						if (!repoOrigamiVersion) {
@@ -457,7 +450,7 @@ function initModel(app) {
 							return true;
 						}
 					}
-					
+
 					return false;
 				})
 				.filter(repo => {
@@ -683,9 +676,6 @@ function initModel(app) {
 
 // Extract keywords from a manifest file
 function extractKeywords(manifest) {
-	if (typeof manifest.keywords === 'string' && manifest.keywords.length) {
-		return manifest.keywords.trim().split(/[,\s]+/);
-	}
 	if (Array.isArray(manifest.keywords)) {
 		return manifest.keywords;
 	}

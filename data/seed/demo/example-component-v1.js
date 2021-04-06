@@ -58,13 +58,14 @@ exports.seed = async database => {
 						'master',
 						'internal'
 					],
-					keywords: 'example, mock',
 					origamiVersion: 1,
 					support: 'https://github.com/Financial-Times/o-example-component/issues',
 					supportStatus: 'active',
 					demos: demos
 				},
-				package: null
+				package: {
+					keywords: ['example', 'mock']
+				}
 			}),
 			languages: ['js'],
 			markdown: JSON.stringify({
@@ -101,13 +102,14 @@ exports.seed = async database => {
 					description: 'An example Origami component',
 					origamiType: 'module',
 					origamiCategory: 'components',
-					keywords: 'example, mock',
 					origamiVersion: 1,
 					support: 'https://github.com/Financial-Times/o-example-component/issues',
 					supportStatus: 'active',
 					demos: demos
 				},
-				package: null
+				package: {
+					keywords: ['example', 'mock']
+				}
 			}),
 			languages: ['js', 'scss'],
 			markdown: JSON.stringify({
@@ -144,13 +146,14 @@ exports.seed = async database => {
 					description: 'An example Origami component',
 					origamiType: 'module',
 					origamiCategory: 'components',
-					keywords: 'example, mock',
 					origamiVersion: 1,
 					support: 'https://github.com/Financial-Times/o-example-component/issues',
 					supportStatus: 'active',
 					demos: demos
 				},
-				package: null
+				package: {
+					keywords: ['example', 'mock']
+				}
 			}),
 			languages: ['js', 'scss'],
 			markdown: JSON.stringify({
