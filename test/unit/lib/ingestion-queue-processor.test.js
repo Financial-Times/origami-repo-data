@@ -284,65 +284,8 @@ describe('lib/ingestion-queue-processor', () => {
 					});
 				});
 
-				it('increments the ingestion attempts', () => {
-					assert.calledWithExactly(mockIngestion.set, 'ingestion_attempts', 2);
-				});
-
-				it('nullifies the ingestion start date', () => {
-					assert.calledWithExactly(mockIngestion.set, 'ingestion_started_at', null);
-				});
-
-				it('saves the ingestion', () => {
-					assert.calledOnce(mockIngestion.save);
-					assert.calledWithExactly(mockIngestion.save);
-				});
-
-				it('sets a timeout to recurse', () => {
-					assert.calledOnce(global.setTimeout);
-					assert.isFunction(global.setTimeout.firstCall.args[0]);
-					assert.strictEqual(global.setTimeout.firstCall.args[1], 100);
-					global.setTimeout.firstCall.args[0]();
-					assert.calledOnce(instance.fetchNextIngestion);
-					assert.calledWithExactly(instance.fetchNextIngestion);
-				});
-
-			});
-
-			describe('when the version creation fails', () => {
-				let creationError;
-
-				beforeEach(async () => {
-					global.setTimeout.resetHistory();
-					creationError = new Error('mock creation error');
-					instance.Version.createFromIngestion.resetHistory();
-					instance.Version.createFromIngestion.rejects(creationError);
-					instance.fetchNextIngestion.resetHistory();
-					mockIngestion.get.withArgs('ingestion_attempts').returns(1);
-					await fetchNextIngestion();
-				});
-
-				it('logs the failure', () => {
-					assert.calledWith(instance.log, {
-						type: 'error',
-						message: 'mock creation error',
-						url: 'mock-ingestion-url',
-						tag: 'mock-ingestion-tag',
-						ingestionType: 'version',
-						recoverable: false
-					});
-				});
-
-				it('increments the ingestion attempts', () => {
-					assert.calledWithExactly(mockIngestion.set, 'ingestion_attempts', 2);
-				});
-
-				it('nullifies the ingestion start date', () => {
-					assert.calledWithExactly(mockIngestion.set, 'ingestion_started_at', null);
-				});
-
-				it('saves the ingestion', () => {
-					assert.calledOnce(mockIngestion.save);
-					assert.calledWithExactly(mockIngestion.save);
+				it('deletes the ingestion attempt', () => {
+					assert.calledOnce(mockIngestion.destroy);
 				});
 
 				it('sets a timeout to recurse', () => {
@@ -364,6 +307,7 @@ describe('lib/ingestion-queue-processor', () => {
 					creationError.isRecoverable = true;
 					instance.Version.createFromIngestion.resetHistory();
 					instance.Version.createFromIngestion.rejects(creationError);
+					mockIngestion.get.withArgs('ingestion_attempts').returns(1);
 					await fetchNextIngestion();
 				});
 
@@ -378,6 +322,27 @@ describe('lib/ingestion-queue-processor', () => {
 					});
 				});
 
+				it('increments the ingestion attempts', () => {
+					assert.calledWithExactly(mockIngestion.set, 'ingestion_attempts', 2);
+				});
+
+				it('nullifies the ingestion start date', () => {
+					assert.calledWithExactly(mockIngestion.set, 'ingestion_started_at', null);
+				});
+
+				it('saves the ingestion', () => {
+					assert.calledOnce(mockIngestion.save);
+					assert.calledWithExactly(mockIngestion.save);
+				});
+
+				it('sets a timeout to recurse', () => {
+					assert.calledOnce(global.setTimeout);
+					assert.isFunction(global.setTimeout.firstCall.args[0]);
+					assert.strictEqual(global.setTimeout.firstCall.args[1], 100);
+					global.setTimeout.firstCall.args[0]();
+					assert.calledOnce(instance.fetchNextIngestion);
+					assert.calledWithExactly(instance.fetchNextIngestion);
+				});
 			});
 
 			describe('when the version creation fails and it is explicitly not recoverable', () => {
