@@ -442,11 +442,11 @@ function initModel(app) {
 				.filter(propertyFilter('support_status', filters.status))
 				.filter(repo => {
 					const standardMatch = propertyFilter('origami_version', filters.origamiVersion);
-					
+
 					if (standardMatch(repo)) {
 						return true;
 					}
-					
+
 					if (filters.origamiVersion.match(/\d+/)) {
 						const repoOrigamiVersion = repo.get('origami_version');
 						if (!repoOrigamiVersion) {
@@ -457,7 +457,7 @@ function initModel(app) {
 							return true;
 						}
 					}
-					
+
 					return false;
 				})
 				.filter(repo => {
@@ -578,7 +578,7 @@ function initModel(app) {
 
 		// Create a version based on an Ingestion
 		async createFromIngestion(ingestion) {
-			await createVersionFromIngestion(ingestion, app.model.Version, app.github);
+			return await createVersionFromIngestion(ingestion, app.model.Version, app.github);
 		},
 
 		// Normalise an Origami manifest demo
