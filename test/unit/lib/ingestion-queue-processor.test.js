@@ -135,10 +135,11 @@ describe('lib/ingestion-queue-processor', () => {
 				global.setTimeout.restore();
 			});
 
-			describe('when a version ingestions is in the database', () => {
+			describe('when a version ingestion for a component is in the database', () => {
 
 				beforeEach(async () => {
 					mockIngestion.get.withArgs('type').returns('version');
+					mockVersion.get.withArgs('type').returns('component');
 					await fetchNextIngestion();
 				});
 
@@ -191,6 +192,19 @@ describe('lib/ingestion-queue-processor', () => {
 					global.setTimeout.firstCall.args[0]();
 					assert.calledOnce(instance.fetchNextIngestion);
 					assert.calledWithExactly(instance.fetchNextIngestion);
+				});
+			});
+
+			describe('when a version ingestion for a non-component is in the database', () => {
+
+				beforeEach(async () => {
+					mockIngestion.get.withArgs('type').returns('version');
+					mockVersion.get.withArgs('type').returns('lib');
+					await fetchNextIngestion();
+				});
+
+				it('does not create a bundle ingestion for the new version', () => {
+					assert.notCalled(app.model.Ingestion.create);
 				});
 			});
 
