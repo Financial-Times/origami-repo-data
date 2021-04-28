@@ -490,7 +490,11 @@ describe('GET /v1/repos with query:', () => {
 				assert.isArray(response);
 				assert.lengthEquals(response, 8);
 				for (const repo of response) {
-					assert.deepEqual(repo.brands, []);
+					if (repo.type === 'module' || repo.type === 'component') {
+						assert.deepEqual(repo.brands, []);
+					} else {
+						assert.isNull(repo.brands);
+					}
 				}
 			});
 
