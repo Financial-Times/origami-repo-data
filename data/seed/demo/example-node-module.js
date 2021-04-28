@@ -39,7 +39,7 @@ exports.seed = async database => {
 					dependencies: {}
 				}
 			}),
-			languages: ['js'],
+			languages: JSON.stringify(['js']),
 			markdown: JSON.stringify({
 				designGuidelines: null,
 				migrationGuide: null,
@@ -75,7 +75,7 @@ exports.seed = async database => {
 					dependencies: {}
 				}
 			}),
-			languages: ['js'],
+			languages: JSON.stringify(['js']),
 			markdown: JSON.stringify({
 				designGuidelines: null,
 				migrationGuide: null,
