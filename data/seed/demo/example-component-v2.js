@@ -33,7 +33,7 @@ exports.seed = async database => {
             created_at: new Date(Date.now() - 10000),
             updated_at: new Date(Date.now() - 10000),
             name: 'o-example-component-v2',
-            type: 'module',
+            type: 'component',
             url: 'https://github.com/Financial-Times/o-example-component-v2',
             support_email: 'origami.support@ft.com',
             support_channel: '#origami-support',
@@ -48,7 +48,7 @@ exports.seed = async database => {
                 imageSet: null,
                 origami: {
                     description: 'An example Origami component, which follows v2 of the Origami specification',
-                    origamiType: 'module',
+                    origamiType: 'component',
                     origamiCategory: 'components',
                     brands: [
                         'master',
@@ -79,7 +79,7 @@ exports.seed = async database => {
             created_at: new Date(Date.now() - 5000),
             updated_at: new Date(Date.now() - 5000),
             name: 'o-example-component-v2',
-            type: 'module',
+            type: 'component',
             url: 'https://github.com/Financial-Times/o-example-component-v2',
             support_email: 'origami.support@ft.com',
             support_channel: '#origami-support',
@@ -94,7 +94,7 @@ exports.seed = async database => {
                 imageSet: null,
                 origami: {
                     description: 'An example Origami component, which follows v2 of the Origami specification',
-                    origamiType: 'module',
+                    origamiType: 'component',
                     origamiCategory: 'components',
                     keywords: 'example, mock',
                     origamiVersion: '2.0',
@@ -121,7 +121,7 @@ exports.seed = async database => {
             created_at: new Date(Date.now()),
             updated_at: new Date(Date.now()),
             name: 'o-example-component-v2',
-            type: 'module',
+            type: 'component',
             url: 'https://github.com/Financial-Times/o-example-component-v2',
             support_email: 'origami.support@ft.com',
             support_channel: '#origami-support',
@@ -136,7 +136,7 @@ exports.seed = async database => {
                 imageSet: null,
                 origami: {
                     description: 'An example Origami component, which follows v2 of the Origami specification',
-                    origamiType: 'module',
+                    origamiType: 'component',
                     origamiCategory: 'components',
                     keywords: 'example, mock',
                     origamiVersion: '2.0',

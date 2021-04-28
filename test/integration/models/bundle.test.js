@@ -46,6 +46,7 @@ describe('Bundle', () => {
 				const url = new URL(this.req.options.href);
 				const { lang } = uri.match(/bundles\/(?<lang>[a-z]*)/).groups;
 				const brand = url.searchParams.get('brand');
+
 				const result = mockData.find(d =>
 					d.brand === brand &&
 					d.lang === lang
