@@ -66,7 +66,7 @@ exports.seed = async database => {
                     browser: './main.js'
                 }
             }),
-            languages: ['js'],
+            languages: JSON.stringify(['js']),
             markdown: JSON.stringify({
                 designGuidelines: 'TODO add mock design guidelines',
                 migrationGuide: null,
@@ -108,7 +108,7 @@ exports.seed = async database => {
                     browser: './main.js'
                 }
             }),
-            languages: ['js'],
+            languages: JSON.stringify(['js']),
             markdown: JSON.stringify({
                 designGuidelines: 'TODO add mock design guidelines',
                 migrationGuide: null,
@@ -153,7 +153,7 @@ exports.seed = async database => {
                     }
                 },
             }),
-            languages: ['js'],
+            languages: JSON.stringify(['js']),
             markdown: JSON.stringify({
                 designGuidelines: 'TODO add mock design guidelines',
                 migrationGuide: null,

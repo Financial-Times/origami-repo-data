@@ -66,7 +66,7 @@ exports.seed = async database => {
 				},
 				package: null
 			}),
-			languages: ['js'],
+			languages: JSON.stringify(['js']),
 			markdown: JSON.stringify({
 				designGuidelines: 'TODO add mock design guidelines',
 				migrationGuide: null,
@@ -109,7 +109,7 @@ exports.seed = async database => {
 				},
 				package: null
 			}),
-			languages: ['js', 'scss'],
+			languages: JSON.stringify(['js', 'scss']),
 			markdown: JSON.stringify({
 				designGuidelines: 'TODO add mock design guidelines',
 				migrationGuide: null,
@@ -152,7 +152,7 @@ exports.seed = async database => {
 				},
 				package: null
 			}),
-			languages: ['js', 'scss'],
+			languages: JSON.stringify(['js', 'scss']),
 			markdown: JSON.stringify({
 				designGuidelines: 'TODO add mock design guidelines',
 				migrationGuide: null,
