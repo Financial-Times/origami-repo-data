@@ -176,7 +176,7 @@ exports.seed = async database => {
 			created_at: new Date('2021-04-10T00:00:00Z'),
 			updated_at: new Date('2021-04-10T00:00:00Z'),
 			name: 'o-mock-component',
-			type: 'module',
+			type: 'component',
 			url: 'https://github.com/Financial-Times/o-mock-component',
 			support_email: 'origami.support@ft.com',
 			support_channel: '#origami-support',

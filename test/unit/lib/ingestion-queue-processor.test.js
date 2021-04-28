@@ -140,6 +140,7 @@ describe('lib/ingestion-queue-processor', () => {
 				beforeEach(async () => {
 					mockIngestion.get.withArgs('type').returns('version');
 					mockVersion.get.withArgs('type').returns('component');
+					mockVersion.get.withArgs('type_is_component').returns(true);
 					await fetchNextIngestion();
 				});
 
@@ -200,6 +201,7 @@ describe('lib/ingestion-queue-processor', () => {
 				beforeEach(async () => {
 					mockIngestion.get.withArgs('type').returns('version');
 					mockVersion.get.withArgs('type').returns('lib');
+					mockVersion.get.withArgs('type_is_component').returns(false);
 					await fetchNextIngestion();
 				});
 

@@ -59,7 +59,7 @@ exports.seed = async database => {
 
 		version({
 			name: 'active-module-v2',
-			type: 'module',
+			type: 'component',
 			support_status: 'active',
 			origami_version: '2.0',
 			manifests: {
@@ -74,7 +74,7 @@ exports.seed = async database => {
 
 		version({
 			name: 'active-module-v2.1',
-			type: 'module',
+			type: 'component',
 			support_status: 'active',
 			origami_version: '2.1',
 			manifests: {

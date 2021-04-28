@@ -26,12 +26,13 @@ describe('createVersionFromIngestion', () => {
             proclaim.ok(version, 'No Version could be found for the Ingestion.');
             proclaim.include(version.get('languages'), 'js', 'Expected the Version to include "js" in the "languages" property.');
             proclaim.include(version.get('languages'), 'scss', 'Expected the Version to include "scss" in the "languages" property.');
+            proclaim.isTrue(version.get('type_is_component'), 'Expected the Version "type_is_component" property to be true.');
         });
     });
 
     describe('given a v2 component Ingestion', () => {
         describe('that is valid, with JS and Sass', () => {
-            it('saves a new Version with languages set', async () => {
+            it('saves a new Version with properties set', async () => {
                 const url = 'https://github.com/Financial-Times/o-test-component';
                 const tag = 'v2.0.1';
 
@@ -45,10 +46,11 @@ describe('createVersionFromIngestion', () => {
                 proclaim.ok(version, 'No Version could be found for the Ingestion.');
                 proclaim.include(version.get('languages'), 'js', 'Expected the Version to include "js" in the "languages" property.');
                 proclaim.include(version.get('languages'), 'scss', 'Expected the Version to include "scss" in the "languages" property.');
+                proclaim.isTrue(version.get('type_is_component'), 'Expected the Version "type_is_component" property to be true.');
             });
         });
         describe('that is valid, with JS but no Sass', () => {
-            it('saves a new Version with languages set', async () => {
+            it('saves a new Version with properties set', async () => {
                 const url = 'https://github.com/Financial-Times/o-test-component';
                 const tag = 'v2.0.16';
 
@@ -62,6 +64,7 @@ describe('createVersionFromIngestion', () => {
                 proclaim.ok(version, 'No Version could be found for the Ingestion.');
                 proclaim.include(version.get('languages'), 'js', 'Expected the Version to include "js" in the "languages" property.');
                 proclaim.notInclude(version.get('languages'), 'scss', 'Expected the Version to not include "scss" in the "languages" property, "js" only.');
+                proclaim.isTrue(version.get('type_is_component'), 'Expected the Version "type_is_component" property to be true.');
             });
         });
     });
