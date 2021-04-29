@@ -305,6 +305,9 @@ function initModel(app) {
 			},
 
 			// Get the Origami sub-type (category) for the version
+			// Spec v1 components/modules have a sub-type (category),
+			// this was dropped in spec v2:
+			// https://github.com/Financial-Times/origami/pull/120
 			sub_type() {
 				const manifests = this.get('manifests') || {};
 				if (manifests.origami && manifests.origami.origamiCategory && typeof manifests.origami.origamiCategory === 'string') {

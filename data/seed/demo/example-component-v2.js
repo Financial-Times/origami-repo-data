@@ -49,7 +49,6 @@ exports.seed = async database => {
                 origami: {
                     description: 'An example Origami component, which follows v2 of the Origami specification',
                     origamiType: 'component',
-                    origamiCategory: 'components',
                     brands: [
                         'master',
                         'internal'
@@ -95,7 +94,6 @@ exports.seed = async database => {
                 origami: {
                     description: 'An example Origami component, which follows v2 of the Origami specification',
                     origamiType: 'component',
-                    origamiCategory: 'components',
                     keywords: 'example, mock',
                     origamiVersion: '2.0',
                     support: 'https://github.com/Financial-Times/o-example-component-v2/issues',
@@ -137,7 +135,6 @@ exports.seed = async database => {
                 origami: {
                     description: 'An example Origami component, which follows v2 of the Origami specification',
                     origamiType: 'component',
-                    origamiCategory: 'components',
                     keywords: 'example, mock',
                     origamiVersion: '2.0',
                     support: 'https://github.com/Financial-Times/o-example-component-v2/issues',
