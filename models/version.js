@@ -171,6 +171,16 @@ function initModel(app) {
 		outputVirtuals: false,
 		virtuals: {
 
+			// Get whether the repo is a component. Either "module" or
+			// "component" could be used interchangeably for spec v1 components.
+			// It was normalised to "module" within repo data, however, spec v2
+			// components dropped the "module" type for "component",
+			type_is_component() {
+				return ['module', 'component'].includes(
+					this.get('type')
+				);
+			},
+
 			// Get whether the repo is supported by the Origami team
 			support_is_origami() {
 				return (this.get('support_email') === origamiSupportEmail);
@@ -295,6 +305,9 @@ function initModel(app) {
 			},
 
 			// Get the Origami sub-type (category) for the version
+			// Spec v1 components/modules have a sub-type (category),
+			// this was dropped in spec v2:
+			// https://github.com/Financial-Times/origami/pull/120
 			sub_type() {
 				const manifests = this.get('manifests') || {};
 				if (manifests.origami && manifests.origami.origamiCategory && typeof manifests.origami.origamiCategory === 'string') {
@@ -651,7 +664,7 @@ function initModel(app) {
 
 		// Normalise an origami brands array
 		normaliseOrigamiBrandsArray(type, brands) {
-			if (type !== 'module') {
+			if (type !== 'module' && type !== 'component') {
 				return null;
 			}
 			if (!Array.isArray(brands)) {

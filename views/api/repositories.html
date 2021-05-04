@@ -24,11 +24,11 @@
 	// The GitHub URL for the repo
 	"url": "https://github.com/Financial-Times/repo-name",
 
-	// The repo type, as outlined in the Origami Spec
+	// The repo type, as outlined in the Origami Specification
 	"type": "module",
 
-	// The repo category, as outlined in the Origami Spec (under origamiCategory).
-	// Set to `null` when the repo type is not `module`
+	// The repo category, as outlined in the Origami Specification v1 (under origamiCategory).
+	// Set to `null` for more recent versions of projects released under v2 of the Origami Specification.
 	"subType": "component",
 
 	// The latest version of the repo
@@ -314,7 +314,7 @@
 				<dt>type</dt>
 				<dd>
 					Specify an Origami repo type (or a comma-delimited list of types) to filter repositories by.
-					Possible values are: <code>module</code>, <code>service</code>, <code>imageset</code>.
+					For example: <code>component</code>, <code>module</code>, <code>service</code>, <code>imageset</code>.
 					Any repository which <em>doesn't</em> have this type will not be output.
 				</dd>
 				<dt>origamiVersion</dt>

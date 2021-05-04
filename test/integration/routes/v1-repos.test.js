@@ -200,7 +200,7 @@ describe('GET /v1/repos with query:', () => {
 
 			it('contains only module components', () => {
 				assert.isArray(response);
-				assert.lengthEquals(response, 9);
+				assert.lengthEquals(response, 7);
 				for (const repo of response) {
 					assert.strictEqual(repo.type, 'module');
 				}
@@ -380,7 +380,7 @@ describe('GET /v1/repos with query:', () => {
 
 			it('contains both module and service components', () => {
 				assert.isArray(response);
-				assert.lengthEquals(response, 10);
+				assert.lengthEquals(response, 8);
 				for (const repo of response) {
 					assert.include(['module', 'service'], repo.type);
 				}
@@ -490,7 +490,7 @@ describe('GET /v1/repos with query:', () => {
 				assert.isArray(response);
 				assert.lengthEquals(response, 8);
 				for (const repo of response) {
-					if (repo.type === 'module') {
+					if (repo.type === 'module' || repo.type === 'component') {
 						assert.deepEqual(repo.brands, []);
 					} else {
 						assert.isNull(repo.brands);
