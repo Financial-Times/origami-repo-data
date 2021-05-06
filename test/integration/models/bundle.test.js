@@ -18,21 +18,21 @@ describe('Bundle', () => {
 			lang: 'css',
 			contentLength: 500,
 			v2Path: `/v2/bundles/css?modules=${testRepoName}%40${v1SpecRelease}&brand=master`,
-			v3Path: `/v3/bundles/css?components=%40financial-times%2F${testRepoName}%40${v2SpecRelease}&system_code=origami-repo-data&brand=master`
+			v3Path: `/v3/bundles/css?components=${testRepoName}%40${v2SpecRelease}&system_code=origami-repo-data&brand=master`
 		},
 		{
 			brand: 'internal',
 			lang: 'css',
 			contentLength: 300,
 			v2Path: `/v2/bundles/css?modules=${testRepoName}%40${v1SpecRelease}&brand=internal`,
-			v3Path: `/v3/bundles/css?components=%40financial-times%2F${testRepoName}%40${v2SpecRelease}&system_code=origami-repo-data&brand=internal`
+			v3Path: `/v3/bundles/css?components=${testRepoName}%40${v2SpecRelease}&system_code=origami-repo-data&brand=internal`
 		},
 		{
 			brand: null,
 			lang: 'js',
 			contentLength: 200,
 			v2Path: `/v2/bundles/js?modules=${testRepoName}%40${v1SpecRelease}`,
-			v3Path: `/v3/bundles/js?components=%40financial-times%2F${testRepoName}%40${v2SpecRelease}&system_code=origami-repo-data`
+			v3Path: `/v3/bundles/js?components=${testRepoName}%40${v2SpecRelease}&system_code=origami-repo-data`
 		}
 	];
 

@@ -25,14 +25,8 @@ function initModel(app) {
             buildServiceUrl = new URL(`https://www.ft.com/__origami/service/build/v2/bundles/${language}`);
             buildServiceUrl.searchParams.append('modules', `${version.get('name')}@${version.get('version')}`);
         } else {
-            const packageName = version.get('package_name');
-            if (!packageName) {
-                throw new Error(
-                    `Could not find package name for ${version.get('name')}@${version.get('version')} to update ` +
-                    'bundle stats.');
-            }
             buildServiceUrl = new URL(`https://www.ft.com/__origami/service/build/v3/bundles/${language}`);
-            buildServiceUrl.searchParams.append('components', `${packageName}@${version.get('version')}`);
+            buildServiceUrl.searchParams.append('components', `${version.get('name')}@${version.get('version')}`);
             buildServiceUrl.searchParams.append('system_code', 'origami-repo-data');
         }
         if (brand && language === 'css') {

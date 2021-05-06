@@ -633,12 +633,12 @@ function initModel(app) {
 				htmlDemoUrl = new URL(`${liveDemoUrl.toString()}/html`);
 			} else {
 				liveDemoUrl = new URL('https://www.ft.com/__origami/service/build/v3/demo');
-				liveDemoUrl.searchParams.append('component', `${version.get('package_name')}@${version.get('version')}`);
+				liveDemoUrl.searchParams.append('component', `${version.get('name')}@${version.get('version')}`);
 				liveDemoUrl.searchParams.append('demo', demo.name);
 				liveDemoUrl.searchParams.append('system_code', 'origami-repo-data');
 
 				htmlDemoUrl = new URL('https://www.ft.com/__origami/service/build/v3/demo/html');
-				htmlDemoUrl.searchParams.append('component', `${version.get('package_name')}@${version.get('version')}`);
+				htmlDemoUrl.searchParams.append('component', `${version.get('name')}@${version.get('version')}`);
 				htmlDemoUrl.searchParams.append('demo', demo.name);
 				htmlDemoUrl.searchParams.append('system_code', 'origami-repo-data');
 			}
