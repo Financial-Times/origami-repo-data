@@ -378,20 +378,20 @@ describe('GET /v1/repos/:repoId/versions/:versionId/demos', () => {
 				assert.lengthEquals(response, 4);
 
 				const demo1 = response[0];
-				assert.strictEqual(demo1.supportingUrls.live, 'https://www.ft.com/__origami/service/build/v3/demo?component=%40financial-times%2Fo-mock-component%403.0.0&demo=example1&system_code=origami-repo-data&brand=master');
-				assert.strictEqual(demo1.supportingUrls.html, 'https://www.ft.com/__origami/service/build/v3/demo/html?component=%40financial-times%2Fo-mock-component%403.0.0&demo=example1&system_code=origami-repo-data&brand=master');
+				assert.strictEqual(demo1.supportingUrls.live, 'https://www.ft.com/__origami/service/build/v3/demo?component=o-mock-component%403.0.0&demo=example1&system_code=origami-repo-data&brand=master');
+				assert.strictEqual(demo1.supportingUrls.html, 'https://www.ft.com/__origami/service/build/v3/demo/html?component=o-mock-component%403.0.0&demo=example1&system_code=origami-repo-data&brand=master');
 
 				const demo2 = response[1];
-				assert.strictEqual(demo2.supportingUrls.live, 'https://www.ft.com/__origami/service/build/v3/demo?component=%40financial-times%2Fo-mock-component%403.0.0&demo=example2&system_code=origami-repo-data&brand=master');
-				assert.strictEqual(demo2.supportingUrls.html, 'https://www.ft.com/__origami/service/build/v3/demo/html?component=%40financial-times%2Fo-mock-component%403.0.0&demo=example2&system_code=origami-repo-data&brand=master');
+				assert.strictEqual(demo2.supportingUrls.live, 'https://www.ft.com/__origami/service/build/v3/demo?component=o-mock-component%403.0.0&demo=example2&system_code=origami-repo-data&brand=master');
+				assert.strictEqual(demo2.supportingUrls.html, 'https://www.ft.com/__origami/service/build/v3/demo/html?component=o-mock-component%403.0.0&demo=example2&system_code=origami-repo-data&brand=master');
 
 				const demo3 = response[2];
-				assert.strictEqual(demo3.supportingUrls.live, 'https://www.ft.com/__origami/service/build/v3/demo?component=%40financial-times%2Fo-mock-component%403.0.0&demo=example-no-html&system_code=origami-repo-data&brand=master');
+				assert.strictEqual(demo3.supportingUrls.live, 'https://www.ft.com/__origami/service/build/v3/demo?component=o-mock-component%403.0.0&demo=example-no-html&system_code=origami-repo-data&brand=master');
 				assert.isNull(demo3.supportingUrls.html);
 
 				const demo4 = response[3];
-				assert.strictEqual(demo4.supportingUrls.live, 'https://www.ft.com/__origami/service/build/v3/demo?component=%40financial-times%2Fo-mock-component%403.0.0&demo=example-branded-demo&system_code=origami-repo-data&brand=master');
-				assert.strictEqual(demo4.supportingUrls.html, 'https://www.ft.com/__origami/service/build/v3/demo/html?component=%40financial-times%2Fo-mock-component%403.0.0&demo=example-branded-demo&system_code=origami-repo-data&brand=master');
+				assert.strictEqual(demo4.supportingUrls.live, 'https://www.ft.com/__origami/service/build/v3/demo?component=o-mock-component%403.0.0&demo=example-branded-demo&system_code=origami-repo-data&brand=master');
+				assert.strictEqual(demo4.supportingUrls.html, 'https://www.ft.com/__origami/service/build/v3/demo/html?component=o-mock-component%403.0.0&demo=example-branded-demo&system_code=origami-repo-data&brand=master');
 
 			});
 
