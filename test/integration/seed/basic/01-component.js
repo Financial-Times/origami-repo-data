@@ -13,7 +13,6 @@ exports.seed = async database => {
 				'internal'
 			],
 			keywords: 'keyword1, keyword2',
-			isMockManifest: true,
 			demos: [
 				{
 					name: 'example1',
@@ -61,6 +60,75 @@ exports.seed = async database => {
 			devDependencies: {
 				'mock-bower-dependency-3': '^1.2.3',
 				'mock-bower-dependency-4': '^4.5.6'
+			}
+		}
+	};
+
+	const manifestsV2 = {
+		origami: {
+			origami: '2.0',
+			type: 'component',
+			status: 'maintained',
+			brands: [
+				'master',
+				'internal'
+			],
+			demos: [
+				{
+					name: 'example1',
+					title: 'Example Demo 1',
+					description: 'This is an example demo'
+				},
+				{
+					name: 'example2',
+					title: 'Example Demo 2',
+					description: ''
+				},
+				{
+					invalid: true
+				},
+				'invalid',
+				{
+					name: 'example-hidden',
+					title: 'Example Hidden Demo',
+					description: 'This is an example hidden demo',
+					hidden: true
+				},
+				{
+					name: 'example-no-html',
+					title: 'Example No-HTML Demo',
+					description: 'This is an example demo without HTML to be displayed',
+					display_html: false
+				},
+				{
+					name: 'example-branded-demo',
+					title: 'Example Branded Demo',
+					description: 'This is an example demo for the "example-brand" brand',
+					brands: ['example-brand']
+				}
+			]
+		},
+		package: {
+			name: '@financial-times/o-mock-component',
+			description: 'An example Origami component, which follows v2 of the Origami specification',
+			keywords: 'keyword1, keyword2',
+			version: '2.0.0',
+			type: 'module',
+			browser: 'mock.js',
+			sass: 'mock.scss',
+			license: 'MIT',
+			bugs: {
+				url: 'https://github.com/Financial-Times/o-mock-component-v2/issues',
+				email: 'origami.support@ft.com',
+				slack: 'origami-support'
+			},
+			dependencies: {
+				'mock-npm-dependency-1': '^1.2.3',
+				'mock-npm-dependency-2': '^4.5.6'
+			},
+			devDependencies: {
+				'mock-npm-dependency-3': '^1.2.3',
+				'mock-npm-dependency-4': '^4.5.6'
 			}
 		}
 	};
@@ -187,15 +255,7 @@ exports.seed = async database => {
 			version_patch: 0,
 			version_prerelease: 0,
 			languages: JSON.stringify(['js', 'scss']),
-			manifests: JSON.stringify(Object.assign({}, manifestsV1, {
-				origami: Object.assign({}, manifestsV1.origami, {
-					origamiVersion: '2.0'
-				}),
-				package: {
-					'name': `@financial-times/${manifestsV1.origami.name}`,
-					'version': '3.0.0'
-				}
-			})),
+			manifests: manifestsV2,
 			markdown: JSON.stringify(markdown)
 		}
 	]);

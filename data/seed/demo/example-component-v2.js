@@ -47,22 +47,28 @@ exports.seed = async database => {
                 about: null,
                 imageSet: null,
                 origami: {
-                    description: 'An example Origami component, which follows v2 of the Origami specification',
-                    origamiType: 'component',
+                    origami: '2.0',
+                    type: 'component',
+                    status: 'active',
                     brands: [
                         'master',
                         'internal'
                     ],
-                    keywords: 'example, mock',
-                    origamiVersion: '2.0',
-                    support: 'https://github.com/Financial-Times/o-example-component-v2/issues',
-                    supportStatus: 'active',
                     demos: demos
                 },
                 package: {
                     name: '@financial-times/o-example-component-v2',
+                    description: 'An example Origami component, which follows v2 of the Origami specification',
+                    keywords: 'example, mock',
                     version: '1.0.0',
-                    browser: './main.js'
+                    type: 'module',
+                    browser: './main.js',
+                    license: 'MIT',
+                    bugs: {
+                        url: 'https://github.com/Financial-Times/o-example-component-v2/issues',
+                        email: 'origami.support@ft.com',
+                        slack: 'origami-support'
+                    }
                 }
             }),
             languages: JSON.stringify(['js']),
@@ -92,18 +98,24 @@ exports.seed = async database => {
                 about: null,
                 imageSet: null,
                 origami: {
-                    description: 'An example Origami component, which follows v2 of the Origami specification',
-                    origamiType: 'component',
-                    keywords: 'example, mock',
-                    origamiVersion: '2.0',
-                    support: 'https://github.com/Financial-Times/o-example-component-v2/issues',
-                    supportStatus: 'active',
+                    origami: '2.0',
+                    type: 'component',
+                    status: 'active',
                     demos: demos
                 },
                 package: {
                     name: '@financial-times/o-example-component-v2',
+                    description: 'An example Origami component, which follows v2 of the Origami specification',
+                    keywords: 'example, mock',
                     version: '1.1.0',
-                    browser: './main.js'
+                    type: 'module',
+                    browser: './main.js',
+                    license: 'MIT',
+                    bugs: {
+                        url: 'https://github.com/Financial-Times/o-example-component-v2/issues',
+                        email: 'origami.support@ft.com',
+                        slack: 'origami-support'
+                    }
                 }
             }),
             languages: JSON.stringify(['js']),
@@ -133,24 +145,31 @@ exports.seed = async database => {
                 about: null,
                 imageSet: null,
                 origami: {
-                    description: 'An example Origami component, which follows v2 of the Origami specification',
-                    origamiType: 'component',
-                    keywords: 'example, mock',
-                    origamiVersion: '2.0',
-                    support: 'https://github.com/Financial-Times/o-example-component-v2/issues',
-                    supportStatus: 'active',
+                    origami: '2.0',
+                    type: 'component',
+                    status: 'active',
                     demos: demos
                 },
                 package: {
                     name: '@financial-times/o-example-component-v2',
+                    description: 'An example Origami component, which follows v2 of the Origami specification',
+                    keywords: 'example, mock',
                     version: '2.0.0',
+                    type: 'module',
                     browser: './main.js',
+                    sass: './main.scss',
+                    license: 'MIT',
+                    bugs: {
+                        url: 'https://github.com/Financial-Times/o-example-component-v2/issues',
+                        email: 'origami.support@ft.com',
+                        slack: 'origami-support'
+                    },
                     peerDependencies: {
                         'mathsass': '^0.11.0'
                     }
                 },
             }),
-            languages: JSON.stringify(['js']),
+            languages: JSON.stringify(['js', 'scss']),
             markdown: JSON.stringify({
                 designGuidelines: 'TODO add mock design guidelines',
                 migrationGuide: null,

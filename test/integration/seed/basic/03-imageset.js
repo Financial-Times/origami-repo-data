@@ -8,7 +8,6 @@ exports.seed = async database => {
 			name: 'o-mock-imageset',
 			origamiType: 'imageset',
 			origamiVersion: 1,
-			isMockManifest: true
 		},
 		imageSet: {
 			scheme: 'ftmock',

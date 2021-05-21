@@ -257,8 +257,9 @@ function initModel(app) {
 			// Get the component's Origami Specification version
 			origami_version() {
 				const manifests = this.get('manifests') || {};
-				const hasOrigamiVersion = manifests.origami && manifests.origami.origamiVersion;
-				return hasOrigamiVersion ? `${manifests.origami.origamiVersion}` : '';
+				// Handle Origami spec v1 and v2 projects
+				const origamiVersion = manifests?.origami?.origamiVersion || manifests?.origami?.origami;
+				return origamiVersion ? `${origamiVersion}` : '';
 			},
 
 			// Get keywords for the version, falling back through different manifests
