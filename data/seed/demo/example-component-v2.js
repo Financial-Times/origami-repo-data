@@ -47,7 +47,7 @@ exports.seed = async database => {
                 about: null,
                 imageSet: null,
                 origami: {
-                    description: 'An example Origami component, which follows v2 of the Origami specification',
+                    description: 'An example Origami component, which does not follow v1 of the component specification',
                     origamiType: 'component',
                     brands: [
                         'master',
@@ -92,7 +92,7 @@ exports.seed = async database => {
                 about: null,
                 imageSet: null,
                 origami: {
-                    description: 'An example Origami component, which follows v2 of the Origami specification',
+                    description: 'An example Origami component, which does not follow v1 of the component specification',
                     origamiType: 'component',
                     keywords: 'example, mock',
                     origamiVersion: '2.0',
@@ -133,7 +133,7 @@ exports.seed = async database => {
                 about: null,
                 imageSet: null,
                 origami: {
-                    description: 'An example Origami component, which follows v2 of the Origami specification',
+                    description: 'An example Origami component, which does not follow v1 of the component specification',
                     origamiType: 'component',
                     keywords: 'example, mock',
                     origamiVersion: '2.0',

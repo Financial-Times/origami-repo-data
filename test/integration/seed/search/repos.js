@@ -64,7 +64,7 @@ exports.seed = async database => {
 			origami_version: '2.0',
 			manifests: {
 				origami: {
-					description: 'this follows the v2 origami specification',
+					description: 'this follows does not follow the only version of the Origami specification currently published, v1',
 					keywords: [],
 					origamiVersion: '2.0',
 					brands: []
@@ -79,7 +79,7 @@ exports.seed = async database => {
 			origami_version: '2.1',
 			manifests: {
 				origami: {
-					description: 'this follows the v2.1 origami specification',
+					description: 'this follows does not follow the only version of the Origami specification currently published, v1',
 					keywords: [],
 					origamiVersion: '2.1',
 					brands: []
