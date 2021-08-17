@@ -126,7 +126,7 @@
 <h4>Example <code>curl</code> command:</h4>
 
 <pre><code class="o-syntax-highlight--bash">curl \
-	-H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
+	-H 'X-Api-Key: ABC123' -H 'X-Api-Secret: XYZ456' \
 	https://origami-repo-data.ft.com/v1/queue</code></pre>
 
 <h2 id="get-v1-queue-(id)">Get an ingestion</h2>
@@ -203,8 +203,8 @@
 <h4>Example <code>curl</code> command:</h4>
 
 <pre><code class="o-syntax-highlight--bash">curl \
-	-H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
-	https://origami-repo-data.ft.com/v1/queue/XXXXXX</code></pre>
+	-H 'X-Api-Key: ABC123' -H 'X-Api-Secret: XYZ456' \
+	https://origami-repo-data.ft.com/v1/queue/QQQ137</code></pre>
 
 
 <h2 id="post-v1-queue">Add an ingestion to the queue</h2>
@@ -304,7 +304,7 @@ There's a section on this <a href="#post-v1-queue-github-webhook">below the stan
 <h4>Example <code>curl</code> command:</h4>
 
 <pre><code class="o-syntax-highlight--bash">curl -X POST \
-	-H 'Content-Type: application/json' -H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
+	-H 'Content-Type: application/json' -H 'X-Api-Key: ABC123' -H 'X-Api-Secret: XYZ456' \
 	-d '{"url": "https://github.com/Financial-Times/example", "tag": "v1.0.0"}' \
 	https://origami-repo-data.ft.com/v1/queue</code></pre>
 
@@ -429,5 +429,5 @@ There's a section on this <a href="#post-v1-queue-github-webhook">below the stan
 <h4>Example <code>curl</code> command:</h4>
 
 <pre><code class="o-syntax-highlight--bash">curl -X DELETE \
-	-H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
-	https://origami-repo-data.ft.com/v1/queue/XXXXXX</code></pre>
+	-H 'X-Api-Key: ABC123' -H 'X-Api-Secret: XYZ456' \
+	https://origami-repo-data.ft.com/v1/queue/QQQ137</code></pre>
