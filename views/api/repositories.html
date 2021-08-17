@@ -360,7 +360,7 @@
 <h3>Example <code>curl</code> command:</h3>
 
 <pre><code class="o-syntax-highlight--bash">curl \
-	-H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
+	-H 'X-Api-Key: ABC123' -H 'X-Api-Secret: XYZ456' \
 	https://origami-repo-data.ft.com/v1/repos</code></pre>
 
 
@@ -427,8 +427,8 @@
 <h3>Example <code>curl</code> command:</h3>
 
 <pre><code class="o-syntax-highlight--bash">curl \
-	-H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
-	https://origami-repo-data.ft.com/v1/repos/XXXXXX</code></pre>
+	-H 'X-Api-Key: ABC123' -H 'X-Api-Secret: XYZ456' \
+	https://origami-repo-data.ft.com/v1/repos/o-example</code></pre>
 
 
 <h3 id="get-v1-repos-(id)_aliases">Aliases</h3>
@@ -510,8 +510,8 @@
 <h3>Example <code>curl</code> command:</h3>
 
 <pre><code class="o-syntax-highlight--bash">curl \
-	-H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
-	https://origami-repo-data.ft.com/v1/repos/XXXXXX/versions</code></pre>
+	-H 'X-Api-Key: ABC123' -H 'X-Api-Secret: XYZ456' \
+	https://origami-repo-data.ft.com/v1/repos/o-example/versions</code></pre>
 
 
 <h2 id="get-v1-repos-(id)-versions-(id)">Get a repository version</h2>
@@ -579,8 +579,8 @@ Get a single version for an Origami repository by ID. This endpoint responds wit
 <h3>Example <code>curl</code> command:</h3>
 
 <pre><code class="o-syntax-highlight--bash">curl \
-	-H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
-	https://origami-repo-data.ft.com/v1/repos/XXXXXX/versions/XXXXXX</code></pre>
+	-H 'X-Api-Key: ABC123' -H 'X-Api-Secret: XYZ456' \
+	https://origami-repo-data.ft.com/v1/repos/o-example/versions/1.3.7</code></pre>
 
 
 <h3 id="get-v1-repos-(id)-versions-(id)_aliases">Aliases</h3>
@@ -687,8 +687,8 @@ the <code>READ</code> permission.
 <h3>Example <code>curl</code> command:</h3>
 
 <pre><code class="o-syntax-highlight--bash">curl \
-	-H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
-	https://origami-repo-data.ft.com/v1/repos/XXXXXX/versions/XXXXXX/manifests/origami</code></pre>
+	-H 'X-Api-Key: ABC123' -H 'X-Api-Secret: XYZ456' \
+	https://origami-repo-data.ft.com/v1/repos/o-example/versions/1.3.7/manifests/origami</code></pre>
 
 
 <h2 id="get-v1-repos-(id)-versions-(id)-markdown-(type)">Get a raw markdown document</h2>
@@ -772,8 +772,8 @@ the <code>READ</code> permission.
 <h3>Example <code>curl</code> command:</h3>
 
 <pre><code class="o-syntax-highlight--bash">curl \
-	-H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
-	https://origami-repo-data.ft.com/v1/repos/XXXXXX/versions/XXXXXX/markdown/readme</code></pre>
+	-H 'X-Api-Key: ABC123' -H 'X-Api-Secret: XYZ456' \
+	https://origami-repo-data.ft.com/v1/repos/o-example/versions/1.3.7/markdown/readme</code></pre>
 
 
 <h2 id="get-v1-repos-(id)-versions-(id)-demos">Get demos for a version</h2>
@@ -854,8 +854,8 @@ with an array of <a href="#entity-demo">Demo entities</a>.
 <h3>Example <code>curl</code> command:</h3>
 
 <pre><code class="o-syntax-highlight--bash">curl \
-	-H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
-	https://origami-repo-data.ft.com/v1/repos/XXXXXX/versions/XXXXXX/demos</code></pre>
+	-H 'X-Api-Key: ABC123' -H 'X-Api-Secret: XYZ456' \
+	https://origami-repo-data.ft.com/v1/repos/o-example/versions/1.3.7/demos</code></pre>
 
 
 <h2 id="get-v1-repos-(id)-versions-(id)-images">Get images for a version</h2>
@@ -934,8 +934,8 @@ repository is an image set. This endpoint responds with an array of
 <h3>Example <code>curl</code> command:</h3>
 
 <pre><code class="o-syntax-highlight--bash">curl \
-	-H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
-	https://origami-repo-data.ft.com/v1/repos/XXXXXX/versions/XXXXXX/images?sourceParam=curl</code></pre>
+	-H 'X-Api-Key: ABC123' -H 'X-Api-Secret: XYZ456' \
+	https://origami-repo-data.ft.com/v1/repos/o-example/versions/1.3.7/images?sourceParam=curl</code></pre>
 
 
 <h2 id="get-v1-repos-(id)-versions-(id)-dependencies">Get dependencies for a version</h2>
@@ -1017,8 +1017,8 @@ repository is an image set. This endpoint responds with an array of
 <h3>Example <code>curl</code> command:</h3>
 
 <pre><code class="o-syntax-highlight--bash">curl \
-	-H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
-	https://origami-repo-data.ft.com/v1/repos/XXXXXX/versions/XXXXXX/dependencies</code></pre>
+	-H 'X-Api-Key: ABC123' -H 'X-Api-Secret: XYZ456' \
+	https://origami-repo-data.ft.com/v1/repos/o-example/versions/1.3.7/dependencies</code></pre>
 
 <h2 id="get-v1-repos-(id)-versions-(id)-bundles-(language)">Get bundles for a version</h2>
 
@@ -1106,5 +1106,5 @@ repository is an image set. This endpoint responds with an array of
 <h3>Example <code>curl</code> command:</h3>
 
 <pre><code class="o-syntax-highlight--bash">curl \
-	-H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
-	https://origami-repo-data.ft.com/v1/repos/XXXXXX/versions/XXXXXX/dependencies</code></pre>
+	-H 'X-Api-Key: ABC123' -H 'X-Api-Secret: XYZ456' \
+	https://origami-repo-data.ft.com/v1/repos/o-example/versions/1.3.7/dependencies</code></pre>
