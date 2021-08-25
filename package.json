@@ -31,10 +31,13 @@
     "@financial-times/origami-service-makefile": "^7.0.0",
     "@octokit/rest": "^16.23.4",
     "@slack/web-api": "^5.15.0",
+    "app-root-path": "^3.0.0",
     "bcrypt": "^5.0.0",
     "body-parser": "^1.18.3",
     "bookshelf": "^0.14.2",
+    "decompress": "^4.2.1",
     "dotenv": "^8.2.0",
+    "execa": "^5.1.1",
     "guestlist": "^2.3.0",
     "heroku-node-settings": "^1.1.0",
     "http-errors": "^1.8.0",
@@ -43,6 +46,7 @@
     "knex": "^0.21.17",
     "lodash": "^4.17.21",
     "node-fetch": "^2.6.0",
+    "npm": "^7.21.0",
     "pg": "^8.5.1",
     "pg-connection-string": "^2.4.0",
     "require-all": "^3.0.0",
@@ -64,5 +68,9 @@
     "sinon": "^10.0.1",
     "supertest": "^6.1.3"
   },
-  "snyk": true
+  "snyk": true,
+  "volta": {
+    "node": "14.17.5",
+    "npm": "6.14.14"
+  }
 }

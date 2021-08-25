@@ -12,7 +12,7 @@ function initModel(app) {
 		url: joi.string().uri({
 			scheme: 'https'
 		}).required(),
-		type: joi.string().valid('version', 'bundle'),
+		type: joi.string().valid('version', 'bundle', 'npm'),
 		tag: joi.semver().valid().required(),
 		ingestion_attempts: joi.number().integer(),
 		ingestion_started_at: joi.date().allow(null)
