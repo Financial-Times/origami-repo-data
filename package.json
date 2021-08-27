@@ -49,6 +49,7 @@
     "npm": "^7.21.0",
     "pg": "^8.5.1",
     "pg-connection-string": "^2.4.0",
+    "promise.any": "^2.0.2",
     "require-all": "^3.0.0",
     "semver": "^7.3.4",
     "snyk": "^1.455.0",
