@@ -7,16 +7,30 @@ module.exports = initModel;
 
 function initModel(app) {
 
+
+
 	// Model validation schema
-	const schema = joi.object().keys({
+	const githubSchema = joi.object().keys({
 		url: joi.string().uri({
 			scheme: 'https'
 		}).required(),
-		type: joi.string().valid('version', 'bundle', 'npm'),
+		type: joi.string().valid('version', 'bundle'),
 		tag: joi.semver().valid().required(),
 		ingestion_attempts: joi.number().integer(),
 		ingestion_started_at: joi.date().allow(null)
 	});
+
+	const npmSchema = joi.object().keys({
+		packageName: joi.string().uri({
+			scheme: 'https'
+		}).required(),
+		type: joi.string().valid('npm'),
+		version: joi.semver().valid().required(),
+		ingestion_attempts: joi.number().integer(),
+		ingestion_started_at: joi.date().allow(null)
+	});
+
+	const schema = joi.alternatives().when('type', { is: joi.string().valid('npm'), then: npmSchema, otherwise: githubSchema });
 
 	// Model prototypal methods
 	const Ingestion = app.database.Model.extend({
