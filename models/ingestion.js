@@ -99,7 +99,6 @@ function initModel(app) {
 					return reject(error);
 				}
 				if (this.attributes.type === 'npm') {
-					debugger
 					// Ensure that ingestion does not conflict with an existing
 					// ingestion or version.
 					if (this.hasChanged('packageName') || this.hasChanged('version') || this.hasChanged('type')) {
