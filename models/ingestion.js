@@ -21,9 +21,7 @@ function initModel(app) {
 	});
 
 	const npmSchema = joi.object().keys({
-		packageName: joi.string().uri({
-			scheme: 'https'
-		}).required(),
+		packageName: joi.string().required(),
 		type: joi.string().valid('npm'),
 		version: joi.semver().valid().required(),
 		ingestion_attempts: joi.number().integer(),
@@ -68,6 +66,10 @@ function initModel(app) {
 					url: this.get('url'),
 					tag: this.get('tag'),
 				},
+				package: {
+					packageName: this.get('packageName'),
+					version: this.get('version'),
+				},
 				type: this.get('type'),
 				progress: {
 					isInProgress: this.get('is_in_progress'),
@@ -81,15 +83,49 @@ function initModel(app) {
 
 		// Validate the model before saving
 		validateSave() {
-			return new Promise((resolve, reject) => {
-				// Validate against the schema
-				joi.validate(this.attributes, schema, {
-					abortEarly: false,
-					allowUnknown: true
-				}, async error => {
-					if (error) {
-						return reject(error);
+			return new Promise(async (resolve, reject) => {
+				try {
+					// Validate against the schema
+					if (this.attributes.type === 'npm') {
+						await joi.validate(this.attributes, npmSchema, {
+							abortEarly: false,
+							allowUnknown: true
+						});
+					} else {
+						await joi.validate(this.attributes, githubSchema, {
+							abortEarly: false,
+							allowUnknown: true
+						});
 					}
+				} catch (error) {
+					return reject(error);
+				}
+				if (this.attributes.type === 'npm') {
+					debugger
+					// Ensure that ingestion does not conflict with an existing
+					// ingestion or version.
+					if (this.hasChanged('packageName') || this.hasChanged('version') || this.hasChanged('type')) {
+						const ingestionExists = await Ingestion.alreadyExistsNpm(this.attributes.packageName, this.attributes.version, this.attributes.type);
+						let conflict = ingestionExists;
+
+						if (!conflict && this.attributes.type === 'version') {
+							const version = await app.model.Version.fetchOneByUrlAndTag(this.attributes.url, this.attributes.tag);
+							conflict = Boolean(version);
+						}
+
+						if (conflict) {
+							const error = new Error('Validation failed');
+							error.isConflict = true;
+							error.name = 'ValidationError';
+							error.details = [
+								{
+									message: 'An ingestion or version with the given packageName and version already exists'
+								}
+							];
+							return reject(error);
+						}
+					}
+				} else {
 
 					// Ensure that ingestion does not conflict with an existing
 					// ingestion or version.
@@ -103,7 +139,7 @@ function initModel(app) {
 						}
 
 						if (conflict) {
-							error = new Error('Validation failed');
+							const error = new Error('Validation failed');
 							error.isConflict = true;
 							error.name = 'ValidationError';
 							error.details = [
@@ -114,9 +150,9 @@ function initModel(app) {
 							return reject(error);
 						}
 					}
+				}
 
-					resolve();
-				});
+				resolve();
 			});
 		},
 
@@ -137,6 +173,11 @@ function initModel(app) {
 		// Check whether an ingestion already exists
 		async alreadyExists(url, tag, type) {
 			const existingIngestion = await Ingestion.fetchOneByUrlTagAndType(url, tag, type);
+			return Boolean(existingIngestion);
+		},
+		
+		async alreadyExistsNpm(packageName, version, type) {
+			const existingIngestion = await Ingestion.fetchOneByPackageNameVersionAndType(packageName, version, type);
 			return Boolean(existingIngestion);
 		},
 
@@ -160,6 +201,15 @@ function initModel(app) {
 				qb.select('*');
 				qb.where('url', url);
 				qb.where('tag', tag);
+				qb.where('type', type);
+			}).fetchOne();
+		},
+		
+		fetchOneByPackageNameVersionAndType(packageName, version, type) {
+			return Ingestion.collection().query(qb => {
+				qb.select('*');
+				qb.where('packageName', packageName);
+				qb.where('version', version);
 				qb.where('type', type);
 			}).fetchOne();
 		},
