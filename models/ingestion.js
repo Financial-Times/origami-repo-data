@@ -28,8 +28,6 @@ function initModel(app) {
 		ingestion_started_at: joi.date().allow(null)
 	});
 
-	const schema = joi.alternatives().when('type', { is: joi.string().valid('npm'), then: npmSchema, otherwise: githubSchema });
-
 	// Model prototypal methods
 	const Ingestion = app.database.Model.extend({
 		tableName: 'ingestion_queue',
