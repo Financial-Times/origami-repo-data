@@ -22,10 +22,10 @@ function initModel(app) {
         const origamiVersion = version.get('origami_version');
         let buildServiceUrl;
         if (!origamiVersion || origamiVersion === '1') {
-            buildServiceUrl = new URL(`https://www.ft.com/__origami/service/build/v2/bundles/${language}`);
+            buildServiceUrl = new URL(`${app.ft.options.buildServiceUrl}/v2/bundles/${language}`);
             buildServiceUrl.searchParams.append('modules', `${version.get('name')}@${version.get('version')}`);
         } else {
-            buildServiceUrl = new URL(`https://www.ft.com/__origami/service/build/v3/bundles/${language}`);
+            buildServiceUrl = new URL(`${app.ft.options.buildServiceUrl}/v3/bundles/${language}`);
             buildServiceUrl.searchParams.append('components', `${version.get('name')}@${version.get('version')}`);
             buildServiceUrl.searchParams.append('system_code', 'origami-repo-data');
         }
