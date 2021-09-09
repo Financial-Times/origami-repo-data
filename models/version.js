@@ -591,7 +591,7 @@ function initModel(app) {
 
 		// Create a version based on an Ingestion
 		async createFromIngestion(ingestion) {
-			return await createVersionFromIngestion(ingestion, app.model.Version, app.github);
+			return await createVersionFromIngestion(ingestion, app.model.Version, app.github, app.ft.npmRegistryUrl);
 		},
 
 		// Normalise an Origami manifest demo
