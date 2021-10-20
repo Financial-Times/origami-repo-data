@@ -52,7 +52,7 @@
     "promise.any": "^2.0.2",
     "require-all": "^3.0.0",
     "semver": "^7.3.4",
-    "snyk": "^1.455.0",
+    "snyk": "^1.685.0",
     "stopword": "^1.0.6",
     "throng": "^4.0.0",
     "uuid": "^8.3.2"
