@@ -621,6 +621,8 @@ function initModel(app) {
 			const demoBrands = Version.normaliseOrigamiBrandsArray(version.get('type'), demo.brands);
 			const demoIsBranded = Array.isArray(demoBrands) && demoBrands.length;
 			const demoBrandFilterSet = filter && filter.brand;
+
+			let demoBrandFilterMatch;
 			if (demoIsBranded && demoBrandFilterSet) {
 				const brandFilter = [filter.brand];
 				if(brandFilter.includes('master')) {
@@ -629,10 +631,11 @@ function initModel(app) {
 				if(brandFilter.includes('core')) {
 					brandFilter.push('master');
 				}
-				const demoForBrand = brandFilter.some(value => demoBrands.includes(value));
-				if (!demoForBrand) {
-					display.live = display.html = false;
-				}
+				demoBrandFilterMatch = brandFilter.find(brand => demoBrands.includes(brand));
+			}
+
+			if (!demoBrandFilterMatch) {
+				display.live = display.html = false;
 			}
 
 			// Calculate the live demo URL (including brand if necessary)
@@ -655,9 +658,13 @@ function initModel(app) {
 			}
 
 			// @breaking require a brand filter in a future version of
-			// repo-data rather than default to the master brand, as the build
+			// repo-data rather than default to the core brand, as the build
 			// service url returned requires a brand parameter since v3
-			const demoBrand = filter && filter.brand ? filter.brand : 'master';
+			// this gets messy, repo data should be deleted soon™️:
+			// if a "master" brand filter found a "core" brand demo
+			// we need to use the actual brand in the query parameter.
+			const defaultDemoBrand = version.get('brands').includes('master') ? 'master' : 'core';
+			const demoBrand = demoBrandFilterMatch || defaultDemoBrand;
 			liveDemoUrl.searchParams.append('brand', demoBrand);
 			htmlDemoUrl.searchParams.append('brand', demoBrand);
 
