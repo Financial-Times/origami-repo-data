@@ -9,18 +9,24 @@ describe('lib/model-property-filter', () => {
     const item1 = {name: 'item1', get: sinon.stub()};
     item1.get.withArgs('a').returns(['1', '2', '3']);
     item1.get.withArgs('b').returns(['1', '2', '3']);
+    item1.get.withArgs('brands').returns(['core', 'internal', 'whitelabel']);
     const item2 = {name: 'item2', get: sinon.stub()};
     item2.get.withArgs('a').returns(['2', '3']);
+    item2.get.withArgs('brands').returns(['master', 'internal', 'whitelabel']);
     const item3 = {name: 'item3', get: sinon.stub()};
     item3.get.withArgs('a').returns(['3']);
+    item3.get.withArgs('brands').returns(['internal', 'whitelabel']);
     const item4 = {name: 'item4', get: sinon.stub()};
     item4.get.withArgs('a').returns([]);
     item4.get.withArgs('b').returns(['1', '2', '3']);
+    item4.get.withArgs('brands').returns([]);
     const item5 = {name: 'item5', get: sinon.stub()};
     item5.get.withArgs('b').returns(['1', '2', '3']);
+    item5.get.withArgs('brands').returns(undefined);
     const item6 = {name: 'item6', get: sinon.stub()};
     item6.get.withArgs('a').returns('1');
     item6.get.withArgs('b').returns('2');
+    item6.get.withArgs('brands').returns([]);
 
     const tests = [
         {
@@ -59,6 +65,18 @@ describe('lib/model-property-filter', () => {
             value: '1,2',
             expected: [item1, item2, item6],
         },
+        {
+            description: 'a "core" brands filter matches the "master" brand',
+            property: 'brands',
+            value: 'core',
+            expected: [item1, item2],
+        },
+        {
+            description: 'a "master" brands filter matches the "core" brand',
+            property: 'brands',
+            value: 'master',
+            expected: [item1, item2],
+        }
     ];
 
     tests.forEach(test => {
@@ -75,5 +93,4 @@ describe('lib/model-property-filter', () => {
             assert.deepEqual(actual.map(a => a.name), test.expected.map(e => e.name), 'Did not filter the expected items.');
         });
     });
-
 });
