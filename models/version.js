@@ -617,9 +617,20 @@ function initModel(app) {
 				html: (demo.display_html !== false)
 			};
 			// Filter based on brand if the filter is present
+			// Hide demos which are not for the filtered brand
 			const demoBrands = Version.normaliseOrigamiBrandsArray(version.get('type'), demo.brands);
-			if (filter && filter.brand && Array.isArray(demoBrands) && demoBrands.length) {
-				if (!demoBrands.includes(filter.brand)) {
+			const demoIsBranded = Array.isArray(demoBrands) && demoBrands.length;
+			const demoBrandFilterSet = filter && filter.brand;
+			if (demoIsBranded && demoBrandFilterSet) {
+				const brandFilter = [filter.brand];
+				if(brandFilter.includes('master')) {
+					brandFilter.push('core');
+				}
+				if(brandFilter.includes('core')) {
+					brandFilter.push('master');
+				}
+				const demoForBrand = brandFilter.some(value => demoBrands.includes(value));
+				if (!demoForBrand) {
 					display.live = display.html = false;
 				}
 			}
