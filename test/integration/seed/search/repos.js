@@ -50,7 +50,7 @@ exports.seed = async database => {
 					description: 'banana apple pear',
 					keywords: ['kiwi', 'pineapple', 'kumquat'],
 					brands: [
-						'master',
+						'core',
 						'internal'
 					]
 				}
@@ -116,7 +116,7 @@ exports.seed = async database => {
 			manifests: {
 				origami: {
 					brands: [
-						'master'
+						'core'
 					],
 					demos: [
 						{

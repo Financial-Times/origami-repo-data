@@ -9,7 +9,7 @@ exports.seed = async database => {
 			origamiType: 'module',
 			origamiVersion: 1,
 			brands: [
-				'master',
+				'core',
 				'internal'
 			],
 			keywords: 'keyword1, keyword2',

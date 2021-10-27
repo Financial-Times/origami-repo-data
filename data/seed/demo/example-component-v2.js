@@ -50,7 +50,7 @@ exports.seed = async database => {
                     description: 'An example Origami component, which does not follow v1 of the component specification',
                     origamiType: 'component',
                     brands: [
-                        'master',
+                        'core',
                         'internal'
                     ],
                     keywords: 'example, mock',
