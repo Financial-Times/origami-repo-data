@@ -47,7 +47,7 @@ describe('GET /v1/repos/:repoId/versions/:versionNumber/bundles/:language', () =
 			expectedDescription: 'All JS bundles',
 		}),
 		Object.assign({}, versions.branded, {
-			brand: 'master',
+			brand: 'core',
 			language: 'js',
 			expectedBundles: [],
 			expectedDescription: 'No JS bundles (no JS bundles are branded at time of writing).',
@@ -77,15 +77,15 @@ describe('GET /v1/repos/:repoId/versions/:versionNumber/bundles/:language', () =
 			expectedDescription: 'All CSS bundles.',
 		}),
 		Object.assign({}, versions.branded, {
-			brand: 'master',
+			brand: 'core',
 			language: 'css',
 			expectedBundles: [
 				'50a42415-df48-4643-bd9a-c05a57bcd544'
 			],
-			expectedDescription: 'Only the master brand CSS bundle.',
+			expectedDescription: 'Only the core brand CSS bundle.',
 		}),
 		Object.assign({}, versions.branded, {
-			brand: 'master,internal',
+			brand: 'core,internal',
 			language: 'css',
 			expectedBundles: [
 				'50a42415-df48-4643-bd9a-c05a57bcd544',
@@ -141,7 +141,7 @@ describe('GET /v1/repos/:repoId/versions/:versionNumber/bundles/:language', () =
 			expectedDescription: 'Its only CSS bundle.',
 		}),
 		Object.assign({}, versions.notBranded, {
-			brand: 'master',
+			brand: 'core',
 			language: 'css',
 			expectedBundles: [],
 			expectedDescription: 'No CSS bundle.',

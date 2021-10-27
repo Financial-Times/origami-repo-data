@@ -39,8 +39,8 @@ describe('GET /v1/repos/:repoId/versions/:versionId/demos', () => {
 				assert.strictEqual(demo1.title, 'Example Demo 1');
 				assert.strictEqual(demo1.description, 'This is an example demo');
 				assert.isObject(demo1.supportingUrls);
-				assert.strictEqual(demo1.supportingUrls.live, 'https://www.ft.com/__origami/service/build/v2/demos/o-mock-component@1.0.0/example1?brand=master');
-				assert.strictEqual(demo1.supportingUrls.html, 'https://www.ft.com/__origami/service/build/v2/demos/o-mock-component@1.0.0/example1/html?brand=master');
+				assert.strictEqual(demo1.supportingUrls.live, 'https://www.ft.com/__origami/service/build/v2/demos/o-mock-component@1.0.0/example1?brand=core');
+				assert.strictEqual(demo1.supportingUrls.html, 'https://www.ft.com/__origami/service/build/v2/demos/o-mock-component@1.0.0/example1/html?brand=core');
 				assert.deepEqual(demo1.display, {
 					live: true,
 					html: true
@@ -52,8 +52,8 @@ describe('GET /v1/repos/:repoId/versions/:versionId/demos', () => {
 				assert.strictEqual(demo2.title, 'Example Demo 2');
 				assert.isNull(demo2.description);
 				assert.isObject(demo2.supportingUrls);
-				assert.strictEqual(demo2.supportingUrls.live, 'https://www.ft.com/__origami/service/build/v2/demos/o-mock-component@1.0.0/example2?brand=master');
-				assert.strictEqual(demo2.supportingUrls.html, 'https://www.ft.com/__origami/service/build/v2/demos/o-mock-component@1.0.0/example2/html?brand=master');
+				assert.strictEqual(demo2.supportingUrls.live, 'https://www.ft.com/__origami/service/build/v2/demos/o-mock-component@1.0.0/example2?brand=core');
+				assert.strictEqual(demo2.supportingUrls.html, 'https://www.ft.com/__origami/service/build/v2/demos/o-mock-component@1.0.0/example2/html?brand=core');
 				assert.deepEqual(demo2.display, {
 					live: true,
 					html: true
@@ -65,7 +65,7 @@ describe('GET /v1/repos/:repoId/versions/:versionId/demos', () => {
 				assert.strictEqual(demo3.title, 'Example No-HTML Demo');
 				assert.strictEqual(demo3.description, 'This is an example demo without HTML to be displayed');
 				assert.isObject(demo3.supportingUrls);
-				assert.strictEqual(demo3.supportingUrls.live, 'https://www.ft.com/__origami/service/build/v2/demos/o-mock-component@1.0.0/example-no-html?brand=master');
+				assert.strictEqual(demo3.supportingUrls.live, 'https://www.ft.com/__origami/service/build/v2/demos/o-mock-component@1.0.0/example-no-html?brand=core');
 				assert.isNull(demo3.supportingUrls.html);
 				assert.deepEqual(demo3.display, {
 					live: true,
@@ -78,8 +78,8 @@ describe('GET /v1/repos/:repoId/versions/:versionId/demos', () => {
 				assert.strictEqual(demo4.title, 'Example Branded Demo');
 				assert.strictEqual(demo4.description, 'This is an example demo for the "example-brand" brand');
 				assert.isObject(demo4.supportingUrls);
-				assert.strictEqual(demo4.supportingUrls.live, 'https://www.ft.com/__origami/service/build/v2/demos/o-mock-component@1.0.0/example-branded-demo?brand=master');
-				assert.strictEqual(demo4.supportingUrls.html, 'https://www.ft.com/__origami/service/build/v2/demos/o-mock-component@1.0.0/example-branded-demo/html?brand=master');
+				assert.strictEqual(demo4.supportingUrls.live, 'https://www.ft.com/__origami/service/build/v2/demos/o-mock-component@1.0.0/example-branded-demo?brand=core');
+				assert.strictEqual(demo4.supportingUrls.html, 'https://www.ft.com/__origami/service/build/v2/demos/o-mock-component@1.0.0/example-branded-demo/html?brand=core');
 				assert.deepEqual(demo4.display, {
 					live: true,
 					html: true
@@ -378,20 +378,20 @@ describe('GET /v1/repos/:repoId/versions/:versionId/demos', () => {
 				assert.lengthEquals(response, 4);
 
 				const demo1 = response[0];
-				assert.strictEqual(demo1.supportingUrls.live, 'https://www.ft.com/__origami/service/build/v3/demo?component=o-mock-component%403.0.0&demo=example1&system_code=origami-repo-data&brand=master');
-				assert.strictEqual(demo1.supportingUrls.html, 'https://www.ft.com/__origami/service/build/v3/demo/html?component=o-mock-component%403.0.0&demo=example1&system_code=origami-repo-data&brand=master');
+				assert.strictEqual(demo1.supportingUrls.live, 'https://www.ft.com/__origami/service/build/v3/demo?component=o-mock-component%403.0.0&demo=example1&system_code=origami-repo-data&brand=core');
+				assert.strictEqual(demo1.supportingUrls.html, 'https://www.ft.com/__origami/service/build/v3/demo/html?component=o-mock-component%403.0.0&demo=example1&system_code=origami-repo-data&brand=core');
 
 				const demo2 = response[1];
-				assert.strictEqual(demo2.supportingUrls.live, 'https://www.ft.com/__origami/service/build/v3/demo?component=o-mock-component%403.0.0&demo=example2&system_code=origami-repo-data&brand=master');
-				assert.strictEqual(demo2.supportingUrls.html, 'https://www.ft.com/__origami/service/build/v3/demo/html?component=o-mock-component%403.0.0&demo=example2&system_code=origami-repo-data&brand=master');
+				assert.strictEqual(demo2.supportingUrls.live, 'https://www.ft.com/__origami/service/build/v3/demo?component=o-mock-component%403.0.0&demo=example2&system_code=origami-repo-data&brand=core');
+				assert.strictEqual(demo2.supportingUrls.html, 'https://www.ft.com/__origami/service/build/v3/demo/html?component=o-mock-component%403.0.0&demo=example2&system_code=origami-repo-data&brand=core');
 
 				const demo3 = response[2];
-				assert.strictEqual(demo3.supportingUrls.live, 'https://www.ft.com/__origami/service/build/v3/demo?component=o-mock-component%403.0.0&demo=example-no-html&system_code=origami-repo-data&brand=master');
+				assert.strictEqual(demo3.supportingUrls.live, 'https://www.ft.com/__origami/service/build/v3/demo?component=o-mock-component%403.0.0&demo=example-no-html&system_code=origami-repo-data&brand=core');
 				assert.isNull(demo3.supportingUrls.html);
 
 				const demo4 = response[3];
-				assert.strictEqual(demo4.supportingUrls.live, 'https://www.ft.com/__origami/service/build/v3/demo?component=o-mock-component%403.0.0&demo=example-branded-demo&system_code=origami-repo-data&brand=master');
-				assert.strictEqual(demo4.supportingUrls.html, 'https://www.ft.com/__origami/service/build/v3/demo/html?component=o-mock-component%403.0.0&demo=example-branded-demo&system_code=origami-repo-data&brand=master');
+				assert.strictEqual(demo4.supportingUrls.live, 'https://www.ft.com/__origami/service/build/v3/demo?component=o-mock-component%403.0.0&demo=example-branded-demo&system_code=origami-repo-data&brand=core');
+				assert.strictEqual(demo4.supportingUrls.html, 'https://www.ft.com/__origami/service/build/v3/demo/html?component=o-mock-component%403.0.0&demo=example-branded-demo&system_code=origami-repo-data&brand=core');
 
 			});
 

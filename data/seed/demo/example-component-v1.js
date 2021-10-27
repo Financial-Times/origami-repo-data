@@ -55,7 +55,7 @@ exports.seed = async database => {
 					origamiType: 'module',
 					origamiCategory: 'components',
 					brands: [
-						'master',
+						'core',
 						'internal'
 					],
 					keywords: 'example, mock',

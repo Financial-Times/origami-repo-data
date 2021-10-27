@@ -37,7 +37,7 @@ describe('GET /v1/repos', () => {
 			assert.strictEqual(repo1.name, 'o-mock-component');
 			// This is the latest *stable* version, even though 3.0.0-beta.1 exists
 			assert.strictEqual(repo1.version, '2.0.0');
-			assert.deepEqual(repo1.brands, ['master', 'internal']);
+			assert.deepEqual(repo1.brands, ['core', 'internal']);
 
 			const repo2 = response[1];
 			assert.isObject(repo2);
@@ -390,11 +390,11 @@ describe('GET /v1/repos with query:', () => {
 
 	});
 
-	describe('brand=master', () => {
+	describe('brand=core', () => {
 
 		beforeEach(async () => {
 			request = agent
-				.get('/v1/repos?brand=master')
+				.get('/v1/repos?brand=core')
 				.set('X-Api-Key', 'mock-read-key')
 				.set('X-Api-Secret', 'mock-read-secret');
 		});
@@ -414,11 +414,11 @@ describe('GET /v1/repos with query:', () => {
 				response = (await request.then()).body;
 			});
 
-			it('contains only masterbrand components', () => {
+			it('contains only core brand components', () => {
 				assert.isArray(response);
 				assert.lengthEquals(response, 2);
 				for (const repo of response) {
-					assert.include(repo.brands, 'master');
+					assert.include(repo.brands, 'core');
 				}
 			});
 
@@ -538,11 +538,11 @@ describe('GET /v1/repos with query:', () => {
 
 	});
 
-	describe('brand=master,internal', () => {
+	describe('brand=core,internal', () => {
 
 		beforeEach(async () => {
 			request = agent
-				.get('/v1/repos?brand=master,internal')
+				.get('/v1/repos?brand=core,internal')
 				.set('X-Api-Key', 'mock-read-key')
 				.set('X-Api-Secret', 'mock-read-secret');
 		});
@@ -562,14 +562,14 @@ describe('GET /v1/repos with query:', () => {
 				response = (await request.then()).body;
 			});
 
-			it('contains both masterbrand and internal branded components', () => {
+			it('contains both core brand and internal branded components', () => {
 				assert.isArray(response);
 				assert.lengthEquals(response, 4);
 				for (const repo of response) {
 					if (repo.brands.length === 1) {
-						assert.include(['master', 'internal'], repo.brands[0]);
+						assert.include(['core', 'internal'], repo.brands[0]);
 					} else {
-						assert.deepEqual(repo.brands, ['master', 'internal']);
+						assert.deepEqual(repo.brands, ['core', 'internal']);
 					}
 				}
 			});

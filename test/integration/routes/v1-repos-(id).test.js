@@ -46,7 +46,7 @@ describe('GET /v1/repos/:repoId', () => {
 				'scss'
 			]);
 			assert.deepEqual(response.brands, [
-				'master',
+				'core',
 				'internal'
 			]);
 		});

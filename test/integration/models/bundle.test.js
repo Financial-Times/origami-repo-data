@@ -14,11 +14,11 @@ describe('Bundle', () => {
 
 	const mockData = [
 		{
-			brand: 'master',
+			brand: 'core',
 			lang: 'css',
 			contentLength: 500,
-			v2Path: `/v2/bundles/css?modules=${testRepoName}%40${v1SpecRelease}&brand=master`,
-			v3Path: `/v3/bundles/css?components=${testRepoName}%40${v2SpecRelease}&system_code=origami-repo-data&brand=master`
+			v2Path: `/v2/bundles/css?modules=${testRepoName}%40${v1SpecRelease}&brand=core`,
+			v3Path: `/v3/bundles/css?components=${testRepoName}%40${v2SpecRelease}&system_code=origami-repo-data&brand=core`
 		},
 		{
 			brand: 'internal',
