@@ -60,7 +60,7 @@
 	// If it does not explicitly support brands, it will be an empty Array.
 	// If it is not a component, the value will be `null`
 	"brands": [
-		"master",
+		"core",
 		"internal"
 	],
 
@@ -234,7 +234,7 @@
 
 	// The brand this bundle is for
 	// The brand may be `null`
-	"brand": "master",
+	"brand": "core",
 
 	// The Origami Build Service url for this bundle.
 	"url": "https://www.ft.com/__origami/service/build/v2/bundles/css?modules=x-xxx",
@@ -283,7 +283,7 @@
 				<dt>brand</dt>
 				<dd>
 					Specify a brand (or a comma-delimited list of brands) to filter repositories by.
-					Possible values are: <code>master</code>, <code>internal</code>, <code>whitelabel</code>.
+					Possible values are: <code>core</code>, <code>internal</code>, <code>whitelabel</code>.
 					Any repository which <em>doesn't</em> include this brand will not be output.
 					If this parameter is set to <code>none</code>, <code>null</code>,
 					or <code>undefined</code> then only repositories which are not branded will be output.
@@ -1057,7 +1057,7 @@ repository is an image set. This endpoint responds with an array of
 				<dt>brand</dt>
 				<dd>
 					Specify a brand (or a comma-delimited list of brands) to filter bundles by.
-					E.g: <code>master</code>, <code>internal</code>, <code>whitelabel</code>.
+					E.g: <code>core</code>, <code>internal</code>, <code>whitelabel</code>.
 					Any bundle which <em>isn't</em> for this brand will not be output.
 					If this parameter is set to <code>all</code> then all bundles which are for a brand will
 					be output.
