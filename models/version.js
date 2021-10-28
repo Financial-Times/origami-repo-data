@@ -632,10 +632,9 @@ function initModel(app) {
 					brandFilter.push('master');
 				}
 				demoBrandFilterMatch = brandFilter.find(brand => demoBrands.includes(brand));
-			}
-
-			if (!demoBrandFilterMatch) {
-				display.live = display.html = false;
+				if (!demoBrandFilterMatch) {
+					display.live = display.html = false;
+				}
 			}
 
 			// Calculate the live demo URL (including brand if necessary)
