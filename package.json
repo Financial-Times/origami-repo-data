@@ -38,6 +38,7 @@
     "decompress": "^4.2.1",
     "dotenv": "^8.2.0",
     "execa": "^5.1.1",
+    "get-changelog-section": "^1.0.2",
     "guestlist": "^2.3.0",
     "heroku-node-settings": "^1.1.0",
     "http-errors": "^1.8.0",
