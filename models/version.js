@@ -662,7 +662,8 @@ function initModel(app) {
 			// this gets messy, repo data should be deleted soon™️:
 			// if a "master" brand filter found a "core" brand demo
 			// we need to use the actual brand in the query parameter.
-			const defaultDemoBrand = version.get('brands').includes('master') ? 'master' : 'core';
+			const versionBrands = version.get('brands');
+			const defaultDemoBrand = versionBrands && versionBrands.includes('master') ? 'master' : 'core';
 			const demoBrand = demoBrandFilterMatch || defaultDemoBrand;
 			liveDemoUrl.searchParams.append('brand', demoBrand);
 			htmlDemoUrl.searchParams.append('brand', demoBrand);
