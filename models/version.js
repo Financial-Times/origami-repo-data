@@ -622,16 +622,14 @@ function initModel(app) {
 			const demoIsBranded = Array.isArray(demoBrands) && demoBrands.length;
 			const demoBrandFilterSet = filter && filter.brand;
 
-			let demoBrandFilterMatch;
 			if (demoIsBranded && demoBrandFilterSet) {
 				const brandFilter = [filter.brand];
-				if(brandFilter.includes('master')) {
+				if (brandFilter.includes('master')) {
 					brandFilter.push('core');
-				}
-				if(brandFilter.includes('core')) {
+				} else if (brandFilter.includes('core')) {
 					brandFilter.push('master');
 				}
-				demoBrandFilterMatch = brandFilter.find(brand => demoBrands.includes(brand));
+				let demoBrandFilterMatch = brandFilter.find(brand => demoBrands.includes(brand));
 				if (!demoBrandFilterMatch) {
 					display.live = display.html = false;
 				}
@@ -644,6 +642,29 @@ function initModel(app) {
 			if (!origamiVersion || origamiVersion === '1') {
 				liveDemoUrl = new URL(`https://www.ft.com/__origami/service/build/v2/demos/${version.get('name')}@${version.get('version')}/${demo.name}`);
 				htmlDemoUrl = new URL(`${liveDemoUrl.toString()}/html`);
+				// @breaking require a brand filter in a future version of
+				// repo-data rather than default to the core brand, as the build
+				// service url returned requires a brand parameter since v3
+				// this gets messy, repo data should be deleted soon™️:
+				// if a "master" brand filter found a "core" brand demo
+				// we need to use the actual brand in the query parameter.
+				const versionBrands = version.get('brands');
+				const defaultDemoBrand = versionBrands && versionBrands.includes('master') ? 'master' : 'core';
+				let demoBrand = defaultDemoBrand;
+				if (filter.brand) {
+					switch (filter.brand) {
+						case "master":
+						case "core": {
+							demoBrand = "master";
+							break;
+						}
+						default: {
+							demoBrand = filter.brand;
+						}
+					}
+				}
+				liveDemoUrl.searchParams.append('brand', demoBrand);
+				htmlDemoUrl.searchParams.append('brand', demoBrand);
 			} else {
 				liveDemoUrl = new URL('https://www.ft.com/__origami/service/build/v3/demo');
 				liveDemoUrl.searchParams.append('component', `${version.get('name')}@${version.get('version')}`);
@@ -654,19 +675,31 @@ function initModel(app) {
 				htmlDemoUrl.searchParams.append('component', `${version.get('name')}@${version.get('version')}`);
 				htmlDemoUrl.searchParams.append('demo', demo.name);
 				htmlDemoUrl.searchParams.append('system_code', 'origami-repo-data');
+				// @breaking require a brand filter in a future version of
+				// repo-data rather than default to the core brand, as the build
+				// service url returned requires a brand parameter since v3
+				// this gets messy, repo data should be deleted soon™️:
+				// if a "master" brand filter found a "core" brand demo
+				// we need to use the actual brand in the query parameter.
+				const versionBrands = version.get('brands');
+				const defaultDemoBrand = versionBrands && versionBrands.includes('master') ? 'master' : 'core';
+				let demoBrand = defaultDemoBrand;
+				if (filter.brand) {
+					switch (filter.brand) {
+						case "master":
+						case "core": {
+							demoBrand = "core";
+							break;
+						}
+						default: {
+							demoBrand = filter.brand;
+						}
+					}
+				}
+				liveDemoUrl.searchParams.append('brand', demoBrand);
+				htmlDemoUrl.searchParams.append('brand', demoBrand);
 			}
 
-			// @breaking require a brand filter in a future version of
-			// repo-data rather than default to the core brand, as the build
-			// service url returned requires a brand parameter since v3
-			// this gets messy, repo data should be deleted soon™️:
-			// if a "master" brand filter found a "core" brand demo
-			// we need to use the actual brand in the query parameter.
-			const versionBrands = version.get('brands');
-			const defaultDemoBrand = versionBrands && versionBrands.includes('master') ? 'master' : 'core';
-			const demoBrand = demoBrandFilterMatch || defaultDemoBrand;
-			liveDemoUrl.searchParams.append('brand', demoBrand);
-			htmlDemoUrl.searchParams.append('brand', demoBrand);
 
 			return {
 				id: demo.name,
