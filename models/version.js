@@ -642,12 +642,6 @@ function initModel(app) {
 			if (!origamiVersion || origamiVersion === '1') {
 				liveDemoUrl = new URL(`https://www.ft.com/__origami/service/build/v2/demos/${version.get('name')}@${version.get('version')}/${demo.name}`);
 				htmlDemoUrl = new URL(`${liveDemoUrl.toString()}/html`);
-				// @breaking require a brand filter in a future version of
-				// repo-data rather than default to the core brand, as the build
-				// service url returned requires a brand parameter since v3
-				// this gets messy, repo data should be deleted soon™️:
-				// if a "master" brand filter found a "core" brand demo
-				// we need to use the actual brand in the query parameter.
 				const versionBrands = version.get('brands');
 				const defaultDemoBrand = versionBrands && versionBrands.includes('master') ? 'master' : 'core';
 				let demoBrand = defaultDemoBrand;
@@ -675,12 +669,6 @@ function initModel(app) {
 				htmlDemoUrl.searchParams.append('component', `${version.get('name')}@${version.get('version')}`);
 				htmlDemoUrl.searchParams.append('demo', demo.name);
 				htmlDemoUrl.searchParams.append('system_code', 'origami-repo-data');
-				// @breaking require a brand filter in a future version of
-				// repo-data rather than default to the core brand, as the build
-				// service url returned requires a brand parameter since v3
-				// this gets messy, repo data should be deleted soon™️:
-				// if a "master" brand filter found a "core" brand demo
-				// we need to use the actual brand in the query parameter.
 				const versionBrands = version.get('brands');
 				const defaultDemoBrand = versionBrands && versionBrands.includes('master') ? 'master' : 'core';
 				let demoBrand = defaultDemoBrand;
