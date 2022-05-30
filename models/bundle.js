@@ -58,7 +58,7 @@ function initModel(app) {
                 // - Compilation Error (560)
                 // - Conflict (409)
                 // - Bad Request (400)
-                // https://www.ft.com/__origami/service/build/v2/#api-reference
+                // https://www.ft.com/__origami/service/build/v3/docs/api
                 const buildServiceError = new Error(`Unable to load ${encoding || 'non-encoded'} bundle from ${buildServiceUrl.toString()}${error.status ? ` (status: ${error.status}).` : ` within ${timeout}ms.`}`);
                 buildServiceError.isRecoverable = error.status && [400, 409, 560].includes(error.status) ? false : true;
                 throw buildServiceError;
