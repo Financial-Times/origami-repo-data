@@ -4,6 +4,9 @@
 exports.seed = async database => {
 
 	const manifests = {
+		origami: {
+			origamiVersion: 1,
+		},
 		package: {
 			name: 'o-mock-component',
 			dependencies: {
@@ -16,6 +19,9 @@ exports.seed = async database => {
 			},
 			optionalDependencies: {
 				'mock-npm-dependency-5': '^1.2.3'
+			},
+			peerDependencies: {
+				'mock-npm-dependency-6': '^7.2.3'
 			}
 		},
 		bower: {
@@ -39,6 +45,7 @@ exports.seed = async database => {
 			support_channel: '#origami-support',
 			tag: 'v1.0.0',
 			version: '1.0.0',
+			origami_version: '1',
 			version_major: 1,
 			version_minor: 0,
 			version_patch: 0,
@@ -58,6 +65,7 @@ exports.seed = async database => {
 			support_channel: '#origami-support',
 			tag: '1.0.0',
 			version: '1.0.0',
+			origami_version: '1',
 			version_major: 1,
 			version_minor: 0,
 			version_patch: 0,

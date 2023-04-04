@@ -1,5 +1,6 @@
 'use strict';
 
+const dotenv = require('dotenv');
 const service = require('../..');
 const supertest = require('supertest');
 
@@ -11,8 +12,14 @@ const mockLog = {
 };
 
 before(async () => {
+
+	dotenv.config();
+
 	const app = global.app = service({
+		buildServiceUrl: 'https://www.ft.com/__origami/service/build',
 		database: process.env.TEST_DATABASE || 'postgres://localhost:5432/origami-repo-data-test',
+		githubAuthToken: process.env.GITHUB_AUTH_TOKEN,
+		npmRegistryUrl: 'https://registry.npmjs.org/',
 		disableIngestionQueue: true,
 		environment: 'test',
 		log: mockLog,

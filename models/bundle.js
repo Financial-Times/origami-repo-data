@@ -15,15 +15,24 @@ function initModel(app) {
      *
      * @param {Version} version - the Version to update a bundle for.
      * @param {string} language - the language of the bundle to update, e.g. 'css' or 'js'.
-     * @param {string} brand [null] - the brand of the bundle to update, e.g. 'internal' (optional).
+     * @param {string} brand - the brand of the bundle to update, e.g. 'internal'.
      * @return {Bundle} - bundle information for the given version, language, and brand
      */
-    async function updateBundleForVersion(version, language, brand = null) {
-        const buildServiceUrl = new URL(`https://www.ft.com/__origami/service/build/v2/bundles/${language}`);
-        buildServiceUrl.searchParams.append('modules', `${version.get('name')}@${version.get('version')}`);
-        if (brand) {
+    async function updateBundleForVersion(version, language, brand) {
+        const origamiVersion = version.get('origami_version');
+        let buildServiceUrl;
+        if (!origamiVersion || origamiVersion === '1') {
+            buildServiceUrl = new URL(`${app.ft.options.buildServiceUrl}/v2/bundles/${language}`);
+            buildServiceUrl.searchParams.append('modules', `${version.get('name')}@${version.get('version')}`);
+        } else {
+            buildServiceUrl = new URL(`${app.ft.options.buildServiceUrl}/v3/bundles/${language}`);
+            buildServiceUrl.searchParams.append('components', `${version.get('name')}@${version.get('version')}`);
+            buildServiceUrl.searchParams.append('system_code', 'origami-repo-data');
+        }
+        if (brand && language === 'css') {
             buildServiceUrl.searchParams.append('brand', brand);
         }
+
         const timeout = 750;
 
         // Find bundle sizes for differing "Accept-Encoding" values.
@@ -49,7 +58,7 @@ function initModel(app) {
                 // - Compilation Error (560)
                 // - Conflict (409)
                 // - Bad Request (400)
-                // https://www.ft.com/__origami/service/build/v2/#api-reference
+                // https://www.ft.com/__origami/service/build/v3/docs/api
                 const buildServiceError = new Error(`Unable to load ${encoding || 'non-encoded'} bundle from ${buildServiceUrl.toString()}${error.status ? ` (status: ${error.status}).` : ` within ${timeout}ms.`}`);
                 buildServiceError.isRecoverable = error.status && [400, 409, 560].includes(error.status) ? false : true;
                 throw buildServiceError;
@@ -198,12 +207,12 @@ function initModel(app) {
                     throw error;
                 }
                 // Get brands from Version.
-                const brands = version.brands.filter(brand => typeof brand === 'string');
+                const brands = (version.brands || []).filter(brand => typeof brand === 'string');
                 // Get bundle languages (js and or css) from Version.
                 const bundleLanguages = ['js', 'css'].filter(language => {
                     // Include css bundles if the version has scss.
                     language = language === 'css' ? 'scss' : language;
-                    return version.languages.includes(language);
+                    return version.get('languages').includes(language);
                 });
 
                 // Get combinations of brands and languages to collect Bundle

@@ -1,4 +1,3 @@
-
 # Origami Repo Data
 
 Get information about Origami repositories. See [the production service][production-url] for API information.
@@ -21,7 +20,7 @@ Get information about Origami repositories. See [the production service][product
 
 ## Requirements
 
-Running Origami Repo Data requires [Node.js] 10.x and [npm]. A [PostgreSQL] database is also required.
+Running Origami Repo Data requires [Node.js] 14.x and [npm]. A [PostgreSQL] database is also required.
 
 If you're working on a Mac, the simplest way to install PostgreSQL is to use [Homebrew]. Run the following and pay attention to the instructions output after installing:
 
@@ -38,7 +37,13 @@ Before we can run the application, we'll need to install dependencies:
 npm install
 ```
 
-Create a local PostgreSQL database, you may need to provide credentials for the following command depending on your local setup:
+Run PostgreSQL locally. If you used brew to install PostgreSQL on a Mac run:
+
+```sh
+brew services start postgresql
+```
+
+Then create a local PostgreSQL database, you may need to provide credentials for the following command depending on your local setup:
 
 ```sh
 make db-create
@@ -69,8 +74,10 @@ We configure Origami Repo Data using environment variables. In development, conf
 
 ### Required everywhere
 
+  * `BUILD_SERVICE_URL`: The url of the Origami Build Service to use for component urls such as demos.
   * `DATABASE_URL`: A PostgreSQL connection string, with write permission on a database
   * `GITHUB_AUTH_TOKEN`: A GitHub auth token which has read access to all Financial Times repositories.
+  * `NPM_REGISTRY`: The url of the npmjs registry to use when ingesting via npm.
   * `NODE_ENV`: The environment to run the application in. One of `production`, `development` (default), or `test` (for use in automated tests).
   * `PORT`: The port to run the application on.
 

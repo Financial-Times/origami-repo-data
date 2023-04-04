@@ -41,7 +41,8 @@ describe('GET /v1/repos/:repoId/versions/:versionId/dependencies', () => {
 				version: '^1.2.3',
 				source: 'bower',
 				isDev: false,
-				isOptional: false
+				isOptional: false,
+				isPeer: false
 			});
 
 			const dependency2 = response[1];
@@ -51,7 +52,8 @@ describe('GET /v1/repos/:repoId/versions/:versionId/dependencies', () => {
 				version: '^4.5.6',
 				source: 'bower',
 				isDev: false,
-				isOptional: false
+				isOptional: false,
+				isPeer: false
 			});
 
 			const dependency3 = response[2];
@@ -61,7 +63,8 @@ describe('GET /v1/repos/:repoId/versions/:versionId/dependencies', () => {
 				version: '^1.2.3',
 				source: 'bower',
 				isDev: true,
-				isOptional: false
+				isOptional: false,
+				isPeer: false
 			});
 
 			const dependency4 = response[3];
@@ -71,7 +74,8 @@ describe('GET /v1/repos/:repoId/versions/:versionId/dependencies', () => {
 				version: '^4.5.6',
 				source: 'bower',
 				isDev: true,
-				isOptional: false
+				isOptional: false,
+				isPeer: false
 			});
 
 		});
@@ -106,7 +110,7 @@ describe('GET /v1/repos/:repoId/versions/:versionId/dependencies', () => {
 
 			it('is the version dependencies', () => {
 				assert.isArray(response);
-				assert.lengthEquals(response, 7);
+				assert.lengthEquals(response, 8);
 
 				const dependency1 = response[0];
 				assert.isObject(dependency1);
@@ -115,7 +119,8 @@ describe('GET /v1/repos/:repoId/versions/:versionId/dependencies', () => {
 					version: '^1.2.3',
 					source: 'bower',
 					isDev: false,
-					isOptional: false
+					isOptional: false,
+					isPeer: false
 				});
 
 				const dependency2 = response[1];
@@ -125,7 +130,8 @@ describe('GET /v1/repos/:repoId/versions/:versionId/dependencies', () => {
 					version: '^4.5.6',
 					source: 'bower',
 					isDev: false,
-					isOptional: false
+					isOptional: false,
+					isPeer: false
 				});
 
 				const dependency3 = response[2];
@@ -135,7 +141,8 @@ describe('GET /v1/repos/:repoId/versions/:versionId/dependencies', () => {
 					version: '^1.2.3',
 					source: 'npm',
 					isDev: false,
-					isOptional: false
+					isOptional: false,
+					isPeer: false
 				});
 
 				const dependency4 = response[3];
@@ -145,7 +152,8 @@ describe('GET /v1/repos/:repoId/versions/:versionId/dependencies', () => {
 					version: '^4.5.6',
 					source: 'npm',
 					isDev: false,
-					isOptional: false
+					isOptional: false,
+					isPeer: false
 				});
 
 				const dependency5 = response[4];
@@ -155,7 +163,8 @@ describe('GET /v1/repos/:repoId/versions/:versionId/dependencies', () => {
 					version: '^1.2.3',
 					source: 'npm',
 					isDev: true,
-					isOptional: false
+					isOptional: false,
+					isPeer: false
 				});
 
 				const dependency6 = response[5];
@@ -165,7 +174,8 @@ describe('GET /v1/repos/:repoId/versions/:versionId/dependencies', () => {
 					version: '^4.5.6',
 					source: 'npm',
 					isDev: true,
-					isOptional: false
+					isOptional: false,
+					isPeer: false
 				});
 
 				const dependency7 = response[6];
@@ -175,7 +185,19 @@ describe('GET /v1/repos/:repoId/versions/:versionId/dependencies', () => {
 					version: '^1.2.3',
 					source: 'npm',
 					isDev: false,
-					isOptional: true
+					isOptional: true,
+					isPeer: false
+				});
+
+				const dependency8 = response[7];
+				assert.isObject(dependency8);
+				assert.deepEqual(dependency8, {
+					name: 'mock-npm-dependency-6',
+					version: '^7.2.3',
+					source: 'npm',
+					isDev: false,
+					isOptional: false,
+					isPeer: true
 				});
 
 			});

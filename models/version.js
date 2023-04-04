@@ -1,13 +1,12 @@
 'use strict';
 
-const cloneDeep = require('lodash/cloneDeep');
 const isPlainObject = require('lodash/isPlainObject');
-const path = require('path');
 const semver = require('semver');
 const {removeStopwords} = require('stopword');
 const { v4: uuid, v5: uuidv5 } = require('uuid');
 const union = require('lodash/union');
 const propertyFilter = require('../lib/model-property-filter');
+const createVersionFromIngestion = require('../lib/create-version-from-ingestion');
 
 const origamiSupportEmail = 'origami.support@ft.com';
 
@@ -60,6 +59,7 @@ function initModel(app) {
 				subType: this.get('sub_type'),
 				version: this.get('version'),
 				versionTag: this.get('tag'),
+				origamiVersion: this.get('origami_version'),
 				imageSetScheme: this.get('imageset_scheme'),
 				description: this.get('description'),
 				brands: this.get('brands'),
@@ -141,7 +141,7 @@ function initModel(app) {
 						data: manifests[name]
 					};
 				});
-			const dependencyKeys = ['dependencies', 'devDependencies', 'optionalDependencies'];
+			const dependencyKeys = ['dependencies', 'devDependencies', 'optionalDependencies', 'peerDependencies'];
 			const dependencies = [];
 
 			// If the repo has either a bower or package manifest...
@@ -155,6 +155,7 @@ function initModel(app) {
 									version,
 									source: (manifest.name === 'bower' ? 'bower' : 'npm'),
 									isDev: (dependencyKey === 'devDependencies'),
+									isPeer: (dependencyKey === 'peerDependencies'),
 									isOptional: (dependencyKey === 'optionalDependencies')
 								});
 							}
@@ -170,6 +171,16 @@ function initModel(app) {
 		// Model virtual methods
 		outputVirtuals: false,
 		virtuals: {
+
+			// Get whether the repo is a component. Either "module" or
+			// "component" could be used interchangeably for spec v1 components.
+			// It was normalised to "module" within repo data, however, spec v2
+			// components dropped the "module" type for "component",
+			type_is_component() {
+				return ['module', 'component'].includes(
+					this.get('type')
+				);
+			},
 
 			// Get whether the repo is supported by the Origami team
 			support_is_origami() {
@@ -207,6 +218,15 @@ function initModel(app) {
 				return this.get('name').toLowerCase().replace(/^[a-z]\-/, '');
 			},
 
+
+			// Get the npm package name
+			package_name() {
+				const manifests = this.get('manifests') || {};
+				const packageManifest = manifests.package || {};
+				const packageName = packageManifest.name;
+				return packageName || null;
+			},
+
 			// Get a description of the version, falling back through different manifests
 			description() {
 				const manifests = this.get('manifests') || {};
@@ -233,6 +253,13 @@ function initModel(app) {
 				const type = this.get('type');
 				const brands = (manifests.origami && manifests.origami.brands ? manifests.origami.brands : []);
 				return Version.normaliseOrigamiBrandsArray(type, brands);
+			},
+
+			// Get the component's Origami Specification version
+			origami_version() {
+				const manifests = this.get('manifests') || {};
+				const hasOrigamiVersion = manifests.origami && manifests.origami.origamiVersion;
+				return hasOrigamiVersion ? `${manifests.origami.origamiVersion}` : '';
 			},
 
 			// Get keywords for the version, falling back through different manifests
@@ -278,31 +305,10 @@ function initModel(app) {
 				return removeStopwords(dedupedWords).sort();
 			},
 
-			// Get languages for the version, falling back through different manifests
-			languages() {
-				const manifests = this.get('manifests') || {};
-				let mainPaths = [];
-
-				// Order: bower, package
-				if (manifests.bower) {
-					if (typeof manifests.bower.main === 'string') {
-						mainPaths.push(manifests.bower.main);
-					} else if (Array.isArray(manifests.bower.main)) {
-						mainPaths = manifests.bower.main.filter(main => typeof main === 'string');
-					}
-				} else if (manifests.package && typeof manifests.package.main === 'string') {
-					mainPaths.push(manifests.package.main);
-				}
-
-				const languages = mainPaths
-					.map(mainPath => path.extname(mainPath).slice(1).toLowerCase())
-					.filter(mainPath => mainPath)
-					.sort();
-
-				return Array.from(new Set(languages));
-			},
-
 			// Get the Origami sub-type (category) for the version
+			// Spec v1 components/modules have a sub-type (category),
+			// this was dropped in spec v2:
+			// https://github.com/Financial-Times/origami/pull/120
 			sub_type() {
 				const manifests = this.get('manifests') || {};
 				if (manifests.origami && manifests.origami.origamiCategory && typeof manifests.origami.origamiCategory === 'string') {
@@ -434,8 +440,12 @@ function initModel(app) {
 			// Create a regular expression for the search
 			let search;
 			if (filters.search && typeof filters.search === 'string') {
-				const regExpSafeQuery = filters.search.trim().replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
-				const searchRegExp = new RegExp(`${regExpSafeQuery}`, 'i');
+				const regExpQuery = filters.search.trim()
+				  // backslash escape special regular expression characters
+				  .replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&')
+				  // replace spaces with dot-star, for fuzzy searching
+				  .replace(/\s+/g, '.*');
+				const searchRegExp = new RegExp(`${regExpQuery}`, 'i');
 				search = searchRegExp.test.bind(searchRegExp);
 			}
 
@@ -444,6 +454,26 @@ function initModel(app) {
 				.filter(propertyFilter('type', filters.type))
 				.filter(propertyFilter('support_email', filters.supportEmail))
 				.filter(propertyFilter('support_status', filters.status))
+				.filter(repo => {
+					const standardMatch = propertyFilter('origami_version', filters.origamiVersion);
+
+					if (standardMatch(repo)) {
+						return true;
+					}
+
+					if (filters.origamiVersion.match(/\d+/)) {
+						const repoOrigamiVersion = repo.get('origami_version');
+						if (!repoOrigamiVersion) {
+							return false;
+						}
+						const major = repoOrigamiVersion.split('.')[0];
+						if (major === filters.origamiVersion) {
+							return true;
+						}
+					}
+
+					return false;
+				})
 				.filter(repo => {
 					repo.searchScore = 0;
 					if (!search) {
@@ -562,164 +592,7 @@ function initModel(app) {
 
 		// Create a version based on an Ingestion
 		async createFromIngestion(ingestion) {
-			try {
-				const url = ingestion.get('url');
-				const tag = ingestion.get('tag');
-				const encodedTag = encodeURIComponent(tag);
-
-				// Expect a valid GitHub URL
-				if (!app.github.isValidUrl(url)) {
-					throw app.github.error('Ingestion URL is not a GitHub repository', false);
-				}
-				const {owner, repo} = app.github.extractRepoFromUrl(url);
-
-				// Check that the repo/tag exist
-				const repoTagExists = await app.github.isValidRepoAndTag({
-					owner,
-					repo,
-					tag: encodedTag
-				});
-				if (!repoTagExists) {
-					throw app.github.error('Repo or tag does not exist', false);
-				}
-
-				// Load the Origami manifest first
-				const origamiManifest = await app.github.loadJsonFile({
-					path: 'origami.json',
-					ref: tag,
-					owner,
-					repo
-				});
-				if (!origamiManifest) {
-					throw app.github.error('Repo does not contain an Origami manifest', false);
-				}
-
-				// Extract the information we need from the Origami manifest
-				const origamiManifestNormalised = Version.normaliseOrigamiManifest(origamiManifest);
-
-				// Load the other manifests
-				const [aboutManifest, bowerManifest, imageSetManifest, packageManifest] = await Promise.all([
-					app.github.loadJsonFile({
-						path: 'about.json',
-						ref: tag,
-						owner,
-						repo
-					}),
-					app.github.loadJsonFile({
-						path: 'bower.json',
-						ref: tag,
-						owner,
-						repo
-					}),
-					app.github.loadJsonFile({
-						path: 'imageset.json',
-						ref: tag,
-						owner,
-						repo
-					}),
-					app.github.loadJsonFile({
-						path: 'package.json',
-						ref: tag,
-						owner,
-						repo
-					})
-				]);
-
-				// Load repo markdown
-				const readme = await app.github.loadReadme({
-					ref: tag,
-					owner,
-					repo
-				});
-				const designguidelines = await app.github.loadFile({
-					path: 'designguidelines.md',
-					ref: tag,
-					owner,
-					repo
-				});
-				const migration = await app.github.loadFile({
-					path: 'migration.md',
-					ref: tag,
-					owner,
-					repo
-				});
-
-				// Create the new version
-				const version = new Version({
-					name: repo,
-					type: origamiManifestNormalised.origamiType,
-					url,
-					tag,
-					support_status: origamiManifestNormalised.supportStatus,
-					support_email: origamiManifestNormalised.supportContact.email,
-					support_channel: origamiManifestNormalised.supportContact.slack,
-					manifests: {
-						about: aboutManifest,
-						bower: bowerManifest,
-						imageSet: imageSetManifest,
-						origami: origamiManifest,
-						package: packageManifest
-					},
-					markdown: {
-						readme,
-						designguidelines,
-						migration
-					}
-				});
-				await version.save();
-
-				// Return the new version
-				return version;
-
-			} catch (error) {
-				// Assume errors are recoverable by default
-				if (error.isRecoverable !== false) {
-					error.isRecoverable = true;
-				}
-				throw error;
-			}
-
-		},
-
-		// Normalise an Origami manifest file. Because we use the manifest
-		// to create fields in the database, we need to ensure that it
-		// mostly conforms to the Origami spec.
-		normaliseOrigamiManifest(manifest) {
-			const normalisedManifest = cloneDeep(manifest);
-
-			// Ensure that origamiType is a string or null
-			if (typeof normalisedManifest.origamiType !== 'string') {
-				normalisedManifest.origamiType = null;
-			}
-
-			// Convert the "component" origamiType to "module" in the database
-			if (normalisedManifest.origamiType === 'component') {
-				normalisedManifest.origamiType = 'module';
-			}
-
-			// Ensure that support status is a string or null
-			if (typeof normalisedManifest.support !== 'string') {
-				normalisedManifest.support = null;
-			}
-
-			// Ensure that we have all the support information that we need
-			if (typeof normalisedManifest.supportContact !== 'object' || normalisedManifest.supportContact === null) {
-				normalisedManifest.supportContact = {
-					email: null,
-					slack: null
-				};
-			}
-			if (!normalisedManifest.supportContact.email && typeof normalisedManifest.support === 'string' && normalisedManifest.support.includes('@')) {
-				normalisedManifest.supportContact.email = normalisedManifest.support;
-			}
-			if (!normalisedManifest.supportContact.email) {
-				normalisedManifest.supportContact.email = origamiSupportEmail;
-			}
-			if (!normalisedManifest.supportContact.slack && normalisedManifest.supportContact.email === origamiSupportEmail) {
-				normalisedManifest.supportContact.slack = 'financialtimes/origami-support';
-			}
-
-			return normalisedManifest;
+			return await createVersionFromIngestion(ingestion, app.model.Version, app.github, app.ft.npmRegistryUrl);
 		},
 
 		// Normalise an Origami manifest demo
@@ -745,20 +618,77 @@ function initModel(app) {
 				html: (demo.display_html !== false)
 			};
 			// Filter based on brand if the filter is present
+			// Hide demos which are not for the filtered brand
 			const demoBrands = Version.normaliseOrigamiBrandsArray(version.get('type'), demo.brands);
-			if (filter && filter.brand && Array.isArray(demoBrands) && demoBrands.length) {
-				if (!demoBrands.includes(filter.brand)) {
+			const demoIsBranded = Array.isArray(demoBrands) && demoBrands.length;
+			const demoBrandFilterSet = filter && filter.brand;
+
+			if (demoIsBranded && demoBrandFilterSet) {
+				const brandFilter = [filter.brand];
+				if (brandFilter.includes('master')) {
+					brandFilter.push('core');
+				} else if (brandFilter.includes('core')) {
+					brandFilter.push('master');
+				}
+				let demoBrandFilterMatch = brandFilter.find(brand => demoBrands.includes(brand));
+				if (!demoBrandFilterMatch) {
 					display.live = display.html = false;
 				}
 			}
 
 			// Calculate the live demo URL (including brand if necessary)
-			let liveDemoUrl = `https://www.ft.com/__origami/service/build/v2/demos/${version.get('name')}@${version.get('version')}/${demo.name}`;
-			let htmlDemoUrl = `${liveDemoUrl}/html`;
-			if (filter && filter.brand) {
-				liveDemoUrl = `${liveDemoUrl}?brand=${filter.brand}`;
-				htmlDemoUrl = `${htmlDemoUrl}?brand=${filter.brand}`;
+			const origamiVersion = version.get('origami_version');
+			let liveDemoUrl;
+			let htmlDemoUrl;
+			if (!origamiVersion || origamiVersion === '1') {
+				liveDemoUrl = new URL(`https://www.ft.com/__origami/service/build/v2/demos/${version.get('name')}@${version.get('version')}/${demo.name}`);
+				htmlDemoUrl = new URL(`${liveDemoUrl.toString()}/html`);
+				const versionBrands = version.get('brands');
+				const defaultDemoBrand = versionBrands && versionBrands.includes('master') ? 'master' : 'core';
+				let demoBrand = defaultDemoBrand;
+				if (filter.brand) {
+					switch (filter.brand) {
+						case "master":
+						case "core": {
+							demoBrand = "master";
+							break;
+						}
+						default: {
+							demoBrand = filter.brand;
+						}
+					}
+				}
+				liveDemoUrl.searchParams.append('brand', demoBrand);
+				htmlDemoUrl.searchParams.append('brand', demoBrand);
+			} else {
+				liveDemoUrl = new URL('https://www.ft.com/__origami/service/build/v3/demo');
+				liveDemoUrl.searchParams.append('component', `${version.get('name')}@${version.get('version')}`);
+				liveDemoUrl.searchParams.append('demo', demo.name);
+				liveDemoUrl.searchParams.append('system_code', 'origami-repo-data');
+
+				htmlDemoUrl = new URL('https://www.ft.com/__origami/service/build/v3/demo/html');
+				htmlDemoUrl.searchParams.append('component', `${version.get('name')}@${version.get('version')}`);
+				htmlDemoUrl.searchParams.append('demo', demo.name);
+				htmlDemoUrl.searchParams.append('system_code', 'origami-repo-data');
+				const versionBrands = version.get('brands');
+				const defaultDemoBrand = versionBrands && versionBrands.includes('master') ? 'master' : 'core';
+				let demoBrand = defaultDemoBrand;
+				if (filter.brand) {
+					switch (filter.brand) {
+						case "master":
+						case "core": {
+							demoBrand = "core";
+							break;
+						}
+						default: {
+							demoBrand = filter.brand;
+						}
+					}
+				}
+				liveDemoUrl.searchParams.append('brand', demoBrand);
+				htmlDemoUrl.searchParams.append('brand', demoBrand);
 			}
+
 
 			return {
 				id: demo.name,
@@ -774,7 +704,7 @@ function initModel(app) {
 
 		// Normalise an origami brands array
 		normaliseOrigamiBrandsArray(type, brands) {
-			if (type !== 'module') {
+			if (type !== 'module' && type !== 'component') {
 				return null;
 			}
 			if (!Array.isArray(brands)) {
