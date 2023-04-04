@@ -16,8 +16,8 @@
     "url": "https://github.com/Financial-Times/origami-repo-data.git"
   },
   "engines": {
-    "node": "^10.15.3",
-    "npm": "^6"
+    "node": "^18",
+    "npm": "^9"
   },
   "main": "./lib/service.js",
   "scripts": {
@@ -33,23 +33,24 @@
     "@slack/web-api": "^5.11.0",
     "bcrypt": "^5.0.0",
     "body-parser": "^1.18.3",
-    "bookshelf": "^0.14.2",
+    "bookshelf": "^1",
+    "bookshelf-virtuals-plugin": "^1.0.0",
     "dotenv": "^8.2.0",
     "guestlist": "^2.3.0",
     "heroku-node-settings": "^1.1.0",
     "http-errors": "^1.8.0",
     "joi": "^14.3.1",
     "joi-extension-semver": "^2.0.0",
-    "knex": "^0.21.5",
+    "knex": "0.21.19",
     "lodash": "^4.17.20",
     "node-fetch": "^2.6.0",
     "pg": "^8.3.2",
     "require-all": "^3.0.0",
     "semver": "^7.3.2",
+    "snyk": "^1.996.0",
     "stopword": "^1.0.1",
     "throng": "^4.0.0",
-    "uuid": "^8.3.0",
-    "snyk": "^1.336.0"
+    "uuid": "^8.3.0"
   },
   "devDependencies": {
     "@financial-times/grafana-tools": "^2.0.0",

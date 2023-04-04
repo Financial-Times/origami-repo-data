@@ -97,6 +97,8 @@ function initModel(app) {
     // Model prototypal methods
     const Bundle = app.database.Model.extend({
         tableName: 'bundles',
+        requireFetch: false,
+
         version: function () {
             return this.belongsTo(app.model.Version);
         },

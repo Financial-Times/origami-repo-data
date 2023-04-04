@@ -21,6 +21,7 @@ function initModel(app) {
 	// Model prototypal methods
 	const Key = app.database.Model.extend({
 		tableName: 'keys',
+    requireFetch: false,
 
 		// Model initialization
 		initialize() {

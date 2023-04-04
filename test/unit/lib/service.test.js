@@ -320,8 +320,8 @@ describe('lib/service', () => {
 			assert.calledWithExactly(bookshelf, knex.mockInstance);
 		});
 
-		it('mounts the "virtuals" Bookshelf plugin', () => {
-			assert.calledWithExactly(bookshelf.mockInstance.plugin, 'virtuals');
+		it('mounts the "bookshelf-virtuals-plugin" Bookshelf plugin', () => {
+			assert.calledWithExactly(bookshelf.mockInstance.plugin, 'bookshelf-virtuals-plugin');
 		});
 
 		it('stores the created Bookshelf instance on `app.database`', () => {

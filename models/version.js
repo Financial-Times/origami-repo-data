@@ -18,6 +18,7 @@ function initModel(app) {
 	// Model prototypal methods
 	const Version = app.database.Model.extend({
 		tableName: 'versions',
+    requireFetch: false,
 
 		// Model initialization
 		initialize() {

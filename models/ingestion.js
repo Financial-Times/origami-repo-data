@@ -21,6 +21,7 @@ function initModel(app) {
 	// Model prototypal methods
 	const Ingestion = app.database.Model.extend({
 		tableName: 'ingestion_queue',
+    requireFetch: false,
 
 		// Model initialization
 		initialize() {
