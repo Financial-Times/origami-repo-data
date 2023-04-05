@@ -7,20 +7,30 @@ Get information about Origami repositories. See [the production service][product
 
 ## Table Of Contents
 
-  * [Requirements](#requirements)
-  * [Running Locally](#running-locally)
-  * [Configuration](#configuration)
-  * [Operational Documentation](#operational-documentation)
-  * [Testing](#testing)
-  * [Deployment](#deployment)
-  * [Monitoring](#monitoring)
-  * [Trouble-Shooting](#trouble-shooting)
-  * [License](#license)
+- [Origami Repo Data](#origami-repo-data)
+  - [Table Of Contents](#table-of-contents)
+  - [Requirements](#requirements)
+  - [Running Locally](#running-locally)
+  - [Configuration](#configuration)
+    - [One time only](#one-time-only)
+    - [Required everywhere](#required-everywhere)
+    - [Required in Heroku](#required-in-heroku)
+    - [Required locally](#required-locally)
+    - [Headers](#headers)
+  - [Database](#database)
+  - [Operational Documentation](#operational-documentation)
+  - [Testing](#testing)
+  - [Deployment](#deployment)
+  - [Monitoring](#monitoring)
+  - [Trouble-Shooting](#trouble-shooting)
+    - [What do I do if memory usage is high?](#what-do-i-do-if-memory-usage-is-high)
+    - [What if I need to deploy manually?](#what-if-i-need-to-deploy-manually)
+  - [License](#license)
 
 
 ## Requirements
 
-Running Origami Repo Data requires [Node.js] 14.x and [npm]. A [PostgreSQL] database is also required.
+Running Origami Repo Data requires [Node.js] and [npm]. A [PostgreSQL] database is also required.
 
 If you're working on a Mac, the simplest way to install PostgreSQL is to use [Homebrew]. Run the following and pay attention to the instructions output after installing:
 
@@ -93,6 +103,7 @@ We configure Origami Repo Data using environment variables. In development, conf
   * `SENTRY_DSN`: The Sentry URL to send error information to.
   * `SLACK_ANNOUNCER_AUTH_TOKEN`: The Slack auth token to use when announcing new repo versions on Slack
   * `SLACK_ANNOUNCER_CHANNEL_ID`: The Slack channel to announce new repo versions in (unique ID, not channel name)
+  * `NPM_CONFIG_LEGACY_PEER_DEPS`: Set to `true` to allow npm to install legacy peer dependencies of npm packages.
 
 ### Required locally
 
