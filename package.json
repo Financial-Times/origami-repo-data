@@ -52,7 +52,7 @@
     "pg-connection-string": "^2.4.0",
     "promise.any": "^2.0.2",
     "require-all": "^3.0.0",
-    "semver": "^7.3.4",
+    "semver": "^7.5.2",
     "snyk": "^1.685.0",
     "stopword": "^1.0.6",
     "throng": "^4.0.0",
