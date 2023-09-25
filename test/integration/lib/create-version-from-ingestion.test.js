@@ -3,6 +3,7 @@
 
 const database = require('../helpers/database');
 const createVersionFromIngestion = require('../../../lib/create-version-from-ingestion');
+const normaliseOrigamiManifest = require('../../../lib/create-version-from-ingestion/normalise-origami-manifest');
 const proclaim = require('proclaim');
 
 describe('createVersionFromIngestion', () => {
@@ -106,5 +107,19 @@ describe('createVersionFromIngestion', () => {
                 proclaim.isTrue(version.get('type_is_component'), 'Expected the Version "type_is_component" property to be true.');
             });
         });
+    });
+    describe.only('given unknown version', () => {
+      it('manifest noramliser throws an error', async () => {
+        const origamiManifest = {
+          'origamiType': 'component',
+          'origamiVersion': '3.0',
+          'brands': ['core','internal','whitelabel'],
+          'supportStatus': 'experimental',
+          'browserFeatures': {},
+          'demosDefaults': {},
+          'demos': []
+        };
+        proclaim.throws(() => normaliseOrigamiManifest(origamiManifest), 'Could not normalise manifest. Origami version unknown.');
+      });
     });
 });
