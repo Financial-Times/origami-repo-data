@@ -6,7 +6,8 @@ module.exports = {
 		'es6': true
 	},
 	'parserOptions': {
-		'ecmaVersion': 2017
+		'ecmaVersion': 'latest',
+		'sourceType': 'module'
 	},
 	'rules': {
 		'no-unused-vars': 2,
@@ -19,7 +20,7 @@ module.exports = {
 		'new-cap': 2,
 		'no-caller': 2,
 		'semi': [2, 'always'],
-		'strict': [2, 'global'],
+		'strict': [0, 'global'],
 		'quotes': [1, 'single'],
 		'no-loop-func': 2,
 		'no-irregular-whitespace': 1,

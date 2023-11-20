@@ -29,8 +29,10 @@ if (!databaseUrl) {
 const options = {
 	database: databaseUrl,
 	githubAuthToken: process.env.GITHUB_AUTH_TOKEN,
+	buildServiceUrl: process.env.BUILD_SERVICE_URL || 'https://www.ft.com/__origami/service/build',
 	log: console,
 	name: 'Origami Repo Data',
+	npmRegistryUrl: process.env.NPM_REGISTRY || 'https://registry.npmjs.org/',
 	workers: process.env.WEB_CONCURRENCY || 1,
 	enableSetupStep: !!process.env.ENABLE_SETUP_STEP,
 	slackAnnouncerAuthToken: process.env.SLACK_ANNOUNCER_AUTH_TOKEN,

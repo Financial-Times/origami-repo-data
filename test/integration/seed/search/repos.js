@@ -17,6 +17,7 @@ exports.seed = async database => {
 			support_channel: data.support_channel || '#origami-support',
 			tag: 'v1.0.0',
 			version: '1.0.0',
+			origami_version: '1',
 			version_major: 1,
 			version_minor: 0,
 			version_patch: 0,
@@ -28,7 +29,8 @@ exports.seed = async database => {
 				origami: {
 					brands: [],
 					keywords: [],
-					demos: []
+					demos: [],
+					origamiVersion: 1,
 				}
 			}
 		});
@@ -48,9 +50,39 @@ exports.seed = async database => {
 					description: 'banana apple pear',
 					keywords: ['kiwi', 'pineapple', 'kumquat'],
 					brands: [
-						'master',
+						'core',
 						'internal'
 					]
+				}
+			}
+		}),
+
+		version({
+			name: 'active-module-v2',
+			type: 'component',
+			support_status: 'active',
+			origami_version: '2.0',
+			manifests: {
+				origami: {
+					description: 'this follows does not follow the only version of the Origami specification currently published, v1',
+					keywords: [],
+					origamiVersion: '2.0',
+					brands: []
+				}
+			}
+		}),
+
+		version({
+			name: 'active-module-v2.1',
+			type: 'component',
+			support_status: 'active',
+			origami_version: '2.1',
+			manifests: {
+				origami: {
+					description: 'this follows does not follow the only version of the Origami specification currently published, v1',
+					keywords: [],
+					origamiVersion: '2.1',
+					brands: []
 				}
 			}
 		}),
@@ -84,7 +116,7 @@ exports.seed = async database => {
 			manifests: {
 				origami: {
 					brands: [
-						'master'
+						'core'
 					],
 					demos: [
 						{

@@ -37,7 +37,7 @@ describe('GET /v1/repos', () => {
 			assert.strictEqual(repo1.name, 'o-mock-component');
 			// This is the latest *stable* version, even though 3.0.0-beta.1 exists
 			assert.strictEqual(repo1.version, '2.0.0');
-			assert.deepEqual(repo1.brands, ['master', 'internal']);
+			assert.deepEqual(repo1.brands, ['core', 'internal']);
 
 			const repo2 = response[1];
 			assert.isObject(repo2);
@@ -92,7 +92,7 @@ describe('GET /v1/repos with query:', () => {
 
 			it('contains only actively supported repos', () => {
 				assert.isArray(response);
-				assert.lengthEquals(response, 5);
+				assert.lengthEquals(response, 7);
 				for (const repo of response) {
 					assert.strictEqual(repo.support.status, 'active');
 				}
@@ -236,7 +236,7 @@ describe('GET /v1/repos with query:', () => {
 
 			it('contains only components with the expected support email', () => {
 				assert.isArray(response);
-				assert.lengthEquals(response, 9);
+				assert.lengthEquals(response, 11);
 				for (const repo of response) {
 					assert.strictEqual(repo.support.email, 'origami.support@ft.com');
 				}
@@ -308,7 +308,7 @@ describe('GET /v1/repos with query:', () => {
 
 			it('contains components with either support email', () => {
 				assert.isArray(response);
-				assert.lengthEquals(response, 10);
+				assert.lengthEquals(response, 12);
 				for (const repo of response) {
 					assert.include(['origami.support@ft.com', 'next.developers@ft.com'], repo.support.email);
 				}
@@ -390,11 +390,11 @@ describe('GET /v1/repos with query:', () => {
 
 	});
 
-	describe('brand=master', () => {
+	describe('brand=core', () => {
 
 		beforeEach(async () => {
 			request = agent
-				.get('/v1/repos?brand=master')
+				.get('/v1/repos?brand=core')
 				.set('X-Api-Key', 'mock-read-key')
 				.set('X-Api-Secret', 'mock-read-secret');
 		});
@@ -414,11 +414,11 @@ describe('GET /v1/repos with query:', () => {
 				response = (await request.then()).body;
 			});
 
-			it('contains only masterbrand components', () => {
+			it('contains only core brand components', () => {
 				assert.isArray(response);
 				assert.lengthEquals(response, 2);
 				for (const repo of response) {
-					assert.include(repo.brands, 'master');
+					assert.include(repo.brands, 'core');
 				}
 			});
 
@@ -488,9 +488,9 @@ describe('GET /v1/repos with query:', () => {
 
 			it('contains only components which have not been branded', () => {
 				assert.isArray(response);
-				assert.lengthEquals(response, 6);
+				assert.lengthEquals(response, 8);
 				for (const repo of response) {
-					if (repo.type === 'module') {
+					if (repo.type === 'module' || repo.type === 'component') {
 						assert.deepEqual(repo.brands, []);
 					} else {
 						assert.isNull(repo.brands);
@@ -538,11 +538,11 @@ describe('GET /v1/repos with query:', () => {
 
 	});
 
-	describe('brand=master,internal', () => {
+	describe('brand=core,internal', () => {
 
 		beforeEach(async () => {
 			request = agent
-				.get('/v1/repos?brand=master,internal')
+				.get('/v1/repos?brand=core,internal')
 				.set('X-Api-Key', 'mock-read-key')
 				.set('X-Api-Secret', 'mock-read-secret');
 		});
@@ -562,14 +562,14 @@ describe('GET /v1/repos with query:', () => {
 				response = (await request.then()).body;
 			});
 
-			it('contains both masterbrand and internal branded components', () => {
+			it('contains both core brand and internal branded components', () => {
 				assert.isArray(response);
 				assert.lengthEquals(response, 4);
 				for (const repo of response) {
 					if (repo.brands.length === 1) {
-						assert.include(['master', 'internal'], repo.brands[0]);
+						assert.include(['core', 'internal'], repo.brands[0]);
 					} else {
-						assert.deepEqual(repo.brands, ['master', 'internal']);
+						assert.deepEqual(repo.brands, ['core', 'internal']);
 					}
 				}
 			});
@@ -682,6 +682,151 @@ describe('GET /v1/repos with query:', () => {
 				assert.isArray(response);
 				assert.lengthEquals(response, 1);
 				assert.strictEqual(response[0].name, 'new-module (banana)');
+			});
+
+		});
+
+	});
+
+	describe('origamiVersion=1', () => {
+
+		beforeEach(async () => {
+			request = agent
+				.get('/v1/repos?origamiVersion=1')
+				.set('X-Api-Key', 'mock-read-key')
+				.set('X-Api-Secret', 'mock-read-secret');
+		});
+
+		it('responds with a 200 status', () => {
+			return request.expect(200);
+		});
+
+		it('responds with JSON', () => {
+			return request.expect('Content-Type', /application\/json/);
+		});
+
+		describe('JSON response', () => {
+			let response;
+
+			beforeEach(async () => {
+				response = (await request.then()).body;
+			});
+
+			it('contains components which match all criteria', () => {
+				assert.isArray(response);
+				assert.greaterThan(response.length, 0, 'No components returned.');
+				response.forEach(component => {
+					assert.strictEqual(component.origamiVersion, '1', `Returned "${component.name}" with Origami version "${component.origamiVersion}".`);
+				});
+			});
+
+		});
+
+	});
+
+	describe('origamiVersion=2.0', () => {
+
+		beforeEach(async () => {
+			request = agent
+				.get('/v1/repos?origamiVersion=2.0')
+				.set('X-Api-Key', 'mock-read-key')
+				.set('X-Api-Secret', 'mock-read-secret');
+		});
+
+		it('responds with a 200 status', () => {
+			return request.expect(200);
+		});
+
+		it('responds with JSON', () => {
+			return request.expect('Content-Type', /application\/json/);
+		});
+
+		describe('JSON response', () => {
+			let response;
+
+			beforeEach(async () => {
+				response = (await request.then()).body;
+			});
+
+			it('contains components which match all criteria', () => {
+				assert.isArray(response);
+				assert.greaterThan(response.length, 0, 'No components returned.');
+				response.forEach(component => {
+					assert.strictEqual(component.origamiVersion, '2.0', `Returned "${component.name}" with Origami version "${component.origamiVersion}".`);
+				});
+			});
+
+		});
+
+	});
+
+	describe('origamiVersion=2', () => {
+
+		beforeEach(async () => {
+			request = agent
+				.get('/v1/repos?origamiVersion=2')
+				.set('X-Api-Key', 'mock-read-key')
+				.set('X-Api-Secret', 'mock-read-secret');
+		});
+
+		it('responds with a 200 status', () => {
+			return request.expect(200);
+		});
+
+		it('responds with JSON', () => {
+			return request.expect('Content-Type', /application\/json/);
+		});
+
+		describe('JSON response', () => {
+			let response;
+
+			beforeEach(async () => {
+				response = (await request.then()).body;
+			});
+
+			it('contains components which match all criteria', () => {
+				assert.isArray(response);
+				assert.greaterThan(response.length, 0, 'No components returned.');
+				assert.ok(response.find(c => c.origamiVersion === '2.0'), 'Expected to find a v2.0 component');
+				assert.ok(response.find(c => c.origamiVersion === '2.1'), 'Expected to find a v2.1 component');
+				response.forEach(component => {
+					assert(component.origamiVersion.startsWith('2.'), `Returned "${component.name}" with Origami version "${component.origamiVersion}".`);
+				});
+			});
+
+		});
+
+	});
+
+	describe('origamiVersion=1,2.0', () => {
+
+		beforeEach(async () => {
+			request = agent
+				.get('/v1/repos?origamiVersion=1,2.0')
+				.set('X-Api-Key', 'mock-read-key')
+				.set('X-Api-Secret', 'mock-read-secret');
+		});
+
+		it('responds with a 200 status', () => {
+			return request.expect(200);
+		});
+
+		it('responds with JSON', () => {
+			return request.expect('Content-Type', /application\/json/);
+		});
+
+		describe('JSON response', () => {
+			let response;
+
+			beforeEach(async () => {
+				response = (await request.then()).body;
+			});
+
+			it('contains components which match all criteria', () => {
+				assert.isArray(response);
+				assert.greaterThan(response.length, 0, 'No components returned.');
+				assert.ok(response.find(c => c.origamiVersion === '1'), 'Expected to find a v1 component');
+				assert.ok(response.find(c => c.origamiVersion === '2.0'), 'Expected to find a v2 component');
 			});
 
 		});

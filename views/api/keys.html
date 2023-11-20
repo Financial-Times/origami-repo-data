@@ -118,7 +118,7 @@
 <h4>Example <code>curl</code> command:</h4>
 
 <pre><code class="o-syntax-highlight--bash">curl \
-	-H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
+	-H 'X-Api-Key: ABC123' -H 'X-Api-Secret: DEF456' \
 	https://origami-repo-data.ft.com/v1/keys</code></pre>
 
 <h2 id="get-v1-keys-(id)">Get an API key</h2>
@@ -194,8 +194,8 @@
 <h4>Example <code>curl</code> command:</h4>
 
 <pre><code class="o-syntax-highlight--bash">curl \
-	-H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
-	https://origami-repo-data.ft.com/v1/keys/XXXXXX</code></pre>
+	-H 'X-Api-Key: ABC123' -H 'X-Api-Secret: XYZ456' \
+	https://origami-repo-data.ft.com/v1/keys/DEF137</code></pre>
 
 <h2 id="post-v1-keys">Create an API key</h2>
 
@@ -290,7 +290,7 @@
 <h4>Example <code>curl</code> command:</h4>
 
 <pre><code class="o-syntax-highlight--bash">curl -X POST \
-	-H 'Content-Type: application/json' -H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
+	-H 'Content-Type: application/json' -H 'X-Api-Key: ABC123' -H 'X-Api-Secret: XYZ456' \
 	-d '{"description": "A new API key", "read": true, "write": true, "admin": false}' \
 	https://origami-repo-data.ft.com/v1/keys</code></pre>
 
@@ -368,5 +368,5 @@
 <h4>Example <code>curl</code> command:</h4>
 
 <pre><code class="o-syntax-highlight--bash">curl -X DELETE \
-	-H 'X-Api-Key: XXXXXX' -H 'X-Api-Secret: XXXXXX' \
-	https://origami-repo-data.ft.com/v1/keys/XXXXXX</code></pre>
+	-H 'X-Api-Key: ABC123' -H 'X-Api-Secret: XYZ456' \
+	https://origami-repo-data.ft.com/v1/keys/DEF137</code></pre>

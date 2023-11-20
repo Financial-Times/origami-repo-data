@@ -43,19 +43,19 @@ const data = [
         },
         url: 'https://www.ft.com/__origami/service/build/v2/bundles/js?modules=o-mock-component%402.0.0',
     },
-    // v2.0.0 (branded): css master brand
+    // v2.0.0 (branded): css core brand
     {
         id: '50a42415-df48-4643-bd9a-c05a57bcd544',
         created_at: new Date('2017-01-02T00:00:00Z'),
         updated_at: new Date('2017-01-02T00:00:00Z'),
         version_id: '9e4e450d-3b70-4672-b459-f297d434add6',
         language: 'css',
-        brand: 'master',
+        brand: 'core',
         sizes: {
             'raw': 18000,
             'gzip': 1200,
         },
-        url: 'https://www.ft.com/__origami/service/build/v2/bundles/css?modules=o-mock-component%402.0.0&brand=master',
+        url: 'https://www.ft.com/__origami/service/build/v2/bundles/css?modules=o-mock-component%402.0.0&brand=core',
     },
     // v2.0.0 (branded): css internal brand
     {
