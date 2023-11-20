@@ -14,10 +14,6 @@ Production
 
 https://origami-repo-data.ft.com
 
-## Replaces
-
-* origami-registry
-
 ## Host Platform
 
 Heroku
@@ -29,31 +25,6 @@ no
 ## Contains Sensitive Data
 
 no
-
-## Delivered By
-
-origami-team
-
-## Supported By
-
-origami-team
-
-## Known About By
-
-* lee.moody
-* jake.champion
-* rowan.manning
-
-## Dependencies
-
-* github
-* heroku
-* slack-financialtimes
-
-## Healthchecks
-
-* origami-repo-data-us.herokuapp.com-https
-* origami-repo-data-eu.herokuapp.com-https
 
 ## Failover Architecture Type
 
