@@ -62,5 +62,9 @@
     "sinon": "^9.0.3",
     "supertest": "^4.0.2"
   },
-  "snyk": true
+  "snyk": true,
+  "volta": {
+    "node": "10.24.1",
+    "npm": "6.14.18"
+  }
 }

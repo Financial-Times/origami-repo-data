@@ -8,15 +8,24 @@ Get information about Origami repositories. See [the production service][product
 
 ## Table Of Contents
 
-  * [Requirements](#requirements)
-  * [Running Locally](#running-locally)
-  * [Configuration](#configuration)
-  * [Operational Documentation](#operational-documentation)
-  * [Testing](#testing)
-  * [Deployment](#deployment)
-  * [Monitoring](#monitoring)
-  * [Trouble-Shooting](#trouble-shooting)
-  * [License](#license)
+- [Origami Repo Data](#origami-repo-data)
+  - [Table Of Contents](#table-of-contents)
+  - [Requirements](#requirements)
+  - [Running Locally](#running-locally)
+  - [Configuration](#configuration)
+    - [One time only](#one-time-only)
+    - [Heroku environment variables](#heroku-environment-variables)
+    - [Add secrets locally](#add-secrets-locally)
+    - [Headers](#headers)
+  - [Database](#database)
+  - [Operational Documentation](#operational-documentation)
+  - [Testing](#testing)
+  - [Deployment](#deployment)
+  - [Monitoring](#monitoring)
+  - [Trouble-Shooting](#trouble-shooting)
+    - [What do I do if memory usage is high?](#what-do-i-do-if-memory-usage-is-high)
+    - [What if I need to deploy manually?](#what-if-i-need-to-deploy-manually)
+  - [License](#license)
 
 
 ## Requirements
@@ -65,31 +74,38 @@ We configure Origami Repo Data using environment variables. In development, conf
 
 ### One time only
 
-  * `ENABLE_SETUP_STEP`: Set to `true` in order to allow the creation of an admin key using the `/v1/setup` endpoint. Once a key has been created this way, this configuration should be removed for security reasons.
+- `ENABLE_SETUP_STEP`: Set to `true` in order to allow the creation of an admin key using the `/v1/setup` endpoint. Once a key has been created this way, this configuration should be removed for security reasons.
 
-### Required everywhere
+### Heroku environment variables
 
-  * `DATABASE_URL`: A PostgreSQL connection string, with write permission on a database
-  * `GITHUB_AUTH_TOKEN`: A GitHub auth token which has read access to all Financial Times repositories.
-  * `NODE_ENV`: The environment to run the application in. One of `production`, `development` (default), or `test` (for use in automated tests).
-  * `PORT`: The port to run the application on.
+- `CHANGE_API_KEY`: The change-log API key to use when creating and closing change-logs.
+- `CMDB_API_KEY`: The CMDB API key to use when updating health checks and the application runbook
+- `DATABASE_URL`: A PostgreSQL connection string, with write permission on a database (optional locally)
+- `FASTLY_PURGE_API_KEY`: A Fastly API key which is used to purge URLs (when somebody POSTs to the `/purge` endpoint)
+- `GITHUB_AUTH_TOKEN`: A GitHub auth token which has read access to all Financial Times repositories.
+- `GRAPHITE_API_KEY`: The FT's internal Graphite API key.
+- `PURGE_API_KEY`: The API key to require when somebody POSTs to the `/purge` endpoint. This should be a non-memorable string, for example a UUID
+- `REGION`: The region the application is running in. One of `QA`, `EU`, or `US`
+- `RELEASE_LOG_ENV`: The Salesforce environment to include in change-logs. One of `Test` or `Production`
+- `SENTRY_DSN`: The Sentry URL to send error information to.
+- `SLACK_ANNOUNCER_AUTH_TOKEN`: The Slack auth token to use when announcing new repo versions on Slack
+- `SLACK_ANNOUNCER_CHANNEL_ID`: The Slack channel to announce new repo versions in (unique ID, not channel name)
 
-### Required in Heroku
+### Add secrets locally
 
-  * `CMDB_API_KEY`: The CMDB API key to use when updating health checks and the application runbook
-  * `FASTLY_PURGE_API_KEY`: A Fastly API key which is used to purge URLs (when somebody POSTs to the `/purge` endpoint)
-  * `GRAPHITE_API_KEY`: The FT's internal Graphite API key.
-  * `PURGE_API_KEY`: The API key to require when somebody POSTs to the `/purge` endpoint. This should be a non-memorable string, for example a UUID
-  * `REGION`: The region the application is running in. One of `QA`, `EU`, or `US`
-  * `CHANGE_API_KEY`: The change-log API key to use when creating and closing change-logs.
-  * `RELEASE_ENV`: The Salesforce environment to include in change-logs. One of `Test` or `Production`
-  * `SENTRY_DSN`: The Sentry URL to send error information to.
-  * `SLACK_ANNOUNCER_AUTH_TOKEN`: The Slack auth token to use when announcing new repo versions on Slack
-  * `SLACK_ANNOUNCER_CHANNEL_ID`: The Slack channel to announce new repo versions in (unique ID, not channel name)
+Origami stores their secrets on Doppler to get them on your local development environment you will need to install the [Doppler CLI](https://docs.doppler.com/docs/enclave-installation), login in Doppler and run the following command to setup Doppler within the repo:
 
-### Required locally
+```sh
+doppler setup
+```
 
-  * `GRAFANA_API_KEY`: The API key to use when using Grafana push/pull
+Setup will ask you to select the project you want to use, select `origami-repo-data` and then select the `local` environment. Once setup is complete you can download the secrets to your local environment by running:
+
+```sh
+doppler secrets download --format --no-file > .env
+```
+
+**NOTE:** You might need to request contributor access to the Doppler project from the Origami team.
 
 ### Headers
 
